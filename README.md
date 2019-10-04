@@ -1,6 +1,4 @@
-# mlaskal
-
-Framework+skeleton
+# Mlaskal Framework + Skeleton
 
 The framework contains the following folders:
 
@@ -11,7 +9,7 @@ The framework contains the following folders:
 - public-cpp - C++ files of the mlaskal support library - DO NOT MODIFY
 - public-tests - test files and expected results
 
-Assignments 1 and 2
+### Assignments 1 and 2
 
 For the first two assignments, you will submit the following files:
 
@@ -23,7 +21,7 @@ In the private-src folder, you will find compilable and runnable skeletons of th
 
 For Assignment 1, you will probably leave the C++ files empty. For Assignment 2, you may use them for C++ routines called from du12l.lex - in this case, add #include "du12sem.hpp" to du12l.lex.
 
-Assignments 3 to 6
+### Assignments 3 to 6
 
 For the last four assignments, you will submit the following files:
 
@@ -37,12 +35,14 @@ When moving from Assignment 2 to 3, replace the skeletons du3456l.lex, du3456sem
 - #include "dummyg.hpp" directive in du3456l.lex to #include "du3456g.hpp".
 - #include "du12sem.hpp" directive in du12sem.cpp (and in du3456l.lex, if any) to #include "du3456sem.hpp".
 
-The makefile
+### The makefile
+
 For assignment 1, run make du1 to build and make test1 to run the respective tests. Use similarly for assignment 2 to 6.
 
 Note that the du1 and du2 targets produce the same executable file tmp/du12, similarly, the du5 and du6 targets produce tmp/du56. The test targets are however different.
 
-The Visual Studio projects
+### The Visual Studio projects
+
 Start the Visual Studio with the mlaskal.sln file.
 
 Edit only the files in folders marked as "STUDENTS". These folders are only in the projects du12, du12grm, du3456, and du3456grm. Don't touch the files in "READONLY" or "GENERATED" folders.
@@ -55,7 +55,8 @@ For Assignment 4 use the du4 project as "Start up". Dependences are the same as 
 
 For Assignments 5 and 6 use the du56 project as "Start up". Dependences are the same.
 
-Test files
+### Test files
+
 The mlaskal source files have the suffix .mls, the corresponding expected outputs are in the .out files.
 
 The test files whose names end with "r" contain records - ignore them this year.

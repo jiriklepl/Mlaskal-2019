@@ -234,9 +234,9 @@ FLEX_COMMAND = flex -Cf -b -p -p -o$*.cpp $<
 
 BISON_COMMAND = bison --report=all -d -o$*.cpp $<
 
-COMPILE_COMMAND = g++ -c -std=c++17 $(INCLUDE_OPTS) -o$@ $<
+COMPILE_COMMAND = g++ -c -O2 -march=native -DNDEBUG -pipe -std=c++17 $(INCLUDE_OPTS) -o$@ $<
 
-LINK_COMMAND = g++ -o$@ $^
+LINK_COMMAND = g++ -O2 -march=native -DNDEBUG -pipe -o$@ $^
 
 #############################################################################
 

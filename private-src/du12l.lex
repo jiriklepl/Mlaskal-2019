@@ -20,6 +20,7 @@
 %option never-interactive
 
 /* MORE OPTIONS */
+// TODO: DAT PRYC...
 %option caseless
 
 WS          [ \r\t\f]

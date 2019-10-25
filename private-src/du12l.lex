@@ -7,6 +7,9 @@
     // avoid unreferenced function warnings when compiling du1l.cpp
     #pragma warning (disable:4505)
 
+    // standard libraries
+    #include <cstddef>
+
     // allow access to YY_DECL macro
     #include "bisonflex.hpp"
 
@@ -19,11 +22,14 @@
 %option noyywrap nounput batch noinput stack reentrant
 %option never-interactive
 
+/* macros for usual tokens */
 WS          [ \r\t\f]
 DIGIT       [0-9]
 UINT        {DIGIT}+
 ALPHA       [A-Za-z]
 ALNUM       [0-9A-Za-z]
+
+/* macros for case insensitivity */
 A           [Aa]
 B           [Bb]
 C           [Cc]
@@ -51,11 +57,25 @@ X           [Xx]
 Y           [Yy]
 Z           [Zz]
 
+%x          STR
+%x          COMMENT
+
 %%
 
 %{
     typedef yy::mlaskal_parser parser;
+    std::size_t comment_level;
 %}
+
+\{                          comment_level = 0; BEGIN(COMMENT);
+\}                          message(mlc::DUERR_UNEXPENDCMT, ctx->curline, *yytext, *yytext);
+
+<COMMENT>{
+"{"                         ++comment_level;
+"}"                         if (comment_level-- == 0) BEGIN(INITIAL); /* " -- weird, but fixes my highlighter */
+[^\n]                       /* not interested */
+<<EOF>>                     message(mlc::DUERR_EOFINCMT, ctx->curline, *yytext, *yytext); return parser::make_EOF(ctx->curline);
+}
 
 {P}{R}{O}{G}{R}{A}{M}       return parser::make_PROGRAM(ctx->curline);
 
@@ -137,7 +157,8 @@ Z           [Zz]
 
 {WS}+       /* go out with whitespaces */
 
-\n          /* we do nothing yet */
+
+<INITIAL,COMMENT>\n       ++ctx->curline;
 
 .           message(mlc::DUERR_UNKCHAR, ctx->curline, *yytext, *yytext);
 

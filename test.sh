@@ -2,6 +2,9 @@
 
 ls public-cpp/*.out | {
     while read name; do
-        diff "public-cpp/"`basename "$name"` "public-tests/"`basename "$name"`
+        output="public-cpp/"`basename "$name"`
+        expected="public-tests/"`basename "$name"`
+        echo  "comparing $output (left) against $expected (right)"
+        diff -y "$output" "$expected"
     done
-}
+} | less

@@ -70,11 +70,12 @@ Z           [Zz]
 \{                          comment_level = 0; BEGIN(COMMENT);
 \}                          message(mlc::DUERR_UNEXPENDCMT, ctx->curline, *yytext, *yytext);
 
-<COMMENT>{
-"{"                         ++comment_level;
-"}"                         if (comment_level-- == 0) BEGIN(INITIAL); /* " -- weird, but fixes my highlighter */
-[^\n]                       /* not interested */
-<<EOF>>                     message(mlc::DUERR_EOFINCMT, ctx->curline, *yytext, *yytext); return parser::make_EOF(ctx->curline);
+<COMMENT>"{"                ++comment_level;
+<COMMENT>"}"                if (comment_level-- == 0) BEGIN(INITIAL);
+<COMMENT>[^\n]              /* not interested */
+<COMMENT><<EOF>> {
+                            message(mlc::DUERR_EOFINCMT, ctx->curline, *yytext, *yytext);
+                            return parser::make_EOF(ctx->curline);
 }
 
 {P}{R}{O}{G}{R}{A}{M}       return parser::make_PROGRAM(ctx->curline);

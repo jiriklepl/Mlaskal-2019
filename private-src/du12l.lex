@@ -19,15 +19,37 @@
 %option noyywrap nounput batch noinput stack reentrant
 %option never-interactive
 
-/* MORE OPTIONS */
-// TODO: DAT PRYC...
-%option caseless
-
 WS          [ \r\t\f]
 DIGIT       [0-9]
 UINT        {DIGIT}+
-ALPHA       [A-Z]
-ALNUM       [A-Z0-9]
+ALPHA       [A-Za-z]
+ALNUM       [0-9A-Za-z]
+A           [Aa]
+B           [Bb]
+C           [Cc]
+D           [Dd]
+E           [Ee]
+F           [Ff]
+G           [Gg]
+H           [Hh]
+I           [Ii]
+J           [Jj]
+K           [Kk]
+L           [Ll]
+M           [Mm]
+N           [Nn]
+O           [Oo]
+P           [Pp]
+Q           [Qq]
+R           [Rr]
+S           [Ss]
+T           [Tt]
+U           [Uu]
+V           [Vv]
+W           [Ww]
+X           [Xx]
+Y           [Yy]
+Z           [Zz]
 
 %%
 
@@ -35,119 +57,71 @@ ALNUM       [A-Z0-9]
     typedef yy::mlaskal_parser parser;
 %}
 
-PROGRAM     return parser::make_PROGRAM(ctx->curline);
+{P}{R}{O}{G}{R}{A}{M}       return parser::make_PROGRAM(ctx->curline);
 
-LABEL       return parser::make_LABEL(ctx->curline);
-CONST       return parser::make_CONST(ctx->curline);
-TYPE        return parser::make_TYPE(ctx->curline);
-VAR         return parser::make_VAR(ctx->curline);
+{L}{A}{B}{E}{L}             return parser::make_LABEL(ctx->curline);
+{C}{O}{N}{S}{T}             return parser::make_CONST(ctx->curline);
+{T}{Y}{P}{E}                return parser::make_TYPE(ctx->curline);
+{V}{A}{R}                   return parser::make_VAR(ctx->curline);
 
-BEGIN       return parser::make_BEGIN(ctx->curline);
-END         return parser::make_END(ctx->curline);
-
-
-
-FUNCTION    return parser::make_FUNCTION(ctx->curline);
-PROCEDURE   return parser::make_PROCEDURE(ctx->curline);
-RECORD      return parser::make_RECORD(ctx->curline);
+{B}{E}{G}{I}{N}             return parser::make_BEGIN(ctx->curline);
+{E}{N}{D}                   return parser::make_END(ctx->curline);
 
 
 
-IF          return parser::make_IF(ctx->curline);
-THEN        return parser::make_THEN(ctx->curline);
-ELSE        return parser::make_ELSE(ctx->curline);
+{F}{U}{N}{C}{T}{I}{O}{N}    return parser::make_FUNCTION(ctx->curline);
+{P}{R}{O}{C}{E}{D}{U}{R}{E} return parser::make_PROCEDURE(ctx->curline);
+{R}{E}{C}{O}{R}{D}          return parser::make_RECORD(ctx->curline);
 
-WHILE       return parser::make_WHILE(ctx->curline);
-FOR         return parser::make_FOR(ctx->curline);
-DO          return parser::make_DO(ctx->curline);
 
-(DOWN)?TO {
-    return parser::make_FOR_DIRECTION(
-        ((yytext[0] | 32) == 'd')
-            ? mlc::DUTOKGE_FOR_DIRECTION::DUTOKGE_DOWNTO
-            : mlc::DUTOKGE_FOR_DIRECTION::DUTOKGE_TO,
-        ctx->curline);
-}
 
-REPEAT      return parser::make_REPEAT(ctx->curline);
-UNTIL       return parser::make_UNTIL(ctx->curline);
+{I}{F}                      return parser::make_IF(ctx->curline);
+{T}{H}{E}{N}                return parser::make_THEN(ctx->curline);
+{E}{L}{S}{E}                return parser::make_ELSE(ctx->curline);
 
-GOTO        return parser::make_GOTO(ctx->curline);
+{W}{H}{I}{L}{E}             return parser::make_WHILE(ctx->curline);
+{F}{O}{R}                   return parser::make_FOR(ctx->curline);
+{D}{O}                      return parser::make_DO(ctx->curline);
 
-NOT         return parser::make_NOT(ctx->curline);
+{T}{O}                      return parser::make_FOR_DIRECTION(mlc::DUTOKGE_FOR_DIRECTION::DUTOKGE_TO, ctx->curline);
+{D}{O}{W}{N}{T}{O}          return parser::make_FOR_DIRECTION(mlc::DUTOKGE_FOR_DIRECTION::DUTOKGE_DOWNTO, ctx->curline);
 
-=           return parser::make_EQ(ctx->curline);
+{R}{E}{P}{E}{A}{T}          return parser::make_REPEAT(ctx->curline);
+{U}{N}{T}{I}{L}             return parser::make_UNTIL(ctx->curline);
 
-[<>]=?|<> {
-    mlc::DUTOKGE_OPER_REL tmp;
-    switch(yytext[1]) {
-        case '=':
-            tmp = (mlc::DUTOKGE_OPER_REL)1;
-        break;
+{G}{O}{T}{O}                return parser::make_GOTO(ctx->curline);
 
-        case '>':
-            tmp = (mlc::DUTOKGE_OPER_REL)2;
-        break;
-        
-        default:
-            tmp = (mlc::DUTOKGE_OPER_REL)0;
-        break;
-    }
+{N}{O}{T}                   return parser::make_NOT(ctx->curline);
 
-    return parser::make_OPER_REL(
-        (yytext[0] == '>')
-            ? (mlc::DUTOKGE_OPER_REL)(4 - (int)tmp)
-            : tmp,
-        ctx->curline);
-}
+=                           return parser::make_EQ(ctx->curline);
 
-[+-] {
-    return parser::make_OPER_SIGNADD(
-        (yytext[0] == '+')
-            ? mlc::DUTOKGE_OPER_SIGNADD::DUTOKGE_PLUS
-            : mlc::DUTOKGE_OPER_SIGNADD::DUTOKGE_MINUS,
-        ctx->curline);
-}
+"<"                         return parser::make_OPER_REL(mlc::DUTOKGE_OPER_REL::DUTOKGE_LT, ctx->curline);
+"<="                        return parser::make_OPER_REL(mlc::DUTOKGE_OPER_REL::DUTOKGE_LE, ctx->curline);
+"<>"                        return parser::make_OPER_REL(mlc::DUTOKGE_OPER_REL::DUTOKGE_NE, ctx->curline);
+">="                        return parser::make_OPER_REL(mlc::DUTOKGE_OPER_REL::DUTOKGE_GE, ctx->curline);
+">"                         return parser::make_OPER_REL(mlc::DUTOKGE_OPER_REL::DUTOKGE_GT, ctx->curline);
 
-[*/]|DIV|(MO|AN)D {
-    mlc::DUTOKGE_OPER_MUL tmp;
-    switch(yytext[0] | 32) {
-        case '*':
-            tmp = mlc::DUTOKGE_OPER_MUL::DUTOKGE_ASTERISK;
-        break;
-        
-        case '/':
-            tmp = mlc::DUTOKGE_OPER_MUL::DUTOKGE_SOLIDUS;
-        break;
-        
-        case 'd':
-            tmp = mlc::DUTOKGE_OPER_MUL::DUTOKGE_DIV;
-        break;
-        
-        case 'm':
-            tmp = mlc::DUTOKGE_OPER_MUL::DUTOKGE_MOD;
-        break;
-        
-        case 'a':
-            tmp = mlc::DUTOKGE_OPER_MUL::DUTOKGE_AND;
-        break;
-    }
+"+"                         return parser::make_OPER_SIGNADD(mlc::DUTOKGE_OPER_SIGNADD::DUTOKGE_PLUS, ctx->curline);
+"-"                         return parser::make_OPER_SIGNADD(mlc::DUTOKGE_OPER_SIGNADD::DUTOKGE_MINUS, ctx->curline);
 
-    return parser::make_OPER_MUL(tmp, ctx->curline);
-}
+"*"                         return parser::make_OPER_MUL(mlc::DUTOKGE_OPER_MUL::DUTOKGE_ASTERISK, ctx->curline);
+"/"                         return parser::make_OPER_MUL(mlc::DUTOKGE_OPER_MUL::DUTOKGE_SOLIDUS, ctx->curline);
+{D}{I}{V}                   return parser::make_OPER_MUL(mlc::DUTOKGE_OPER_MUL::DUTOKGE_DIV, ctx->curline);
+{M}{O}{D}                   return parser::make_OPER_MUL(mlc::DUTOKGE_OPER_MUL::DUTOKGE_MOD, ctx->curline);
+{A}{N}{D}                   return parser::make_OPER_MUL(mlc::DUTOKGE_OPER_MUL::DUTOKGE_AND, ctx->curline);
 
-\(          return parser::make_LPAR(ctx->curline);
-\)          return parser::make_RPAR(ctx->curline);
-\[          return parser::make_LSBRA(ctx->curline);
-\]          return parser::make_RSBRA(ctx->curline);
+\(                          return parser::make_LPAR(ctx->curline);
+\)                          return parser::make_RPAR(ctx->curline);
+\[                          return parser::make_LSBRA(ctx->curline);
+\]                          return parser::make_RSBRA(ctx->curline);
 
-,           return parser::make_COMMA(ctx->curline);
-\.          return parser::make_DOT(ctx->curline);
-\.\.        return parser::make_DOTDOT(ctx->curline);
+,                           return parser::make_COMMA(ctx->curline);
+\.                          return parser::make_DOT(ctx->curline);
+\.\.                        return parser::make_DOTDOT(ctx->curline);
 
-:=          return parser::make_ASSIGN(ctx->curline);
-:           return parser::make_COLON(ctx->curline);
-;           return parser::make_SEMICOLON(ctx->curline);
+:=                          return parser::make_ASSIGN(ctx->curline);
+:                           return parser::make_COLON(ctx->curline);
+;                           return parser::make_SEMICOLON(ctx->curline);
 
 {ALPHA}{ALNUM}* {
     return parser::make_IDENTIFIER(mlc::ls_id_index(), ctx->curline);
@@ -157,7 +131,7 @@ NOT         return parser::make_NOT(ctx->curline);
     return parser::make_UINT(mlc::ls_int_index(), ctx->curline);
 }
 
-{UINT}(\.|(\.{UINT})?E[+-]?){UINT} {
+{UINT}(\.|(\.{UINT})?{E}[+-]?){UINT} {
     return parser::make_REAL(mlc::ls_real_index(), ctx->curline);
 }
 

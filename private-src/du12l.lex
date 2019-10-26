@@ -84,7 +84,7 @@ Z           [Zz]
 }
 
 
-'([^\n']|'')*               string_literal =  yytext + 1; mlc::upper_case(string_literal); BEGIN(STR);
+'([^\n']|'')*               string_literal = yytext + 1; BEGIN(STR);
 <STR>\n                     message(mlc::DUERR_EOLINSTRCHR, ctx->curline); BEGIN(INITIAL); return parser::make_STRING(mlc::ls_str_index(), ctx->curline++);
 <STR>'                      BEGIN(INITIAL); return parser::make_STRING(mlc::ls_str_index(), ctx->curline);
 <STR><<EOF>>                message(mlc::DUERR_EOFINSTRCHR, ctx->curline); BEGIN(INITIAL); return parser::make_EOF(ctx->curline);

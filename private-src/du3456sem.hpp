@@ -8,8 +8,8 @@
 
 */
 
-#ifndef __DU3456SEM_H
-#define __DU3456SEM_H
+#ifndef DU3456SEM_HPP_
+#define DU3456SEM_HPP_
 
 #include <string>
 #include "literal_storage.hpp"
@@ -23,4 +23,4 @@ namespace mlc {
 
 }
 
-#endif
+#endif  // DU3456SEM_HPP_

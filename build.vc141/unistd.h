@@ -1,4 +1,3 @@
 /*
-
-	To je specialni prazdny soubor na obelsteni Flexe a *nixaru:)
+	To je speciální prázdný soubor na obelstění Flexe :)
 */

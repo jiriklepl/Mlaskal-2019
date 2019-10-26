@@ -8,8 +8,8 @@
 
 */
 
-#ifndef __DU12SEM_H
-#define __DU12SEM_H
+#ifndef DU12SEM_HPP_
+#define DU12SEM_HPP_
 
 #include <string>
 #include "literal_storage.hpp"
@@ -24,4 +24,4 @@ namespace mlc {
 
 }
 
-#endif
+#endif  // DU12SEM_HPP_

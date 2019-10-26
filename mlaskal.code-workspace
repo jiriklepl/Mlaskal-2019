@@ -1,0 +1,21 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		/* cpplint: */
+		"cpplint.excludes": [
+			"public-cpp/*",
+			"build.vc142/*",
+			"build.vc141/*"
+		],
+		"cpplint.root": "${workspaceFolder}/private-src",
+		"cpplint.filters": [
+			"-legal/copyright",
+			"-runtime/reference",
+			"-readability/namespace"
+		]
+	}
+}

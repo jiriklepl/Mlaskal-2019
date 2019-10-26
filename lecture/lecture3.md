@@ -15,7 +15,6 @@ konstrukce pro slova:
 
 1. pro FIRST(X1...Xi) postupuj stejne jako bys postupoval s FIRST(S'), kde S' -> X1...Xi.
 
-
 ## FOLLOW(A)
 - A je neterminal, tenhle operator vrati zase mnozinu, ale vsech terminalu (abecednich symbolu), ktery se mohou bezprostredne objevit za A. Pridavame zde jeste bonusovej symbol $ (jako je v regexech)
 

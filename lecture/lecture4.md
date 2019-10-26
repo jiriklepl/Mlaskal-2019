@@ -15,8 +15,8 @@
 - dve tabulky: action a goto
 - vystup: pri kazdy redukci vystup + ano/ne
 
-1) paska ukazuje na prvni terminal a mame pocatecni stav na zasobniku
-2) vzdycky se divame do tabulky action (souradnice terminal stav) a tam sou ctyri ruzny mozny akce co provist - stav podle stacku, akce mame shift, reduce, accept a error
+1. paska ukazuje na prvni terminal a mame pocatecni stav na zasobniku
+2. vzdycky se divame do tabulky action (souradnice terminal stav) a tam sou ctyri ruzny mozny akce co provist - stav podle stacku, akce mame shift, reduce, accept a error
     - shift: posunuti pasky o jedna
         - terminal se z pasky ulozi na zasobnik, posune se stav, divame se na dalsi terminal (je to zraci)
     - reduce: podle prepisovaciho pravidla
@@ -54,12 +54,11 @@ je i chyba na neukoncenej komentar (az u EOFu), nebo na spatny parovani komentar
 musime prevadet  inty rucne (floaty ne, na to mame pouzit naky std) - to co rozeznavame musime kontrolovat ze se vejde do uint31, kdyby ne, tak udelame WARNING a ulozime dolnich 31 bitu.
 
 slozity chyby: (malformovany elementy)
+
 - treba 12xy (takle to vypada jako uint identifikator), ale je to spatnej integer (malformovanej integer), vratime tu 12 a zahlasime chybu (muze to bejt jeste kombinovany s tim dlouhym cislem)
 - 3. je treba malformovanej real, nebo 3.1E, atd
-    - to se zase muze kombit s pravidlem nad
-    - furt se to dava do ty tabulky ale
-    - 3EAB je malformovanej int furt s prilepenym EAB
-    - 3..4 takle se v pascalu zapisuje interval
-        - uint dotdot uint
-
-+ lex.backup: nemel by tam bejt (resp 'no backup'), ale neni to rozhodna vec (je to jen vec vykonu)
+  - to se zase muze kombit s pravidlem nad
+  - furt se to dava do ty tabulky ale
+  - 3EAB je malformovanej int furt s prilepenym EAB- 3..4 takle se v   pascalu zapisuje interval
+    - uint dotdot uint
+- lex.backup: nemel by tam bejt (resp 'no backup'), ale neni to rozhodna vec (je to jen vec vykonu)

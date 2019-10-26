@@ -7,11 +7,6 @@
     // avoid unreferenced function warnings when compiling du1l.cpp
     #pragma warning (disable:4505)
 
-    // standard libraries
-    #include <cstddef>
-
-    #include <string>
-
     // allow access to YY_DECL macro
     #include "bisonflex.hpp"
 
@@ -29,9 +24,11 @@
 /* macros for usual tokens */
 WS          [ \r\t\f]
 DIGIT       [0-9]
-UINT        {DIGIT}+
 ALPHA       [A-Za-z]
 ALNUM       [0-9A-Za-z]
+IDENT       {ALPHA}{ALNUM}*
+UINT        {DIGIT}+
+REAL        {UINT}(\.|(\.{UINT})?{E}[+-]?){UINT}
 
 /* macros for case insensitivity */
 A           [Aa]
@@ -61,8 +58,10 @@ X           [Xx]
 Y           [Yy]
 Z           [Zz]
 
-%x          STR
+%x          CORRUPTED_STR
 %x          COMMENT
+%x          UINT
+%x          REAL
 
 %%
 
@@ -84,10 +83,12 @@ Z           [Zz]
 }
 
 
-'([^\n']|'')*               string_literal = yytext + 1; BEGIN(STR);
-<STR>\n                     message(mlc::DUERR_EOLINSTRCHR, ctx->curline); BEGIN(INITIAL); return parser::make_STRING(mlc::ls_str_index(), ctx->curline++);
-<STR>'                      BEGIN(INITIAL); return parser::make_STRING(mlc::ls_str_index(), ctx->curline);
-<STR><<EOF>>                message(mlc::DUERR_EOFINSTRCHR, ctx->curline); BEGIN(INITIAL); return parser::make_EOF(ctx->curline);
+'([^\n']|'')*'              string_literal = yytext + 1; string_literal.pop_back(); mlc::un_apostrophe(string_literal); return parser::make_STRING(ctx->tab->ls_str().add(string_literal), ctx->curline);
+
+'([^\n']|'')*               mlc::un_apostrophe(string_literal = yytext + 1); BEGIN(CORRUPTED_STR);
+
+<CORRUPTED_STR>\n           message(mlc::DUERR_EOLINSTRCHR, ctx->curline); BEGIN(INITIAL); return parser::make_STRING(ctx->tab->ls_str().add(string_literal), ctx->curline++);
+<CORRUPTED_STR><<EOF>>      message(mlc::DUERR_EOFINSTRCHR, ctx->curline); BEGIN(INITIAL); return parser::make_EOF(ctx->curline);
 
 {P}{R}{O}{G}{R}{A}{M}       return parser::make_PROGRAM(ctx->curline);
 
@@ -105,10 +106,6 @@ Z           [Zz]
 {O}{F}                      return parser::make_OF(ctx->curline);
 
 {R}{E}{C}{O}{R}{D}          return parser::make_RECORD(ctx->curline);
-
-
-{R}{E}{P}{E}{A}{T}          return parser::make_REPEAT(ctx->curline);
-{U}{N}{T}{I}{L}             return parser::make_UNTIL(ctx->curline);
 
 {I}{F}                      return parser::make_IF(ctx->curline);
 {T}{H}{E}{N}                return parser::make_THEN(ctx->curline);
@@ -162,16 +159,67 @@ Z           [Zz]
 :                           return parser::make_COLON(ctx->curline);
 ;                           return parser::make_SEMICOLON(ctx->curline);
 
-{ALPHA}{ALNUM}* {
-    return parser::make_IDENTIFIER(mlc::ls_id_index(), ctx->curline);
+{IDENT} {
+    string_literal = yytext;
+    return parser::make_IDENTIFIER(ctx->tab->ls_id().add(mlc::upper_case(string_literal)), ctx->curline);
 }
 
 {UINT} {
-    return parser::make_UINT(mlc::ls_int_index(), ctx->curline);
+    string_literal = yytext;
+    BEGIN(UINT);
 }
 
-{UINT}(\.|(\.{UINT})?{E}[+-]?){UINT} {
-    return parser::make_REAL(mlc::ls_real_index(), ctx->curline);
+<UINT>{E}[+-]?{IDENT}? {
+    BEGIN(INITIAL);
+    mlc::message(mlc::DUERR_BADREAL, ctx->curline, string_literal + yytext);
+    return parser::make_REAL(ctx->tab->ls_real().add(mlc::convert_real(string_literal)), ctx->curline);
+}
+
+<UINT>{IDENT} {
+    BEGIN(INITIAL);
+    mlc::message(mlc::DUERR_BADINT, ctx->curline, string_literal + yytext);
+    return parser::make_UINT(ctx->tab->ls_int().add(mlc::convert_int(string_literal.c_str(), ctx->curline)), ctx->curline);
+}
+
+<UINT>\./[^.] {
+    BEGIN(INITIAL);
+    mlc::message(mlc::DUERR_BADREAL, ctx->curline, string_literal + yytext);
+    return parser::make_REAL(ctx->tab->ls_real().add(mlc::convert_real(string_literal)), ctx->curline);
+}
+
+<UINT>""/. {
+    BEGIN(INITIAL);
+    return parser::make_UINT(ctx->tab->ls_int().add(mlc::convert_int(string_literal.c_str(), ctx->curline)), ctx->curline);
+}
+
+<UINT>(\.|(\.{UINT})?{E}[+-]?){UINT} {
+    string_literal += yytext;
+    BEGIN(REAL);
+}
+
+<UINT>(\.{UINT}){E}[+-]?{IDENT}? {
+    BEGIN(INITIAL);
+    mlc::message(mlc::DUERR_BADREAL, ctx->curline, string_literal + yytext);
+
+    char* where = yytext + 1;
+    while (*where >= '0' && *where <= '9') {
+        ++where;
+    }
+
+    string_literal += std::string{yytext, where - yytext};
+
+    return parser::make_REAL(ctx->tab->ls_real().add(mlc::convert_real(string_literal)), ctx->curline);
+}
+
+<REAL>""/. {
+    BEGIN(INITIAL);
+    return parser::make_REAL(ctx->tab->ls_real().add(mlc::convert_real(string_literal)), ctx->curline);
+}
+
+<REAL>{IDENT} {
+    BEGIN(INITIAL);
+    mlc::message(mlc::DUERR_BADREAL, ctx->curline, string_literal + yytext);
+    return parser::make_REAL(ctx->tab->ls_real().add(mlc::convert_real(string_literal)), ctx->curline);
 }
 
 {WS}+       /* go out with whitespaces */

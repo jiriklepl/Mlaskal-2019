@@ -11,6 +11,6 @@ ls public-cpp/*.out | {
         output="public-cpp/"`basename "$name"`
         expected="public-tests/"`basename "$name"`
         echo  "comparing $output (left) against $expected (right)"
-        $diff -y "$output" "$expected"
+        $diff -y --suppress-common-lines "$output" "$expected"
     done
 } | less -R

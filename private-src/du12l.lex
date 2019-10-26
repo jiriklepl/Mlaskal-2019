@@ -1,5 +1,5 @@
 %{
-    // this code is emitted into du12l.cpp 
+    // this code is emitted into du12l.cpp
     // avoid macro redefinition warnings when compiling du1l.cpp
     #pragma warning (disable:4005)
     // avoid unreferenced parameter warnings when compiling du1l.cpp
@@ -15,7 +15,7 @@
     // allow access to YY_DECL macro
     #include "bisonflex.hpp"
 
-    // allow access to context 
+    // allow access to context
     // CHANGE THIS LINE TO #include "du3456g.hpp" WHEN THIS FILE IS COPIED TO du3456l.lex
     #include "dummyg.hpp"
 

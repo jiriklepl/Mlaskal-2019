@@ -16,6 +16,9 @@
 			"-legal/copyright",
 			"-runtime/reference",
 			"-readability/namespace"
-		]
+		],
+		"files.eol": "\n",
+		"files.trimTrailingWhitespace": true,
+		"files.insertFinalNewline": true
 	}
 }

@@ -37,11 +37,11 @@
 {
 	// this code is emitted to du3456g.cpp
 
-	// declare yylex here 
+	// declare yylex here
 	#include "bisonflex.hpp"
 	YY_DECL;
 
-	// allow access to context 
+	// allow access to context
 	#include "dutables.hpp"
 
 	// other user-required contents
@@ -106,9 +106,9 @@
 
 %%
 
-mlaskal:	    PROGRAM 
-		    IDENTIFIER 
-		    SEMICOLON 
+mlaskal:	    PROGRAM
+		    IDENTIFIER
+		    SEMICOLON
 		;
 
 

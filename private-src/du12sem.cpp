@@ -1,10 +1,10 @@
 /*
 
-DU12SEM.CPP
+    DU12SEM.CPP
 
-JY
+    JY
 
-Mlaskal's semantic interface for DU1-2
+    Mlaskal's semantic interface for DU1-2
 
 */
 
@@ -14,6 +14,13 @@ Mlaskal's semantic interface for DU1-2
 
 namespace mlc {
 
+    std::string& upper_case(std::string& from) {
+        for (auto&& c : from) {
+            c |= 32;
+        }
+
+        return from;
+    }
 
 };
 

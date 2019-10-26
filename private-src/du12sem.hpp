@@ -1,10 +1,10 @@
 /*
 
-	DU12SEM.H
+    DU12SEM.H
 
-	DB
+    DB
 
-	Mlaskal's semantic interface for DU1-2
+    Mlaskal's semantic interface for DU1-2
 
 */
 
@@ -20,6 +20,7 @@
 
 namespace mlc {
 
+    std::string& upper_case(std::string&);
 
 }
 

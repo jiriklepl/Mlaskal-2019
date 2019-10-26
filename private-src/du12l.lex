@@ -10,12 +10,16 @@
     // standard libraries
     #include <cstddef>
 
+    #include <string>
+
     // allow access to YY_DECL macro
     #include "bisonflex.hpp"
 
     // allow access to context 
     // CHANGE THIS LINE TO #include "du3456g.hpp" WHEN THIS FILE IS COPIED TO du3456l.lex
     #include "dummyg.hpp"
+
+    #include "du12sem.hpp"
 %}
 
 /* DO NOT TOUCH THIS OPTIONS! */
@@ -64,19 +68,26 @@ Z           [Zz]
 
 %{
     typedef yy::mlaskal_parser parser;
-    std::size_t comment_level;
+    std::size_t comment_level = 0;
+    std::string string_literal;
 %}
 
 \{                          comment_level = 0; BEGIN(COMMENT);
-\}                          message(mlc::DUERR_UNEXPENDCMT, ctx->curline, *yytext, *yytext);
+\}                          message(mlc::DUERR_UNEXPENDCMT, ctx->curline);
 
 <COMMENT>"{"                ++comment_level;
 <COMMENT>"}"                if (comment_level-- == 0) BEGIN(INITIAL);
 <COMMENT>[^\n]              /* not interested */
 <COMMENT><<EOF>> {
-                            message(mlc::DUERR_EOFINCMT, ctx->curline, *yytext, *yytext);
+                            message(mlc::DUERR_EOFINCMT, ctx->curline);
                             return parser::make_EOF(ctx->curline);
 }
+
+
+'([^\n']|'')*               string_literal =  yytext + 1; mlc::upper_case(string_literal); BEGIN(STR);
+<STR>\n                     message(mlc::DUERR_EOLINSTRCHR, ctx->curline); BEGIN(INITIAL); return parser::make_STRING(mlc::ls_str_index(), ctx->curline++);
+<STR>'                      BEGIN(INITIAL); return parser::make_STRING(mlc::ls_str_index(), ctx->curline);
+<STR><<EOF>>                message(mlc::DUERR_EOFINSTRCHR, ctx->curline); BEGIN(INITIAL); return parser::make_EOF(ctx->curline);
 
 {P}{R}{O}{G}{R}{A}{M}       return parser::make_PROGRAM(ctx->curline);
 
@@ -85,16 +96,19 @@ Z           [Zz]
 {T}{Y}{P}{E}                return parser::make_TYPE(ctx->curline);
 {V}{A}{R}                   return parser::make_VAR(ctx->curline);
 
+
 {B}{E}{G}{I}{N}             return parser::make_BEGIN(ctx->curline);
 {E}{N}{D}                   return parser::make_END(ctx->curline);
 
 
+{A}{R}{R}{A}{Y}             return parser::make_ARRAY(ctx->curline);
+{O}{F}                      return parser::make_OF(ctx->curline);
 
-{F}{U}{N}{C}{T}{I}{O}{N}    return parser::make_FUNCTION(ctx->curline);
-{P}{R}{O}{C}{E}{D}{U}{R}{E} return parser::make_PROCEDURE(ctx->curline);
 {R}{E}{C}{O}{R}{D}          return parser::make_RECORD(ctx->curline);
 
 
+{R}{E}{P}{E}{A}{T}          return parser::make_REPEAT(ctx->curline);
+{U}{N}{T}{I}{L}             return parser::make_UNTIL(ctx->curline);
 
 {I}{F}                      return parser::make_IF(ctx->curline);
 {T}{H}{E}{N}                return parser::make_THEN(ctx->curline);
@@ -111,6 +125,7 @@ Z           [Zz]
 {U}{N}{T}{I}{L}             return parser::make_UNTIL(ctx->curline);
 
 {G}{O}{T}{O}                return parser::make_GOTO(ctx->curline);
+
 
 {N}{O}{T}                   return parser::make_NOT(ctx->curline);
 
@@ -131,14 +146,17 @@ Z           [Zz]
 {M}{O}{D}                   return parser::make_OPER_MUL(mlc::DUTOKGE_OPER_MUL::DUTOKGE_MOD, ctx->curline);
 {A}{N}{D}                   return parser::make_OPER_MUL(mlc::DUTOKGE_OPER_MUL::DUTOKGE_AND, ctx->curline);
 
+
 \(                          return parser::make_LPAR(ctx->curline);
 \)                          return parser::make_RPAR(ctx->curline);
 \[                          return parser::make_LSBRA(ctx->curline);
 \]                          return parser::make_RSBRA(ctx->curline);
 
+
 ,                           return parser::make_COMMA(ctx->curline);
 \.                          return parser::make_DOT(ctx->curline);
 \.\.                        return parser::make_DOTDOT(ctx->curline);
+
 
 :=                          return parser::make_ASSIGN(ctx->curline);
 :                           return parser::make_COLON(ctx->curline);

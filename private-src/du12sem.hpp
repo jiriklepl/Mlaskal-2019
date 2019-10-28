@@ -26,6 +26,7 @@ namespace mlc {
 
     std::string& upper_case(std::string&);
     std::string& un_apostrophe(std::string&);
+
     ls_real_type::value_type convert_real(const std::string&);
     ls_int_type::value_type convert_int(
         const char* from,

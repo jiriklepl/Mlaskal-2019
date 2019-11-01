@@ -17,6 +17,8 @@
 			"-runtime/reference",
 			"-readability/namespace"
 		],
+
+		/* files */
 		"files.eol": "\n",
 		"files.trimTrailingWhitespace": true,
 		"files.insertFinalNewline": true,
@@ -70,6 +72,15 @@
 			"cinttypes": "cpp",
 			"typeinfo": "cpp",
 			"bit": "cpp"
-		}
+		},
+
+		"C_Cpp.default.cppStandard": "c++17"
+	},
+	"extensions": {
+		"recommendations": [
+			"mine.cpplint",
+			"alefragnani.Bookmarks",
+			"ms-vscode.cpptools"
+		]
 	}
 }

@@ -46,33 +46,29 @@ namespace mlc {
     ) {
         ls_int_type::value_type number = 0;
         const char* where = from;
+        constexpr std::uint_least32_t limit = 1U << 31;
 
         for (; *where != '\0'; ++where) {
+            if (static_cast<std::uint_least32_t>(number) >= limit / 10) {
+                message(DUERR_INTOUTRANGE, line, from);
+                break;
+            }
+
             number *= 10;
-            if (  // checking for both variants, we dont know the architecture
-                number < 0 ||
-                (std::uint_least32_t)number >= (std::uint_least32_t)(1U << 31)
-            ) {
-                message(DUERR_INTOUTRANGE, line, from);
 
-                ++where;
-                break;
+            char digit = (*where - '0');
+
+            if (static_cast<std::uint_least32_t>(number) >= limit - digit) {
+                message(DUERR_INTOUTRANGE, line, from);
+                goto for_rest_digit;
             }
 
-            number += (*where - '0');
-            if (  // checking for both variants, we dont know the architecture
-                number < 0 ||
-                (std::uint_least32_t)number >= (std::uint_least32_t)(1U << 31)
-            ) {
-                message(DUERR_INTOUTRANGE, line, from);
-
-                ++where;
-                break;
-            }
+            number += digit;
         }
 
         for (; *where != '\0'; ++where) {
             number *= 10;
+        for_rest_digit:
             number += (*where - '0');
         }
 

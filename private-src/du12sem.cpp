@@ -81,7 +81,7 @@ namespace mlc {
 
     ls_real_type::value_type convert_real(const std::string& from) try {
         return std::stod(from);
-    } catch (std::out_of_range& e) {
+    } catch (std::out_of_range&) {
         std::istringstream from_stream{from};
         ls_real_type::value_type number;
 

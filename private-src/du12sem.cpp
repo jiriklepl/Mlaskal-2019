@@ -26,13 +26,18 @@ namespace mlc {
     }
 
     std::string& un_apostrophe(std::string& from) {
+        std::string to;
+        to.reserve(from.size());
+
         for (std::size_t i = 0; i < from.size(); ++i) {
             if (from[i] == '\'') {
-                from.erase(i, 1);
+                ++i;
             }
+
+            to.push_back(from[i]);
         }
 
-        return from;
+        return from = std::move(to);
     }
 
     ls_int_type::value_type convert_int(

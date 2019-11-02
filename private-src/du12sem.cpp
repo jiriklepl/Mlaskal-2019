@@ -42,10 +42,12 @@ namespace mlc {
 
     ls_int_type::value_type convert_int(
         const char* from,
-        decltype(mlc::MlaskalCtx::curline) line
+        std::add_const<decltype(mlc::MlaskalCtx::curline)>::type line
     ) {
         constexpr std::uint_least32_t limit = 1U << 31;
         constexpr std::uint_least32_t mask = (1UL << 31) - 1UL;
+
+        static_assert(mask + 1 == limit);
 
         std::uint_least32_t number = 0;
         const char* where = from;
@@ -58,7 +60,9 @@ namespace mlc {
 
             number *= 10;
 
-            char digit = (*where - '0');
+            assert(number < limit);
+
+            const char digit = (*where - '0');
 
             if (number >= limit - digit) {
                 message(DUERR_INTOUTRANGE, line, from);
@@ -69,6 +73,8 @@ namespace mlc {
             }
 
             number += digit;
+
+            assert(number < limit);
         }
 
         for (; *where != '\0'; ++where) {

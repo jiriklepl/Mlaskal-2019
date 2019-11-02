@@ -5,9 +5,15 @@
 /.vs
 
 public-cpp/tmp/
-public-cpp/*.out
-public-cpp/lex.backup
+
 public-cpp/du12l.cpp
+public-cpp/du3456l.cpp
+public-cpp/lex.backup
+
 public-cpp/du3456g.cpp
 public-cpp/du3456g.hpp
 public-cpp/du3456g.output
+
+public-cpp/stack.hh
+
+public-cpp/*.out

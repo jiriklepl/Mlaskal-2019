@@ -1,16 +1,10 @@
 #!/bin/bash
 
-if command -v colordiff > /dev/null; then
-    diff="colordiff"
-else
-    diff="diff"
-fi
-
-ls public-cpp/*.out | {
+ls public-cpp/*.out 2> /dev/null | {
     while read name; do
         output="public-cpp/"`basename "$name"`
         expected="public-tests/"`basename "$name"`
         echo  "comparing $output (left) against $expected (right)"
-        $diff -y --suppress-common-lines "$output" "$expected"
+        sdiff -l --strip-trailing-cr $output $expected | cat -n | grep -v -e ' ($'
     done
-} | less -R
+} | less

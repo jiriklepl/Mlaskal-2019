@@ -53,7 +53,7 @@ namespace mlc {
         const char* where = from;
 
         for (; *where != '\0'; ++where) {
-            if (number >= limit / 10) {
+            if (number > (limit / 10) - ((limit % 10) ? 0 : 1)) {
                 message(DUERR_INTOUTRANGE, line, from);
                 break;
             }

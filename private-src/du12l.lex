@@ -28,7 +28,6 @@ ALPHA       [A-Za-z]
 ALNUM       [0-9A-Za-z]
 IDENT       {ALPHA}{ALNUM}*
 UINT        {DIGIT}+
-REAL        {UINT}(\.|(\.{UINT})?{E}[+-]?){UINT}
 
 /* macros for case insensitivity */
 A           [Aa]
@@ -242,16 +241,6 @@ Z           [Zz]
         ctx->curline);
 }
 
-<UINT>{IDENT} {
-    BEGIN(INITIAL);
-    mlc::message(mlc::DUERR_BADINT, ctx->curline, string_literal + yytext);
-    return parser::make_UINT(
-        ctx->tab->ls_int().add(
-            mlc::convert_int(string_literal.c_str(),
-            ctx->curline)),
-        ctx->curline);
-}
-
 <UINT>(\.|(\.{UINT})?{E}[+-]?){UINT} {
     string_literal += yytext;
     BEGIN(REAL);
@@ -281,6 +270,16 @@ Z           [Zz]
     mlc::message(mlc::DUERR_BADREAL, ctx->curline, string_literal + yytext);
     return parser::make_REAL(
         ctx->tab->ls_real().add(mlc::convert_real(string_literal)),
+        ctx->curline);
+}
+
+<UINT>{IDENT} {
+    BEGIN(INITIAL);
+    mlc::message(mlc::DUERR_BADINT, ctx->curline, string_literal + yytext);
+    return parser::make_UINT(
+        ctx->tab->ls_int().add(
+            mlc::convert_int(string_literal.c_str(),
+            ctx->curline)),
         ctx->curline);
 }
 

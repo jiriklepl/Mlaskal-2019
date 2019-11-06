@@ -252,23 +252,6 @@ Z           [Zz]
         ctx->curline);
 }
 
-<UINT>\./[^.] {
-    BEGIN(INITIAL);
-    mlc::message(mlc::DUERR_BADREAL, ctx->curline, string_literal + yytext);
-    return parser::make_REAL(
-        ctx->tab->ls_real().add(mlc::convert_real(string_literal)),
-        ctx->curline);
-}
-
-<UINT>""/. {
-    BEGIN(INITIAL);
-    return parser::make_UINT(
-        ctx->tab->ls_int().add(
-            mlc::convert_int(string_literal.c_str(),
-            ctx->curline)),
-        ctx->curline);
-}
-
 <UINT>(\.|(\.{UINT})?{E}[+-]?){UINT} {
     string_literal += yytext;
     BEGIN(REAL);
@@ -293,11 +276,20 @@ Z           [Zz]
         ctx->curline);
 }
 
-<REAL>""/. {
+<UINT>\./[^.] {
     BEGIN(INITIAL);
-
+    mlc::message(mlc::DUERR_BADREAL, ctx->curline, string_literal + yytext);
     return parser::make_REAL(
         ctx->tab->ls_real().add(mlc::convert_real(string_literal)),
+        ctx->curline);
+}
+
+<UINT>""/. {
+    BEGIN(INITIAL);
+    return parser::make_UINT(
+        ctx->tab->ls_int().add(
+            mlc::convert_int(string_literal.c_str(),
+            ctx->curline)),
         ctx->curline);
 }
 
@@ -308,6 +300,14 @@ Z           [Zz]
         mlc::DUERR_BADREAL,
         ctx->curline,
         string_literal + yytext);
+
+    return parser::make_REAL(
+        ctx->tab->ls_real().add(mlc::convert_real(string_literal)),
+        ctx->curline);
+}
+
+<REAL>""/. {
+    BEGIN(INITIAL);
 
     return parser::make_REAL(
         ctx->tab->ls_real().add(mlc::convert_real(string_literal)),

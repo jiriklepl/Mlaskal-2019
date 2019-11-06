@@ -29,12 +29,12 @@ namespace mlc {
         std::string to;
         to.reserve(from.size());
 
-        for (std::size_t i = 0; i < from.size(); ++i) {
-            if (from[i] == '\'') {
-                ++i;
+        for (const char* c = from.c_str(); *c != '\0'; ++c) {
+            if (*c == '\'') {
+                ++c;
             }
 
-            to.push_back(from[i]);
+            to.push_back(*c);
         }
 
         return from = std::move(to);

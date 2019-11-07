@@ -60,8 +60,6 @@ Z           [Zz]
 
 %x          CORRUPTED_STR
 %x          COMMENT
-%x          UINT
-%x          REAL
 
 %%
 

@@ -52,7 +52,7 @@ namespace mlc {
         std::uint_least32_t number = 0;
         const char* where = from;
 
-        for (; *where != '\0'; ++where) {
+        for (; *where >= '0' && *where <= '9'; ++where) {
             if (number > (limit / 10) - ((limit % 10) ? 0 : 1)) {
                 message(DUERR_INTOUTRANGE, line, from);
                 break;
@@ -77,7 +77,7 @@ namespace mlc {
             assert(number < limit);
         }
 
-        for (; *where != '\0'; ++where) {
+        for (; *where >= '0' && *where <= '9'; ++where) {
             number *= 10;
             number += (*where - '0');
         }

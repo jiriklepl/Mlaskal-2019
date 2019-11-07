@@ -28,6 +28,7 @@ ALPHA       [A-Za-z]
 ALNUM       [0-9A-Za-z]
 IDENT       {ALPHA}{ALNUM}*
 UINT        {DIGIT}+
+REAL        {UINT}(\.|(\.{UINT})?{E}[+-]?){UINT}
 
 /* macros for case insensitivity */
 A           [Aa]
@@ -68,6 +69,16 @@ Z           [Zz]
     typedef yy::mlaskal_parser parser;
     std::size_t comment_level = 0;
     std::string string_literal;
+    static mlc::SPECIAL_CASE special_case = mlc::SPECIAL_CASE::SC_NORMAL;
+
+    switch (special_case) {
+        case mlc::SPECIAL_CASE::SC_UINT_DOTDOT:
+            special_case = mlc::SPECIAL_CASE::SC_NORMAL;
+            return parser::make_DOTDOT(ctx->curline);
+        case mlc::SPECIAL_CASE::SC_NORMAL:
+        default:
+        break;
+    }
 %}
 
 \{                          comment_level = 0; BEGIN(COMMENT);
@@ -229,87 +240,79 @@ Z           [Zz]
 }
 
 {UINT} {
-    string_literal = yytext;
-    BEGIN(UINT);
-}
-
-<UINT>{E}[+-]?{IDENT}? {
-    BEGIN(INITIAL);
-    mlc::message(mlc::DUERR_BADREAL, ctx->curline, string_literal + yytext);
-    return parser::make_REAL(
-        ctx->tab->ls_real().add(mlc::convert_real(string_literal)),
+    return parser::make_UINT(
+        ctx->tab->ls_int().add(
+            mlc::convert_int(yytext, ctx->curline)),
         ctx->curline);
 }
 
-<UINT>(\.|(\.{UINT})?{E}[+-]?){UINT} {
-    string_literal += yytext;
-    BEGIN(REAL);
+{UINT}{E}[+-]?{IDENT}? {
+    mlc::message(mlc::DUERR_BADREAL, ctx->curline, yytext);
+
+    return parser::make_REAL(
+        ctx->tab->ls_real().add(mlc::convert_real(yytext)),
+        ctx->curline);
 }
 
-<UINT>(\.{UINT}){E}[+-]?{IDENT}? {
-    BEGIN(INITIAL);
+{UINT}(\.{UINT}){E}[+-]?{IDENT}? {
     mlc::message(
         mlc::DUERR_BADREAL,
         ctx->curline,
-        string_literal + yytext);
-
-    const char* where = yytext + 1;
-    while (*where >= '0' && *where <= '9') {
-        ++where;
-    }
-
-    string_literal.append(yytext, where - yytext);
+        yytext);
 
     return parser::make_REAL(
-        ctx->tab->ls_real().add(mlc::convert_real(string_literal)),
+        ctx->tab->ls_real().add(mlc::convert_real(yytext)),
         ctx->curline);
 }
 
-<UINT>\./[^.] {
-    BEGIN(INITIAL);
-    mlc::message(mlc::DUERR_BADREAL, ctx->curline, string_literal + yytext);
-    return parser::make_REAL(
-        ctx->tab->ls_real().add(mlc::convert_real(string_literal)),
-        ctx->curline);
-}
+{UINT}\.\. {
+    special_case = mlc::SPECIAL_CASE::SC_UINT_DOTDOT;
 
-<UINT>{IDENT} {
-    BEGIN(INITIAL);
-    mlc::message(mlc::DUERR_BADINT, ctx->curline, string_literal + yytext);
     return parser::make_UINT(
         ctx->tab->ls_int().add(
-            mlc::convert_int(string_literal.c_str(),
+            mlc::convert_int(yytext, ctx->curline)),
+        ctx->curline);
+}
+
+{UINT}\. {
+    mlc::message(mlc::DUERR_BADREAL, ctx->curline, yytext);
+
+    return parser::make_REAL(
+        ctx->tab->ls_real().add(mlc::convert_real(yytext)),
+        ctx->curline);
+}
+
+{UINT}{IDENT} {
+    mlc::message(mlc::DUERR_BADINT, ctx->curline, yytext);
+
+    return parser::make_UINT(
+        ctx->tab->ls_int().add(
+            mlc::convert_int(yytext,
             ctx->curline)),
         ctx->curline);
 }
 
-<UINT>""/. {
-    BEGIN(INITIAL);
+{UINT} {
     return parser::make_UINT(
         ctx->tab->ls_int().add(
-            mlc::convert_int(string_literal.c_str(),
-            ctx->curline)),
+            mlc::convert_int(yytext, ctx->curline)),
         ctx->curline);
 }
 
-<REAL>{IDENT} {
-    BEGIN(INITIAL);
-
+{REAL}{IDENT} {
     mlc::message(
         mlc::DUERR_BADREAL,
         ctx->curline,
-        string_literal + yytext);
+        yytext);
 
     return parser::make_REAL(
-        ctx->tab->ls_real().add(mlc::convert_real(string_literal)),
+        ctx->tab->ls_real().add(mlc::convert_real(yytext)),
         ctx->curline);
 }
 
-<REAL>""/. {
-    BEGIN(INITIAL);
-
+{REAL} {
     return parser::make_REAL(
-        ctx->tab->ls_real().add(mlc::convert_real(string_literal)),
+        ctx->tab->ls_real().add(mlc::convert_real(yytext)),
         ctx->curline);
 }
 

@@ -292,13 +292,6 @@ Z           [Zz]
         ctx->curline);
 }
 
-{UINT} {
-    return parser::make_UINT(
-        ctx->tab->ls_int().add(
-            mlc::convert_int(yytext, ctx->curline)),
-        ctx->curline);
-}
-
 {REAL}{IDENT} {
     mlc::message(
         mlc::DUERR_BADREAL,

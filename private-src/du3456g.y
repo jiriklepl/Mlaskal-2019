@@ -302,6 +302,58 @@ statement_norepeat_nolabel
 	| statement_if
 	;
 
+variable
+	: variable_identifier  // TODO: variable_identifier
+	| variable_noidentifier
+
+variable_noidentifier
+	: record_variable DOT field_identifier  // TODO: record_variable, field_identifier
+
+real_par_list
+	: expression
+	| variable
+	| real_par_list COMMA expression
+	| real_par_list COMMA variable
+
+expression
+	: simple_expression
+	| simple_expression OPER_REL simple_expression
+
+simple_expression
+	: add_expression
+	| OPER_SIGNADD add_expression
+
+add_expression
+	: mul_expression
+	| add_expression OPER_SIGNADD mul_expression
+	| add_expression OR mul_expression
+
+mul_expression
+	: factor
+	| mul_expression OPER_MUL factor
+
+factor
+	: unsigned_constant
+	| variable_noidentifier
+	| function_call
+	| LPAR expression RPAR
+	| NOT factor
+
+function_call
+	: function_identifier  // TODO: function_identifier
+	| function_identifier LPAR real_par_list RPAR
+
+constant
+	: unsigned_constant
+	| OPER_SIGNADD UINT
+	| OPER_SIGNADD REAL
+
+unsigned_constant
+	: constant_identifier  // TODO: constant_identifier
+	| UINT
+	| REAL
+	| STRING
+
 %%
 
 

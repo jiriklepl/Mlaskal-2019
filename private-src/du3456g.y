@@ -31,8 +31,6 @@
 %param{ mlc::yyscan_t2 yyscanner }    // formal name "yyscanner" is enforced by flex
 %param{ mlc::MlaskalCtx* ctx }
 
-%start mlaskal
-
 %code
 {
     // this code is emitted to du3456g.cpp
@@ -103,6 +101,8 @@
 %token<mlc::DUTOKGE_OPER_SIGNADD> OPER_SIGNADD   /* +, - */
 %token<mlc::DUTOKGE_OPER_MUL> OPER_MUL           /* *, /, div, mod, and */
 %token<mlc::DUTOKGE_FOR_DIRECTION> FOR_DIRECTION /* to, downto */
+
+%start program
 
 %%
 

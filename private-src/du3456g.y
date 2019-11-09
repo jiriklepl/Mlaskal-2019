@@ -108,127 +108,158 @@
 
 program
 	: PROGRAM IDENTIFIER SEMICOLON program_block DOT
+	;
 
 program_block
 	: block_body
 	| program_block_header block_body
+	;
 
 program_block_header
 	: program_block_header_noblock_header
 	| block_header program_block_header_noblock_header
+	;
 
 program_block_header_noblock_header
 	: block_body
 	| function_def_list block_body
+	;
 
 block_header
 	: block_header_nolabel
 	| LABEL uint_list SEMICOLON block_header_nolabel
+	;
 
 block_header_nolabel
 	: block_header_noconst
 	| CONST const_def_list block_header_noconst
+	;
 
 block_header_noconst
 	: block_header_notype
 	| TYPE type_def_list block_header_notype
+	;
 
 block_header_notype
 	: block_header_novar
 	| VAR var_def_list block_header_novar
+	;
 
 block
 	: block_body
 	| block_header block_body
+	;
 
 block_body
 	: BEGIN statement_list END
+	;
 
 statement_list
 	: statement  // TODO(jiriklepl): statement
 	| statement_list SEMICOLON statement
+	;
 
 uint_list
 	: UINT
 	| uint_list COMMA UINT
+	;
 
 const_def_list
 	: const_def SEMICOLON
 	| const_def_list const_def SEMICOLON
+	;
 
 const_def
 	: IDENTIFIER EQ constant  // TODO(jiriklepl): constant
+	;
 
 type_def_list
 	: type_def SEMICOLON
 	| type_def_list type_def SEMICOLON
+	;
 
 type_def
 	: IDENTIFIER EQ type
+	;
 
 var_def_list
 	: var_def SEMICOLON
 	| var_def_list var_def SEMICOLON
+	;
 
 var_def
 	: identifier_list COMMA type
+	;
 
 identifier_list
 	: IDENTIFIER
 	| identifier_list COMMA IDENTIFIER
+	;
 
 function_def_list
 	: procedure_header SEMICOLON block SEMICOLON
 	| function_header SEMICOLON block SEMICOLON
+	;
 
 procedure_header
 	: PROCEDURE profun_header
+	;
 
 function_header
 	: FUNCTION profun_header SEMICOLON scalar_tident
+	;
 
 profun_header
 	: IDENTIFIER
 	| IDENTIFIER LPAR formal_par_list RPAR
+	;
 
 formal_par_list
 	: formal_par
 	| formal_par_list SEMICOLON formal_par
+	;
 
 formal_par
 	: VAR identifier_list COLON type_identifier  // TODO: type_identifier
+	;
 
 type
 	: ordinal_type
 	| type_identifier
 	| structured_type
+	;
 
 ordinal_type
 	: ordinal_type_identifier // TODO: ordinal_type_identifier
+	;
 /* ignoring the green */
 
 structured_type
 	: structured_type_identifiern  // TODO: structured_type_identifier
 	| RECORD END
 	| RECORD record_body END
+	;
 
 record_body
 	: field_list
 	| field_list SEMICOLON
+	;
 
 field_list
 	: var_def
 	| field_list SEMICOLON var_def
+	;
 
 statement
 	: UINT COLON statement_nolabel
 	| statement_nolabel
+	;
 
 statement_nolabel
 	: simple_statement  // TODO: simple_statement
 	| GOTO UINT
 	| block_body
-	| control_statement  // TODO: control_statement
+	;
 
 
 %%

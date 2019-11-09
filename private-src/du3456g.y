@@ -111,43 +111,39 @@ program
 	;
 
 program_block
-	: block_body
-	| program_block_header block_body
-	;
-
-program_block_header
-	: program_block_header_noblock_header
-	| block_header program_block_header_noblock_header
-	;
-
-program_block_header_noblock_header
-	: block_body
-	| function_def_list block_body
+	: block_header
+	  function_def_list
+	  block_body
 	;
 
 block_header
-	: block_header_nolabel
-	| LABEL uint_list SEMICOLON block_header_nolabel
+	: block_header_label
+	  block_header_const
+	  block_header_type
+	  block_header_var
 	;
 
-block_header_nolabel
-	: block_header_noconst
-	| CONST const_def_list block_header_noconst
+block_header_label
+	: /* empty */
+	| LABEL uint_list SEMICOLON
+
+block_header_const
+	: /* empty */
+	| CONST const_def_list
 	;
 
-block_header_noconst
-	: block_header_notype
-	| TYPE type_def_list block_header_notype
+block_header_type
+	: /* empty */
+	| TYPE type_def_list
 	;
 
-block_header_notype
-	: block_header_novar
-	| VAR var_def_list block_header_novar
+block_header_var
+	: /* empty */
+	| VAR var_def_list
 	;
 
 block
-	: block_body
-	| block_header block_body
+	: block_header block_body
 	;
 
 block_body
@@ -197,8 +193,9 @@ identifier_list
 	;
 
 function_def_list
-	: procedure_header SEMICOLON block SEMICOLON
-	| function_header SEMICOLON block SEMICOLON
+	: /* empty */
+	| function_def_list procedure_header SEMICOLON block SEMICOLON
+	| function_def_list function_header SEMICOLON block SEMICOLON
 	;
 
 procedure_header
@@ -206,7 +203,7 @@ procedure_header
 	;
 
 function_header
-	: FUNCTION profun_header SEMICOLON scalar_tident
+	: FUNCTION profun_header SEMICOLON scalar_tident  // TODO: scalar_tident
 	;
 
 profun_header

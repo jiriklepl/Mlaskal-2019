@@ -256,11 +256,54 @@ statement
 	;
 
 statement_nolabel
+	: statement_safe
+	| statement_if
+	| statement_repeat
+	;
+
+statement_safe
 	: simple_statement  // TODO: simple_statement
 	| GOTO UINT
 	| block_body
+	| safe_control_statement
 	;
 
+statement_if
+	: IF bool_expression THEN statement_noif
+	;
+
+statement_repeat
+	: REPEAT statement_norepeat UNTIL bool_expression
+	;
+
+safe_control_statement
+	: statement_if ELSE statement
+	| WHILE bool_expression DO  statement
+	| statement_repeat
+	| FOR ordinal_type_variable_identifier ASSIGN  // TODO: ordinal_type_variable_identifier
+		ordinal_expression FOR_DIRECTION ordinal_expression  // TODO: ordinal_expression
+		do statement
+	;
+
+statement_noif
+	: UINT COLON statement_noif_nolabel
+	| statement_noif_nolabel
+	;
+
+statement_noif_nolabel
+	: statement_safe
+	| statement_repeat
+	;
+
+statement_norepeat
+	: UINT COLON statement_norepeat_nolabel
+	| statement_norepeat_nolabel
+	;
+
+statement_norepeat_nolabel
+	: statement_safe
+	| statement_if
+	;
 
 %%
 

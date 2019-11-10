@@ -186,7 +186,7 @@ var_def_list
 	;
 
 var_def
-	: identifier_list COMMA type
+	: identifier_list COLON type
 	;
 
 identifier_list
@@ -205,7 +205,7 @@ procedure_header
 	;
 
 function_header
-	: FUNCTION profun_header SEMICOLON IDENTIFIER  // IDENTIFIER: scalar type
+	: FUNCTION profun_header COLON IDENTIFIER  // IDENTIFIER: scalar type
 	;
 
 profun_header

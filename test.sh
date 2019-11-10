@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ls public-cpp/*.out 2> /dev/null | grep -vE ".*a.out" | {
+ls public-cpp/*.out 2> /dev/null | grep -vE ".*a\.out" | {
     while read name; do
         output="public-cpp/"`basename "$name"`
         expected="public-tests/"`basename "$name"`

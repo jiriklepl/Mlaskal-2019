@@ -191,6 +191,8 @@ Z           [Zz]
                                 mlc::DUTOKGE_OPER_SIGNADD::DUTOKGE_PLUS,
                                 ctx->curline); }
 
+{O}{R}                      return parser::make_OR(ctx->curline);
+
 "-"                         { return parser::make_OPER_SIGNADD(
                                 mlc::DUTOKGE_OPER_SIGNADD::DUTOKGE_MINUS,
                                 ctx->curline); }

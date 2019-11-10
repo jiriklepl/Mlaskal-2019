@@ -169,7 +169,7 @@ const_def_list
 	;
 
 const_def
-	: IDENTIFIER EQ constant  // TODO(jiriklepl): constant
+	: IDENTIFIER EQ constant
 	;
 
 type_def_list

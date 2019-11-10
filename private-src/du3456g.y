@@ -248,58 +248,40 @@ field_list
 	;
 
 statement
-	: UINT COLON statement_nolabel
-	| statement_nolabel
-	;
+	: label_header safe_statement
+	| label_header if_statement
 
-statement_nolabel
-	: statement_safe
-	| statement_if
-	| statement_repeat
-	;
-
-statement_safe
-	: simple_statement  // TODO: simple_statement
-	| GOTO UINT
-	| block_body
-	| safe_control_statement
-	;
-
-statement_if
-	: IF expression THEN statement_noif  // expression: bool
-	;
-
-statement_repeat
-	: REPEAT statement_norepeat UNTIL expression  // expression: bool
-	;
-
-safe_control_statement
-	: statement_if ELSE statement
-	| WHILE expression DO  statement  // expression: bool
-	| statement_repeat
+whilefor_header
+	: WHILE expression DO  // expression: bool
 	| FOR IDENTIFIER ASSIGN  // IDENTIFIER: ordinal type variable
 		expression FOR_DIRECTION expression  // expression: ordinal
-		DO statement
+		DO
 	;
 
-statement_noif
-	: UINT COLON statement_noif_nolabel
-	| statement_noif_nolabel
+safe_statement
+	: IF expression THEN label_header safe_statement ELSE label_header safe_statement
+	| REPEAT statement UNTIL expression
+	| whilefor_header label_header safe_statement
+	| simple_statement_body
 	;
 
-statement_noif_nolabel
-	: statement_safe
-	| statement_repeat
+if_statement
+	: IF expression THEN statement
+	| IF expression THEN label_header safe_statement ELSE label_header if_statement
+	| whilefor_header label_header if_statement
 	;
 
-statement_norepeat
-	: UINT COLON statement_norepeat_nolabel
-	| statement_norepeat_nolabel
+label_header
+	: /* empty */
+	| UINT COLON
 	;
 
-statement_norepeat_nolabel
-	: statement_safe
-	| statement_if
+simple_statement_body
+	: IDENTIFIER ASSIGN expression  // IDENTIFIER: variable || function identifier (return value)
+	| IDENTIFIER  // IDENTIFIER: function || procedure
+	| IDENTIFIER LPAR real_par_list RPAR  // IDENTIFIER: function || procedure
+	| GOTO UINT
+	| block_body
 	;
 
 variable

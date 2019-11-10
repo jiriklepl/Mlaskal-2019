@@ -203,7 +203,7 @@ procedure_header
 	;
 
 function_header
-	: FUNCTION profun_header SEMICOLON scalar_tident  // TODO: scalar_tident
+	: FUNCTION profun_header SEMICOLON IDENTIFIER  // IDENTIFIER: scalar type
 	;
 
 profun_header
@@ -217,22 +217,22 @@ formal_par_list
 	;
 
 formal_par
-	: VAR identifier_list COLON type_identifier  // TODO: type_identifier
+	: VAR identifier_list COLON IDENTIFIER  // IDENTIFIER: type
 	;
 
 type
 	: ordinal_type
-	| type_identifier
+	| IDENTIFIER  // IDENTIFIER: type
 	| structured_type
 	;
 
 ordinal_type
-	: ordinal_type_identifier // TODO: ordinal_type_identifier
+	: IDENTIFIER // IDENTIFIER: ordinal type
 	;
 /* ignoring the green */
 
 structured_type
-	: structured_type_identifiern  // TODO: structured_type_identifier
+	: IDENTIFIER  // IDENTIFIER: structured type
 	| RECORD END
 	| RECORD record_body END
 	;
@@ -266,20 +266,20 @@ statement_safe
 	;
 
 statement_if
-	: IF bool_expression THEN statement_noif
+	: IF expression THEN statement_noif  // expression: bool
 	;
 
 statement_repeat
-	: REPEAT statement_norepeat UNTIL bool_expression
+	: REPEAT statement_norepeat UNTIL expression  // expression: bool
 	;
 
 safe_control_statement
 	: statement_if ELSE statement
-	| WHILE bool_expression DO  statement
+	| WHILE expression DO  statement  // expression: bool
 	| statement_repeat
-	| FOR ordinal_type_variable_identifier ASSIGN  // TODO: ordinal_type_variable_identifier
-		ordinal_expression FOR_DIRECTION ordinal_expression  // TODO: ordinal_expression
-		do statement
+	| FOR IDENTIFIER ASSIGN  // IDENTIFIER: ordinal type variable
+		expression FOR_DIRECTION expression  // expression: ordinal
+		DO statement
 	;
 
 statement_noif
@@ -303,11 +303,11 @@ statement_norepeat_nolabel
 	;
 
 variable
-	: variable_identifier  // TODO: variable_identifier
+	: IDENTIFIER  // IDENTIFIER: variable
 	| variable_noidentifier
 
 variable_noidentifier
-	: record_variable DOT field_identifier  // TODO: record_variable, field_identifier
+	: IDENTIFIER DOT IDENTIFIER  // IDENTIFIER: record_variable, field_identifier
 
 real_par_list
 	: expression
@@ -340,8 +340,8 @@ factor
 	| NOT factor
 
 function_call
-	: function_identifier  // TODO: function_identifier
-	| function_identifier LPAR real_par_list RPAR
+	: IDENTIFIER  // IDENTIFIER: function
+	| IDENTIFIER LPAR real_par_list RPAR  // IDENTIFIER: function
 
 constant
 	: unsigned_constant
@@ -349,7 +349,7 @@ constant
 	| OPER_SIGNADD REAL
 
 unsigned_constant
-	: constant_identifier  // TODO: constant_identifier
+	: IDENTIFIER  // IDENTIFIER: constant
 	| UINT
 	| REAL
 	| STRING

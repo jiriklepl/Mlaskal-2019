@@ -245,8 +245,9 @@ field_list
 	;
 
 statement
-	: label_header safe_statement
-	| label_header if_statement
+	: headered_safe_statement
+	| headered_if_statement
+	;
 
 whilefor_header
 	: WHILE expression DO  // expression: bool
@@ -255,17 +256,25 @@ whilefor_header
 		DO
 	;
 
+headered_safe_statement
+	: label_header safe_statement
+	;
+
 safe_statement
-	: IF expression THEN label_header safe_statement ELSE label_header safe_statement
+	: IF expression THEN headered_safe_statement ELSE headered_safe_statement
 	| REPEAT statement UNTIL expression
-	| whilefor_header label_header safe_statement
+	| whilefor_header headered_safe_statement
 	| simple_statement_body
+	;
+
+headered_if_statement
+	: label_header if_statement
 	;
 
 if_statement
 	: IF expression THEN statement
-	| IF expression THEN label_header safe_statement ELSE label_header if_statement
-	| whilefor_header label_header if_statement
+	| IF expression THEN headered_safe_statement ELSE headered_if_statement
+	| whilefor_header headered_if_statement
 	;
 
 label_header

@@ -283,54 +283,63 @@ simple_statement_body
 variable
 	: IDENTIFIER  // IDENTIFIER: variable
 	| variable_noidentifier
+	;
 
 variable_noidentifier
-	: IDENTIFIER DOT IDENTIFIER  // IDENTIFIER: record_variable, field_identifier
+	: variable DOT IDENTIFIER  // IDENTIFIER: record_variable, field_identifier
+	;
 
 real_par_list
 	: expression
-	| variable
 	| real_par_list COMMA expression
-	| real_par_list COMMA variable
+	;
 
 expression
 	: simple_expression
 	| simple_expression OPER_REL simple_expression
+	;
 
 simple_expression
 	: add_expression
 	| OPER_SIGNADD add_expression
+	;
 
 add_expression
 	: mul_expression
 	| add_expression OPER_SIGNADD mul_expression
 	| add_expression OR mul_expression
+	;
 
 mul_expression
 	: factor
 	| mul_expression OPER_MUL factor
+	;
 
 factor
-	: unsigned_constant
+	: unsigned_constant_noidentifier
 	| variable_noidentifier
-	| function_call
+	| IDENTIFIER  // IDENTIFIER: function || variable || unsigned_constant
+	| IDENTIFIER LPAR real_par_list RPAR  // IDENTIFIER: function
 	| LPAR expression RPAR
 	| NOT factor
-
-function_call
-	: IDENTIFIER  // IDENTIFIER: function
-	| IDENTIFIER LPAR real_par_list RPAR  // IDENTIFIER: function
+	;
 
 constant
 	: unsigned_constant
 	| OPER_SIGNADD UINT
 	| OPER_SIGNADD REAL
+	;
 
 unsigned_constant
 	: IDENTIFIER  // IDENTIFIER: constant
-	| UINT
+	| unsigned_constant_noidentifier
+	;
+
+unsigned_constant_noidentifier
+	: UINT
 	| REAL
 	| STRING
+	;
 
 %%
 

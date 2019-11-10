@@ -148,10 +148,12 @@ block
 
 block_body
 	: BEGIN statement_list END
+	| BEGIN END
+	| BEGIN statement_list SEMICOLON END
 	;
 
 statement_list
-	: statement  // TODO(jiriklepl): statement
+	: statement
 	| statement_list SEMICOLON statement
 	;
 

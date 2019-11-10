@@ -262,7 +262,7 @@ headered_safe_statement
 
 safe_statement
 	: IF expression THEN headered_safe_statement ELSE headered_safe_statement
-	| REPEAT statement UNTIL expression
+	| REPEAT statement_list UNTIL expression
 	| whilefor_header headered_safe_statement
 	| simple_statement
 	;
@@ -284,7 +284,7 @@ label_header
 
 simple_statement
 	: IDENTIFIER ASSIGN expression  // IDENTIFIER: variable || function identifier (return value)
-	| IDENTIFIER  // IDENTIFIER: procedure || variable
+	| IDENTIFIER  // IDENTIFIER: procedure || function
 	| IDENTIFIER LPAR real_par_list RPAR  // IDENTIFIER: function || procedure
 	| GOTO UINT
 	| block_body

@@ -123,6 +123,8 @@ Z           [Zz]
 }
 
 {P}{R}{O}{G}{R}{A}{M}       return parser::make_PROGRAM(ctx->curline);
+{F}{U}{N}{C}{T}{I}{O}{N}    return parser::make_FUNCTION(ctx->curline);
+{P}{R}{O}{C}{E}{D}{U}{R}{E} return parser::make_PROCEDURE(ctx->curline);
 
 {L}{A}{B}{E}{L}             return parser::make_LABEL(ctx->curline);
 {C}{O}{N}{S}{T}             return parser::make_CONST(ctx->curline);

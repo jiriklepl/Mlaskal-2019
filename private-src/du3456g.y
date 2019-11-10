@@ -224,19 +224,12 @@ formal_par
 	;
 
 type
-	: ordinal_type
-	| IDENTIFIER  // IDENTIFIER: type
+	: IDENTIFIER  // IDENTIFIER: type
 	| structured_type
 	;
 
-ordinal_type
-	: IDENTIFIER // IDENTIFIER: ordinal type
-	;
-/* ignoring the green */
-
 structured_type
-	: IDENTIFIER  // IDENTIFIER: structured type
-	| RECORD END
+	: RECORD END
 	| RECORD record_body END
 	;
 

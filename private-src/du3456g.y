@@ -126,6 +126,7 @@ block_header
 block_header_label
 	: /* empty */
 	| LABEL uint_list SEMICOLON
+	;
 
 block_header_const
 	: /* empty */

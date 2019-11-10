@@ -219,7 +219,8 @@ formal_par_list
 	;
 
 formal_par
-	: VAR identifier_list COLON IDENTIFIER  // IDENTIFIER: type
+	: identifier_list COLON IDENTIFIER  // IDENTIFIER: type
+	| VAR identifier_list COLON IDENTIFIER  // IDENTIFIER: type
 	;
 
 type

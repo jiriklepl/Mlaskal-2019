@@ -149,8 +149,6 @@ block
 
 block_body
 	: BEGIN statement_list END
-	| BEGIN END
-	| BEGIN statement_list SEMICOLON END
 	;
 
 statement_list
@@ -261,7 +259,8 @@ headered_safe_statement
 	;
 
 safe_statement
-	: IF expression THEN headered_safe_statement ELSE headered_safe_statement
+	: /* empty */
+	| IF expression THEN headered_safe_statement ELSE headered_safe_statement
 	| REPEAT statement_list UNTIL expression
 	| whilefor_header headered_safe_statement
 	| simple_statement

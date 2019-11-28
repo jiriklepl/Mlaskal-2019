@@ -283,6 +283,7 @@ label_header
 
 simple_statement
 	: IDENTIFIER ASSIGN expression  // IDENTIFIER: variable || function identifier (return value)
+	| variable_noidentifier ASSIGN expression  // IDENTIFIER: variable || function identifier (return value)
 	| IDENTIFIER  // IDENTIFIER: procedure || function
 	| IDENTIFIER LPAR real_par_list RPAR  // IDENTIFIER: function || procedure
 	| GOTO UINT

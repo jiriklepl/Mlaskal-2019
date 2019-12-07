@@ -104,6 +104,16 @@
 %token<mlc::DUTOKGE_OPER_MUL> OPER_MUL           /* *, /, div, mod, and */
 %token<mlc::DUTOKGE_FOR_DIRECTION> FOR_DIRECTION /* to, downto */
 
+
+/* types */
+%type<mlc::type_specifier::pointer> type
+%type<mlc::type_pointer> structured_type
+%type<mlc::field_list_ptr> record_body
+%type<mlc::field_list_ptr> field_list
+%type<mlc::var_def::pointer> var_def
+%type<mlc::id_list::pointer> identifier_list
+
+/* constants */
 %type<mlc::constant_value::pointer> constant
 %type<mlc::constant_value::pointer> unsigned_constant
 %type<mlc::constant_value::pointer> unsigned_constant_noidentifier
@@ -118,7 +128,7 @@ program:
 
 program_block:
     block_header
-    function_def_list
+    profun_def_list
     block_body
     ;
 
@@ -174,84 +184,84 @@ const_def_list:
 
 const_def:
     IDENTIFIER EQ constant {
-        switch($3->get_type()) {
-            case constant_value::constant_value_type::ID_CONSTANT: {
-                auto value = ((id_constant*)&*$3)->_val;
+        switch ($constant->get_type()) {
+            case constant_value::type::ID_CONSTANT: {
+                auto value = ((id_constant*)&*$constant)->_val;
                 mlc::symbol_pointer sp = ctx->tab->find_symbol(value);
                 if (sp->kind() != SKIND_CONST) {
-                    message(DUERR_NOTCONST, @3, *value);
+                    message(DUERR_NOTCONST, @constant, *value);
                 }
 
-                switch(sp->access_const()->type()->cat()) {
+                switch (sp->access_const()->type()->cat()) {
                     case TCAT_REAL:
                         ctx->tab->add_const_real(
-                            @1,
-                            $1,
+                            @IDENTIFIER,
+                            $IDENTIFIER,
                             sp->access_const()->access_real_const()->real_value());
 
                     break;
 
                     case TCAT_INT:
                         ctx->tab->add_const_int(
-                            @1,
-                            $1,
+                            @IDENTIFIER,
+                            $IDENTIFIER,
                             sp->access_const()->access_int_const()->int_value());
                     break;
 
                     case TCAT_STR:
                         ctx->tab->add_const_str(
-                            @1,
-                            $1,
+                            @IDENTIFIER,
+                            $IDENTIFIER,
                             sp->access_const()->access_str_const()->str_value());
                     break;
                 }
             } break;
 
-            case constant_value::constant_value_type::UINT_CONSTANT:
-                ctx->tab->add_const_int( @1, $1, ((uint_constant*)&*$3)->_val);
+            case constant_value::type::UINT_CONSTANT:
+                ctx->tab->add_const_int( @IDENTIFIER, $IDENTIFIER, ((uint_constant*)&*$constant)->_val);
             break;
 
-            case constant_value::constant_value_type::STR_CONSTANT:
-                ctx->tab->add_const_str( @1, $1, ((str_constant*)&*$3)->_val);
+            case constant_value::type::STR_CONSTANT:
+                ctx->tab->add_const_str( @IDENTIFIER, $IDENTIFIER, ((str_constant*)&*$constant)->_val);
             break;
 
-            case constant_value::constant_value_type::REAL_CONSTANT:
-                ctx->tab->add_const_real( @1, $1, ((real_constant*)&*$3)->_val);
+            case constant_value::type::REAL_CONSTANT:
+                ctx->tab->add_const_real( @IDENTIFIER, $IDENTIFIER, ((real_constant*)&*$constant)->_val);
             break;
 
-            case constant_value::constant_value_type::SIGNED_UINT_CONSTANT:
+            case constant_value::type::SIGNED_UINT_CONSTANT:
                 if (
-                    ((signed_uint_constant*)&*$3)->_oper ==
+                    ((signed_uint_constant*)&*$constant)->_oper ==
                         DUTOKGE_OPER_SIGNADD::DUTOKGE_PLUS
                 ) {
                     ctx->tab->add_const_int(
-                        @1,
-                        $1,
-                        ((signed_uint_constant*)&*$3)->_val);
+                        @IDENTIFIER,
+                        $IDENTIFIER,
+                        ((signed_uint_constant*)&*$constant)->_val);
                 } else {
                     ctx->tab->add_const_int(
-                        @1,
-                        $1,
+                        @IDENTIFIER,
+                        $IDENTIFIER,
                         ctx->tab->ls_int().add(
-                            -*((signed_uint_constant*)&*$3)->_val));
+                            -*((signed_uint_constant*)&*$constant)->_val));
                 }
             break;
 
-            case constant_value::constant_value_type::SIGNED_REAL_CONSTANT:
+            case constant_value::type::SIGNED_REAL_CONSTANT:
                 if (
-                    ((signed_real_constant*)&*$3)->_oper ==
+                    ((signed_real_constant*)&*$constant)->_oper ==
                         DUTOKGE_OPER_SIGNADD::DUTOKGE_PLUS
                 ) {
                     ctx->tab->add_const_real(
-                        @1,
-                        $1,
-                        ((signed_real_constant*)&*$3)->_val);
+                        @IDENTIFIER,
+                        $IDENTIFIER,
+                        ((signed_real_constant*)&*$constant)->_val);
                 } else {
                     ctx->tab->add_const_real(
-                        @1,
-                        $1,
+                        @IDENTIFIER,
+                        $IDENTIFIER,
                         ctx->tab->ls_real().add(
-                            -*((signed_real_constant*)&*$3)->_val));
+                            -*((signed_real_constant*)&*$constant)->_val));
                 }
             break;
         }
@@ -264,7 +274,31 @@ type_def_list:
     ;
 
 type_def:
-    IDENTIFIER EQ type
+    IDENTIFIER EQ type {
+        switch ($type->get_type()) {
+            case type_specifier::type::ID_TYPE: {
+                auto value = ((id_specifier*)&*$type)->_val;
+                mlc::symbol_pointer sp =
+                    ctx->tab->find_symbol(value);
+
+                if (!sp || (sp->kind() != SKIND_TYPE)) {
+                    message(DUERR_NOTTYPE, @type, *value);
+                } else {
+                    ctx->tab->add_type(
+                        @IDENTIFIER,
+                        $IDENTIFIER,
+                        sp->access_type()->type());
+                }
+            } break;
+
+            case type_specifier::type::RECORD_TYPE:
+                ctx->tab->add_type(
+                    @IDENTIFIER,
+                    $IDENTIFIER,
+                    ((record_specifier*)&*$type)->_val);
+            break;
+        }
+    }
     ;
 
 var_def_list:
@@ -273,18 +307,50 @@ var_def_list:
     ;
 
 var_def:
-    identifier_list COLON type
+    identifier_list COLON type {
+        type_pointer type;
+
+        switch ($type->get_type()) {
+            case type_specifier::type::ID_TYPE: {
+                auto value = ((id_specifier*)&*$type)->_val;
+                mlc::symbol_pointer sp =
+                    ctx->tab->find_symbol(value);
+
+                if (!sp || (sp->kind() != SKIND_TYPE)) {
+                    message(DUERR_NOTTYPE, @type, *value);
+                } else {
+                    type = sp->access_type()->type();
+                }
+            } break;
+
+            case type_specifier::type::RECORD_TYPE:
+                type = ((record_specifier*)&*$type)->_val;
+            break;
+        }
+
+        $$ = std::make_unique<var_def>(
+            std::move($identifier_list),
+            type
+        );
+    }
     ;
 
 identifier_list:
-    IDENTIFIER
-    | identifier_list COMMA IDENTIFIER
+    IDENTIFIER { $$ = std::make_unique<id_list>($IDENTIFIER); }
+    | identifier_list[list] COMMA IDENTIFIER {
+        $list->append($IDENTIFIER);
+        $$ = std::move($list);
+    }
     ;
 
-function_def_list:
+profun_def_list:
     /* empty */
-    | function_def_list procedure_header SEMICOLON block SEMICOLON
-    | function_def_list function_header SEMICOLON block SEMICOLON
+    | profun_def_list procedure_header SEMICOLON block SEMICOLON[END] {
+        ctx->tab->leave(@END);
+    }
+    | profun_def_list function_header SEMICOLON block SEMICOLON[END] {
+        ctx->tab->leave(@END);
+    }
     ;
 
 procedure_header:
@@ -296,8 +362,12 @@ function_header:
     ;
 
 profun_header:
-    IDENTIFIER
-    | IDENTIFIER LPAR formal_par_list RPAR
+    IDENTIFIER {
+        ctx->tab->enter(@IDENTIFIER, $IDENTIFIER);
+    }
+    | IDENTIFIER LPAR formal_par_list RPAR {
+        ctx->tab->enter(@IDENTIFIER, $IDENTIFIER);
+    }
     ;
 
 formal_par_list:
@@ -311,23 +381,46 @@ formal_par:
     ;
 
 type:
-    IDENTIFIER  // IDENTIFIER: type
-    | structured_type
+    IDENTIFIER  { $$ = std::make_unique<id_specifier>($IDENTIFIER); }
+    | structured_type { $$ = std::make_unique<record_specifier>($structured_type); }
     ;
 
 structured_type:
-    RECORD END
-    | RECORD record_body END
+    RECORD END {
+        $$ = ctx->tab->create_record_type(
+            std::make_shared<field_list_body>(),
+            @RECORD);
+    }
+    | RECORD record_body END {
+
+        $$ = ctx->tab->create_record_type(
+            $record_body,
+            @RECORD);
+    }
     ;
 
 record_body:
-    field_list
-    | field_list SEMICOLON
+    field_list { $$ = $field_list; }
+    | field_list SEMICOLON { $$ = $field_list; }
     ;
 
 field_list:
-    var_def
-    | field_list SEMICOLON var_def
+    var_def {
+        auto fields = std::make_shared<field_list_body>();
+
+        for (auto&& id : $var_def->_list->_ids) {
+            fields->append_field(id, $var_def->_type);
+        }
+
+        $$ = fields;
+    }
+    | field_list[fields] SEMICOLON var_def {
+        for (auto&& id : $var_def->_list->_ids) {
+            $fields->append_field(id, $var_def->_type);
+        }
+
+        $$ = $fields;
+    }
     ;
 
 statement:
@@ -423,20 +516,20 @@ factor:
     ;
 
 constant:
-    unsigned_constant { $$ = std::move($1); }
-    | OPER_SIGNADD UINT { $$ = std::make_unique<signed_uint_constant>($1, $2); }
-    | OPER_SIGNADD REAL { $$ = std::make_unique<signed_real_constant>($1, $2); }
+    unsigned_constant { $$ = std::move($unsigned_constant); }
+    | OPER_SIGNADD UINT { $$ = std::make_unique<signed_uint_constant>($OPER_SIGNADD, $UINT); }
+    | OPER_SIGNADD REAL { $$ = std::make_unique<signed_real_constant>($OPER_SIGNADD, $REAL); }
     ;
 
 unsigned_constant:
-    IDENTIFIER  { $$ = std::make_unique<id_constant>($1); }
-    | unsigned_constant_noidentifier { $$ = std::move($1); }
+    IDENTIFIER  { $$ = std::make_unique<id_constant>($IDENTIFIER); }
+    | unsigned_constant_noidentifier { $$ = std::move($unsigned_constant_noidentifier); }
     ;
 
 unsigned_constant_noidentifier:
-    UINT { $$ = std::make_unique<uint_constant>($1); }
-    | REAL { $$ = std::make_unique<real_constant>($1); }
-    | STRING { $$ = std::make_unique<str_constant>($1); }
+    UINT { $$ = std::make_unique<uint_constant>($UINT); }
+    | REAL { $$ = std::make_unique<real_constant>($REAL); }
+    | STRING { $$ = std::make_unique<str_constant>($STRING); }
     ;
 
 %%

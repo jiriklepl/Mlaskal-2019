@@ -106,203 +106,250 @@
 
 %%
 
-program: PROGRAM IDENTIFIER SEMICOLON program_block DOT
-       ;
+program:
+    PROGRAM IDENTIFIER SEMICOLON program_block DOT
+    ;
 
-program_block: block_header
-               function_def_list
-               block_body
-             ;
+program_block:
+    block_header
+    function_def_list
+    block_body
+    ;
 
-block_header: block_header_label
-              block_header_const
-              block_header_type
-              block_header_var
-            ;
+block_header:
+    block_header_label
+    block_header_const
+    block_header_type
+    block_header_var
+    ;
 
-block_header_label: /* empty */
-                  | LABEL uint_list SEMICOLON
-                  ;
+block_header_label:
+    /* empty */
+    | LABEL uint_list SEMICOLON
+    ;
 
-block_header_const: /* empty */
-                  | CONST const_def_list
-                  ;
+block_header_const:
+    /* empty */
+    | CONST const_def_list
+    ;
 
-block_header_type: /* empty */
-                 | TYPE type_def_list
-                 ;
+block_header_type:
+    /* empty */
+    | TYPE type_def_list
+    ;
 
-block_header_var: /* empty */
-                | VAR var_def_list
-                ;
+block_header_var:
+    /* empty */
+    | VAR var_def_list
+    ;
 
-block: block_header block_body
-     ;
+block:
+    block_header block_body
+    ;
 
-block_body: BEGIN statement_list END
-          ;
+block_body:
+    BEGIN statement_list END
+    ;
 
-statement_list: statement
-              | statement_list SEMICOLON statement
-              ;
+statement_list:
+    statement
+    | statement_list SEMICOLON statement
+    ;
 
-uint_list: UINT
-         | uint_list COMMA UINT
-         ;
+uint_list:
+    UINT
+    | uint_list COMMA UINT
+    ;
 
-const_def_list: const_def SEMICOLON
-              | const_def_list const_def SEMICOLON
-              ;
+const_def_list:
+    const_def SEMICOLON
+    | const_def_list const_def SEMICOLON
+    ;
 
-const_def: IDENTIFIER EQ constant
-         ;
+const_def:
+    IDENTIFIER EQ constant
+    ;
 
-type_def_list: type_def SEMICOLON
-             | type_def_list type_def SEMICOLON
-             ;
+type_def_list:
+    type_def SEMICOLON
+    | type_def_list type_def SEMICOLON
+    ;
 
-type_def: IDENTIFIER EQ type
-        ;
+type_def:
+    IDENTIFIER EQ type
+    ;
 
-var_def_list: var_def SEMICOLON
-            | var_def_list var_def SEMICOLON
-            ;
+var_def_list:
+    var_def SEMICOLON
+    | var_def_list var_def SEMICOLON
+    ;
 
-var_def: identifier_list COLON type
-       ;
+var_def:
+    identifier_list COLON type
+    ;
 
-identifier_list: IDENTIFIER
-               | identifier_list COMMA IDENTIFIER
-               ;
+identifier_list:
+    IDENTIFIER
+    | identifier_list COMMA IDENTIFIER
+    ;
 
-function_def_list: /* empty */
-                 | function_def_list procedure_header SEMICOLON block SEMICOLON
-                 | function_def_list function_header SEMICOLON block SEMICOLON
-                 ;
+function_def_list:
+    /* empty */
+    | function_def_list procedure_header SEMICOLON block SEMICOLON
+    | function_def_list function_header SEMICOLON block SEMICOLON
+    ;
 
-procedure_header: PROCEDURE profun_header
-                ;
+procedure_header:
+    PROCEDURE profun_header
+    ;
 
-function_header: FUNCTION profun_header COLON IDENTIFIER  // IDENTIFIER: scalar type
-               ;
+function_header:
+    FUNCTION profun_header COLON IDENTIFIER  // IDENTIFIER: scalar type
+    ;
 
-profun_header: IDENTIFIER
-             | IDENTIFIER LPAR formal_par_list RPAR
-             ;
+profun_header:
+    IDENTIFIER
+    | IDENTIFIER LPAR formal_par_list RPAR
+    ;
 
-formal_par_list: formal_par
-               | formal_par_list SEMICOLON formal_par
-               ;
+formal_par_list:
+    formal_par
+    | formal_par_list SEMICOLON formal_par
+    ;
 
-formal_par: identifier_list COLON IDENTIFIER  // IDENTIFIER: type
-          | VAR identifier_list COLON IDENTIFIER  // IDENTIFIER: type
-          ;
+formal_par:
+    identifier_list COLON IDENTIFIER  // IDENTIFIER: type
+    | VAR identifier_list COLON IDENTIFIER  // IDENTIFIER: type
+    ;
 
-type: IDENTIFIER  // IDENTIFIER: type
+type:
+    IDENTIFIER  // IDENTIFIER: type
     | structured_type
     ;
 
-structured_type: RECORD END
-               | RECORD record_body END
-               ;
+structured_type:
+    RECORD END
+    | RECORD record_body END
+    ;
 
-record_body: field_list
-           | field_list SEMICOLON
-           ;
+record_body:
+    field_list
+    | field_list SEMICOLON
+    ;
 
-field_list: var_def
-          | field_list SEMICOLON var_def
-          ;
+field_list:
+    var_def
+    | field_list SEMICOLON var_def
+    ;
 
-statement: headered_safe_statement
-         | headered_if_statement
-         ;
+statement:
+    headered_safe_statement
+    | headered_if_statement
+    ;
 
-whilefor_header: WHILE expression DO  // expression: bool
-               | FOR IDENTIFIER ASSIGN  // IDENTIFIER: ordinal type variable
-                 expression FOR_DIRECTION expression  // expression: ordinal
-                 DO
-               ;
+whilefor_header:
+    WHILE expression DO  // expression: bool
+    | FOR IDENTIFIER ASSIGN  // IDENTIFIER: ordinal type variable
+    expression FOR_DIRECTION expression  // expression: ordinal
+    DO
+    ;
 
-headered_safe_statement: label_header safe_statement
-                       ;
+headered_safe_statement:
+    label_header safe_statement
+    ;
 
-safe_statement: /* empty */
-              | IF expression THEN headered_safe_statement ELSE headered_safe_statement
-              | REPEAT statement_list UNTIL expression
-              | whilefor_header headered_safe_statement
-              | simple_statement
-              ;
+safe_statement:
+    /* empty */
+    | IF expression THEN headered_safe_statement ELSE headered_safe_statement
+    | REPEAT statement_list UNTIL expression
+    | whilefor_header headered_safe_statement
+    | simple_statement
+    ;
 
-headered_if_statement: label_header if_statement
-                     ;
+headered_if_statement:
+    label_header if_statement
+    ;
 
-if_statement: IF expression THEN statement
-            | IF expression THEN headered_safe_statement ELSE headered_if_statement
-            | whilefor_header headered_if_statement
-            ;
+if_statement:
+    IF expression THEN statement
+    | IF expression THEN headered_safe_statement ELSE headered_if_statement
+    | whilefor_header headered_if_statement
+    ;
 
-label_header: /* empty */
-            | UINT COLON
-            ;
+label_header:
+    /* empty */
+    | UINT COLON
+    ;
 
-simple_statement: IDENTIFIER ASSIGN expression  // IDENTIFIER: variable || function identifier (return value)
-                | variable_noidentifier ASSIGN expression  // IDENTIFIER: variable || function identifier (return value)
-                | IDENTIFIER  // IDENTIFIER: procedure || function
-                | IDENTIFIER LPAR real_par_list RPAR  // IDENTIFIER: function || procedure
-                | GOTO UINT
-                | block_body
-                ;
+simple_statement:
+    IDENTIFIER ASSIGN expression  // IDENTIFIER: variable || function identifier (return value)
+    | variable_noidentifier ASSIGN expression  // IDENTIFIER: variable || function identifier (return value)
+    | IDENTIFIER  // IDENTIFIER: procedure || function
+    | IDENTIFIER LPAR real_par_list RPAR  // IDENTIFIER: function || procedure
+    | GOTO UINT
+    | block_body
+    ;
 
-variable: IDENTIFIER  // IDENTIFIER: variable
-        | variable_noidentifier
-        ;
+variable:
+    IDENTIFIER  // IDENTIFIER: variable
+    | variable_noidentifier
+    ;
 
-variable_noidentifier: variable DOT IDENTIFIER  // IDENTIFIER: record_variable, field_identifier
-                     ;
+variable_noidentifier:
+    variable DOT IDENTIFIER  // IDENTIFIER: record_variable, field_identifier
+    ;
 
-real_par_list: expression
-             | real_par_list COMMA expression
-             ;
+real_par_list:
+    expression
+    | real_par_list COMMA expression
+    ;
 
-expression: simple_expression
-          | simple_expression OPER_REL simple_expression
-          ;
+expression:
+    simple_expression
+    | simple_expression OPER_REL simple_expression
+    ;
 
-simple_expression: add_expression
-                 | OPER_SIGNADD add_expression
-                 ;
+simple_expression:
+    add_expression
+    | OPER_SIGNADD add_expression
+    ;
 
-add_expression: mul_expression
-              | add_expression OPER_SIGNADD mul_expression
-              | add_expression OR mul_expression
-              ;
+add_expression:
+    mul_expression
+    | add_expression OPER_SIGNADD mul_expression
+    | add_expression OR mul_expression
+    ;
 
-mul_expression: factor
-              | mul_expression OPER_MUL factor
-              ;
+mul_expression:
+    factor
+    | mul_expression OPER_MUL factor
+    ;
 
-factor: unsigned_constant_noidentifier
-      | variable_noidentifier
-      | IDENTIFIER  // IDENTIFIER: function || variable || unsigned_constant
-      | IDENTIFIER LPAR real_par_list RPAR  // IDENTIFIER: function
-      | LPAR expression RPAR
-      | NOT factor
-      ;
+factor:
+    unsigned_constant_noidentifier
+    | variable_noidentifier
+    | IDENTIFIER  // IDENTIFIER: function || variable || unsigned_constant
+    | IDENTIFIER LPAR real_par_list RPAR  // IDENTIFIER: function
+    | LPAR expression RPAR
+    | NOT factor
+    ;
 
-constant: unsigned_constant
-        | OPER_SIGNADD UINT
-        | OPER_SIGNADD REAL
-        ;
+constant:
+    unsigned_constant
+    | OPER_SIGNADD UINT
+    | OPER_SIGNADD REAL
+    ;
 
-unsigned_constant: IDENTIFIER  // IDENTIFIER: constant
-                 | unsigned_constant_noidentifier
-                 ;
+unsigned_constant:
+    IDENTIFIER  // IDENTIFIER: constant
+    | unsigned_constant_noidentifier
+    ;
 
-unsigned_constant_noidentifier: UINT
-                              | REAL
-                              | STRING
-                              ;
+unsigned_constant_noidentifier:
+    UINT
+    | REAL
+    | STRING
+    ;
 
 %%
 

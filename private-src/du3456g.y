@@ -1,7 +1,7 @@
 %language "c++"
 %require "3.0.4"
 %defines
-%define parser_class_name{ mlaskal_parser }
+%define api.parser.class { mlaskal_parser }
 %define api.token.constructor
 %define api.token.prefix{DUTOK_}
 %define api.value.type variant
@@ -17,6 +17,8 @@
 
     // allow references to semantic types in %type
 #include "dutables.hpp"
+
+#include "du3456sem.hpp"
 
     // avoid no-case warnings when compiling du3g.hpp
 #pragma warning (disable:4065)
@@ -102,6 +104,10 @@
 %token<mlc::DUTOKGE_OPER_MUL> OPER_MUL           /* *, /, div, mod, and */
 %token<mlc::DUTOKGE_FOR_DIRECTION> FOR_DIRECTION /* to, downto */
 
+%type<mlc::constant_value::pointer> constant
+%type<mlc::constant_value::pointer> unsigned_constant
+%type<mlc::constant_value::pointer> unsigned_constant_noidentifier
+
 %start program
 
 %%
@@ -123,7 +129,7 @@ block_header:
     block_header_var
     ;
 
-block_header_label:
+block_header_label: /* TODO: do labels */
     /* empty */
     | LABEL uint_list SEMICOLON
     ;
@@ -167,7 +173,89 @@ const_def_list:
     ;
 
 const_def:
-    IDENTIFIER EQ constant
+    IDENTIFIER EQ constant {
+        switch($3->get_type()) {
+            case constant_value::constant_value_type::ID_CONSTANT: {
+                auto value = ((id_constant*)&*$3)->_val;
+                mlc::symbol_pointer sp = ctx->tab->find_symbol(value);
+                if (sp->kind() != SKIND_CONST) {
+                    message(DUERR_NOTCONST, @3, *value);
+                }
+
+                switch(sp->access_const()->type()->cat()) {
+                    case TCAT_REAL:
+                        ctx->tab->add_const_real(
+                            @1,
+                            $1,
+                            sp->access_const()->access_real_const()->real_value());
+
+                    break;
+
+                    case TCAT_INT:
+                        ctx->tab->add_const_int(
+                            @1,
+                            $1,
+                            sp->access_const()->access_int_const()->int_value());
+                    break;
+
+                    case TCAT_STR:
+                        ctx->tab->add_const_str(
+                            @1,
+                            $1,
+                            sp->access_const()->access_str_const()->str_value());
+                    break;
+                }
+            } break;
+
+            case constant_value::constant_value_type::UINT_CONSTANT:
+                ctx->tab->add_const_int( @1, $1, ((uint_constant*)&*$3)->_val);
+            break;
+
+            case constant_value::constant_value_type::STR_CONSTANT:
+                ctx->tab->add_const_str( @1, $1, ((str_constant*)&*$3)->_val);
+            break;
+
+            case constant_value::constant_value_type::REAL_CONSTANT:
+                ctx->tab->add_const_real( @1, $1, ((real_constant*)&*$3)->_val);
+            break;
+
+            case constant_value::constant_value_type::SIGNED_UINT_CONSTANT:
+                if (
+                    ((signed_uint_constant*)&*$3)->_oper ==
+                        DUTOKGE_OPER_SIGNADD::DUTOKGE_PLUS
+                ) {
+                    ctx->tab->add_const_int(
+                        @1,
+                        $1,
+                        ((signed_uint_constant*)&*$3)->_val);
+                } else {
+                    ctx->tab->add_const_int(
+                        @1,
+                        $1,
+                        ctx->tab->ls_int().add(
+                            -*((signed_uint_constant*)&*$3)->_val));
+                }
+            break;
+
+            case constant_value::constant_value_type::SIGNED_REAL_CONSTANT:
+                if (
+                    ((signed_real_constant*)&*$3)->_oper ==
+                        DUTOKGE_OPER_SIGNADD::DUTOKGE_PLUS
+                ) {
+                    ctx->tab->add_const_real(
+                        @1,
+                        $1,
+                        ((signed_real_constant*)&*$3)->_val);
+                } else {
+                    ctx->tab->add_const_real(
+                        @1,
+                        $1,
+                        ctx->tab->ls_real().add(
+                            -*((signed_real_constant*)&*$3)->_val));
+                }
+            break;
+        }
+    }
     ;
 
 type_def_list:
@@ -335,20 +423,20 @@ factor:
     ;
 
 constant:
-    unsigned_constant
-    | OPER_SIGNADD UINT
-    | OPER_SIGNADD REAL
+    unsigned_constant { $$ = std::move($1); }
+    | OPER_SIGNADD UINT { $$ = std::make_unique<signed_uint_constant>($1, $2); }
+    | OPER_SIGNADD REAL { $$ = std::make_unique<signed_real_constant>($1, $2); }
     ;
 
 unsigned_constant:
-    IDENTIFIER  // IDENTIFIER: constant
-    | unsigned_constant_noidentifier
+    IDENTIFIER  { $$ = std::make_unique<id_constant>($1); }
+    | unsigned_constant_noidentifier { $$ = std::move($1); }
     ;
 
 unsigned_constant_noidentifier:
-    UINT
-    | REAL
-    | STRING
+    UINT { $$ = std::make_unique<uint_constant>($1); }
+    | REAL { $$ = std::make_unique<real_constant>($1); }
+    | STRING { $$ = std::make_unique<str_constant>($1); }
     ;
 
 %%

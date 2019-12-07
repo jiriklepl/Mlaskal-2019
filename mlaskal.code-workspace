@@ -72,7 +72,8 @@
 			"cinttypes": "cpp",
 			"typeinfo": "cpp",
 			"bit": "cpp",
-			"cassert": "cpp"
+			"cassert": "cpp",
+			"cstring": "cpp"
 		},
 
 		"C_Cpp.default.cppStandard": "c++17"

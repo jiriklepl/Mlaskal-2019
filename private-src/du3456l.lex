@@ -293,18 +293,18 @@ Z           [Zz]
         ctx->curline);
 }
 
+{REAL} {
+    return parser::make_REAL(
+        ctx->tab->ls_real().add(mlc::convert_real(yytext)),
+        ctx->curline);
+}
+
 {REAL}{IDENT} {
     mlc::message(
         mlc::DUERR_BADREAL,
         ctx->curline,
         yytext);
 
-    return parser::make_REAL(
-        ctx->tab->ls_real().add(mlc::convert_real(yytext)),
-        ctx->curline);
-}
-
-{REAL} {
     return parser::make_REAL(
         ctx->tab->ls_real().add(mlc::convert_real(yytext)),
         ctx->curline);

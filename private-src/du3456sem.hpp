@@ -16,6 +16,7 @@
 #include <utility>
 #include <memory>
 #include <vector>
+#include <tuple>
 
 #include "literal_storage.hpp"
 #include "flat_icblock.hpp"
@@ -39,7 +40,7 @@ namespace mlc {
 
     class type_specifier {
      public:
-        typedef std::unique_ptr<type_specifier> pointer;
+        typedef std::shared_ptr<type_specifier> pointer;
         enum class type {
             ID_TYPE,
             RECORD_TYPE,
@@ -83,7 +84,7 @@ namespace mlc {
 
     class constant_value {
      public:
-        typedef std::unique_ptr<constant_value> pointer;
+        typedef std::shared_ptr<constant_value> pointer;
         enum class type {
             SIGNED_UINT_CONSTANT,
             SIGNED_REAL_CONSTANT,
@@ -194,7 +195,7 @@ namespace mlc {
 
     class id_list {
      public:
-        typedef std::unique_ptr<id_list> pointer;
+        typedef std::shared_ptr<id_list> pointer;
 
         id_list() = default;
         id_list(ls_id_index val
@@ -211,28 +212,9 @@ namespace mlc {
         std::vector<ls_id_index> _ids;
     };
 
-    class uint_list {
-     public:
-        typedef std::unique_ptr<uint_list> pointer;
-
-        uint_list() = default;
-        uint_list(ls_int_type::value_type val
-        ) : _ids{} {
-            _ids.push_back(val);
-        }
-
-        ~uint_list() noexcept = default;
-
-        void append(ls_int_type::value_type val) {
-            _ids.push_back(val);
-        }
-
-        std::vector<ls_int_type::value_type> _ids;
-    };
-
     class var_def {
      public:
-        typedef std::unique_ptr<var_def> pointer;
+        typedef std::shared_ptr<var_def> pointer;
         var_def(
             id_list::pointer list,
             type_pointer type

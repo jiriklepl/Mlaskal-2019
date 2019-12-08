@@ -1,7 +1,7 @@
 %language "c++"
 %require "3.0.4"
 %defines
-%define api.parser.class { mlaskal_parser }
+%define parser_class_name { mlaskal_parser }
 %define api.token.constructor
 %define api.token.prefix{DUTOK_}
 %define api.value.type variant
@@ -104,6 +104,10 @@
 %token<mlc::DUTOKGE_OPER_MUL> OPER_MUL           /* *, /, div, mod, and */
 %token<mlc::DUTOKGE_FOR_DIRECTION> FOR_DIRECTION /* to, downto */
 
+/* profuns */
+%type<mlc::parameter_list_ptr> formal_par_list
+%type<mlc::parameter_list_ptr> formal_par
+%type<std::tuple<mlc::ls_id_index, mlc::parameter_list_ptr>> profun_header
 
 /* types */
 %type<mlc::type_specifier::pointer> type
@@ -139,9 +143,9 @@ block_header:
     block_header_var
     ;
 
-block_header_label: /* TODO: do labels */
+block_header_label:
     /* empty */
-    | LABEL uint_list SEMICOLON
+    | LABEL label_list SEMICOLON
     ;
 
 block_header_const:
@@ -172,9 +176,19 @@ statement_list:
     | statement_list SEMICOLON statement
     ;
 
-uint_list:
-    UINT
-    | uint_list COMMA UINT
+label_list:
+    UINT {
+        ctx->tab->add_label_entry(
+            @UINT,
+            $UINT,
+            ctx->tab->new_label());
+    }
+    | label_list[list] COMMA UINT {
+        ctx->tab->add_label_entry(
+            @UINT,
+            $UINT,
+            ctx->tab->new_label());
+    }
     ;
 
 const_def_list:
@@ -214,19 +228,33 @@ const_def:
                             $IDENTIFIER,
                             sp->access_const()->access_str_const()->str_value());
                     break;
+
+                    case TCAT_BOOL:
+                        ctx->tab->add_const_bool(
+                            @IDENTIFIER,
+                            $IDENTIFIER,
+                            sp->access_const()->access_bool_const()->bool_value());
+                    break;
+
+                    case TCAT_UNDEF:
+                    case TCAT_RECORD:
+                    case TCAT_RANGE:
+                    case TCAT_ARRAY:
+                    // NOTHING YET...
+                    break;
                 }
             } break;
 
             case constant_value::type::UINT_CONSTANT:
-                ctx->tab->add_const_int( @IDENTIFIER, $IDENTIFIER, ((uint_constant*)&*$constant)->_val);
+                ctx->tab->add_const_int(@IDENTIFIER, $IDENTIFIER, ((uint_constant*)&*$constant)->_val);
             break;
 
             case constant_value::type::STR_CONSTANT:
-                ctx->tab->add_const_str( @IDENTIFIER, $IDENTIFIER, ((str_constant*)&*$constant)->_val);
+                ctx->tab->add_const_str(@IDENTIFIER, $IDENTIFIER, ((str_constant*)&*$constant)->_val);
             break;
 
             case constant_value::type::REAL_CONSTANT:
-                ctx->tab->add_const_real( @IDENTIFIER, $IDENTIFIER, ((real_constant*)&*$constant)->_val);
+                ctx->tab->add_const_real(@IDENTIFIER, $IDENTIFIER, ((real_constant*)&*$constant)->_val);
             break;
 
             case constant_value::type::SIGNED_UINT_CONSTANT:
@@ -297,13 +325,25 @@ type_def:
                     $IDENTIFIER,
                     ((record_specifier*)&*$type)->_val);
             break;
+
+            case type_specifier::type::ARRAY_TYPE:
+                // SHOULD NOT HAPPEN
+            break;
         }
     }
     ;
 
 var_def_list:
-    var_def SEMICOLON
-    | var_def_list var_def SEMICOLON
+    var_def_do SEMICOLON
+    | var_def_list var_def_do SEMICOLON
+    ;
+
+var_def_do:
+    var_def {
+        for (auto&& id : $var_def->_list->_ids) {
+            ctx->tab->add_var(@var_def, id, $var_def->_type);
+        }
+    }
     ;
 
 var_def:
@@ -326,9 +366,13 @@ var_def:
             case type_specifier::type::RECORD_TYPE:
                 type = ((record_specifier*)&*$type)->_val;
             break;
+
+            case type_specifier::type::ARRAY_TYPE:
+                // SHOULD NOT HAPPEN
+            break;
         }
 
-        $$ = std::make_unique<var_def>(
+        $$ = std::make_shared<var_def>(
             std::move($identifier_list),
             type
         );
@@ -336,7 +380,7 @@ var_def:
     ;
 
 identifier_list:
-    IDENTIFIER { $$ = std::make_unique<id_list>($IDENTIFIER); }
+    IDENTIFIER { $$ = std::make_shared<id_list>($IDENTIFIER); }
     | identifier_list[list] COMMA IDENTIFIER {
         $list->append($IDENTIFIER);
         $$ = std::move($list);
@@ -345,44 +389,89 @@ identifier_list:
 
 profun_def_list:
     /* empty */
-    | profun_def_list procedure_header SEMICOLON block SEMICOLON[END] {
+    | profun_def_list PROCEDURE profun_header {
+        ctx->tab->add_proc(
+            @profun_header,
+            std::get<0>($profun_header),
+            std::get<1>($profun_header));
+
+        ctx->tab->enter(
+            @profun_header,
+            std::get<0>($profun_header));
+    } SEMICOLON block SEMICOLON[END] {
         ctx->tab->leave(@END);
     }
-    | profun_def_list function_header SEMICOLON block SEMICOLON[END] {
+    | profun_def_list FUNCTION profun_header COLON IDENTIFIER {
+        mlc::symbol_pointer sp = ctx->tab->find_symbol($IDENTIFIER);
+
+        if (!sp || (sp->kind() != SKIND_TYPE)) {
+            message(DUERR_NOTTYPE, @IDENTIFIER, *$IDENTIFIER);
+        }
+
+        ctx->tab->add_fnc(
+            @profun_header,
+            std::get<0>($profun_header),
+            sp->access_type()->type(),
+            std::get<1>($profun_header));
+
+        ctx->tab->enter(
+            @profun_header,
+            std::get<0>($profun_header));
+    } SEMICOLON block SEMICOLON[END] {
         ctx->tab->leave(@END);
     }
-    ;
-
-procedure_header:
-    PROCEDURE profun_header
-    ;
-
-function_header:
-    FUNCTION profun_header COLON IDENTIFIER  // IDENTIFIER: scalar type
     ;
 
 profun_header:
     IDENTIFIER {
-        ctx->tab->enter(@IDENTIFIER, $IDENTIFIER);
+        $$ = std::make_tuple($IDENTIFIER, std::make_shared<parameter_list_body>());
     }
     | IDENTIFIER LPAR formal_par_list RPAR {
         ctx->tab->enter(@IDENTIFIER, $IDENTIFIER);
+        $$ = std::make_tuple($IDENTIFIER, $formal_par_list);
     }
     ;
 
 formal_par_list:
-    formal_par
-    | formal_par_list SEMICOLON formal_par
+    formal_par { $$ = $formal_par; }
+    | formal_par_list[list] SEMICOLON formal_par {
+        $list->append_and_kill($formal_par);
+        $$ = $list;
+    }
     ;
 
 formal_par:
-    identifier_list COLON IDENTIFIER  // IDENTIFIER: type
-    | VAR identifier_list COLON IDENTIFIER  // IDENTIFIER: type
+    identifier_list COLON IDENTIFIER {
+        $$ = std::make_shared<parameter_list_body>();
+
+        mlc::symbol_pointer sp = ctx->tab->find_symbol($IDENTIFIER);
+
+        if (!sp || (sp->kind() != SKIND_TYPE)) {
+            message(DUERR_NOTTYPE, @IDENTIFIER, *$IDENTIFIER);
+        }
+
+        for (auto&& id : $identifier_list->_ids) {
+            $$->append_parameter_by_value(id, sp->access_type()->type());
+        }
+    }
+    | VAR identifier_list COLON IDENTIFIER  {
+        $$ = std::make_shared<parameter_list_body>();
+
+        mlc::symbol_pointer sp = ctx->tab->find_symbol($IDENTIFIER);
+
+        if (!sp || (sp->kind() != SKIND_TYPE)) {
+            message(DUERR_NOTTYPE, @IDENTIFIER, *$IDENTIFIER);
+        }
+
+        for (auto&& id : $identifier_list->_ids) {
+            $$->append_parameter_by_reference(id, sp->access_type()->type());
+        }
+    }
     ;
 
 type:
-    IDENTIFIER  { $$ = std::make_unique<id_specifier>($IDENTIFIER); }
-    | structured_type { $$ = std::make_unique<record_specifier>($structured_type); }
+    IDENTIFIER  { $$ = std::make_shared<id_specifier>($IDENTIFIER); }
+    | structured_type { $$ = std::make_shared<record_specifier>($structured_type); }
     ;
 
 structured_type:
@@ -517,19 +606,19 @@ factor:
 
 constant:
     unsigned_constant { $$ = std::move($unsigned_constant); }
-    | OPER_SIGNADD UINT { $$ = std::make_unique<signed_uint_constant>($OPER_SIGNADD, $UINT); }
-    | OPER_SIGNADD REAL { $$ = std::make_unique<signed_real_constant>($OPER_SIGNADD, $REAL); }
+    | OPER_SIGNADD UINT { $$ = std::make_shared<signed_uint_constant>($OPER_SIGNADD, $UINT); }
+    | OPER_SIGNADD REAL { $$ = std::make_shared<signed_real_constant>($OPER_SIGNADD, $REAL); }
     ;
 
 unsigned_constant:
-    IDENTIFIER  { $$ = std::make_unique<id_constant>($IDENTIFIER); }
+    IDENTIFIER  { $$ = std::make_shared<id_constant>($IDENTIFIER); }
     | unsigned_constant_noidentifier { $$ = std::move($unsigned_constant_noidentifier); }
     ;
 
 unsigned_constant_noidentifier:
-    UINT { $$ = std::make_unique<uint_constant>($UINT); }
-    | REAL { $$ = std::make_unique<real_constant>($REAL); }
-    | STRING { $$ = std::make_unique<str_constant>($STRING); }
+    UINT { $$ = std::make_shared<uint_constant>($UINT); }
+    | REAL { $$ = std::make_shared<real_constant>($REAL); }
+    | STRING { $$ = std::make_shared<str_constant>($STRING); }
     ;
 
 %%

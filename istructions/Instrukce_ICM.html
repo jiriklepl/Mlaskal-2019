@@ -1,2595 +1,3391 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
-<!-- saved from url=(0069)https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html -->
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- saved from url=(0076)https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_jump -->
+<html>
 
-<title>Instrukce ICM</title>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+	<title>Instrukce ICM</title>
 </head>
-<body><div><h1>Instrukce ICM</h1><ul>
-<a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_ref"><li>Adresa proměnné - zásobníkový stroj</li></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_eref"></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_init"><li>Inicializace - zásobníkový stroj</li></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_einit"></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_lit"><li>Načtení literálů - zásobníkový stroj</li></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_mlit"></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_emov"></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_unarit"><li>Unární aritmetické operace - zásobníkový stroj</li></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_munarit"></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_binb"><li>Binární booleovské operace - zásobníkový stroj</li></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_mbinb"></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_cmpb"><li>Porovnání booleovské - zásobníkový stroj</li></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_mcmpb"></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_bini"><li>Binární celočíselné operace - zásobníkový stroj</li></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_mbini"></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_cmpi"><li>Porovnání celočíselné - zásobníkový stroj</li></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_mcmpi"></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_binr"><li>Binární reálné operace - zásobníkový stroj</li></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_mbinr"></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_cmpr"><li>Porovnání reálné - zásobníkový stroj</li></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_mcmpr"></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_bins"><li>Binární řetězcové operace - zásobníkový stroj</li></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_msbins"></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_dtor"><li>Destrukce proměnných - zásobníkový stroj</li></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_gld"><li>Čtení globálních proměnných - zásobníkový stroj</li></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_geld"></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_gst"><li>Zápis do globálních proměnných - zásobníkový stroj</li></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_gest"></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_lld"><li>Čtení lokálních proměnných - zásobníkový stroj</li></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_leld"></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_lst"><li>Zápis do lokálních proměnných - zásobníkový stroj</li></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_lest"></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_sld"><li>Čtení pomocných proměnných - zásobníkový stroj</li></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_sst"><li>Zápis do pomocných proměnných - zásobníkový stroj</li></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_epush"><li>Přidání na zásobníku - registrový stroj</li></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_epop"><li>Odebrání ze zásobníku - registrový stroj</li></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_xld"><li>Nepřímé čtení - zásobníkový stroj</li></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_xeld"></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_xst"><li>Nepřímý zápis - zásobníkový stroj</li></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_xest"></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_ujump"><li>Skoky - univerzální</li></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_jump"><li>Skoky - zásobníkový stroj</li></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_mjump"></a><a href="https://www.ksi.mff.cuni.cz/teaching/nswi098-web/gendoc/icminstr.html#C_other"><li>Ostatní - univerzální</li></a>
-</ul><h4>Legenda</h4><p>TOP0 je vrchol zásobníku, TOP1 je hodnota pod vrcholem zásobníku a TOP2 je druhá hodnota pod vrcholem zásobníku. RES je případný výsledek, který se uloží na vrcholek zásobníku.</p><p>IN1, IN2, IN3 a IN4 jsou vstupní registry, OUT je výstupní registr, INOUT je vstupně/výstupní registr.</p><table border="1">
-<thead><tr>
-<th>Opcode</th>
-<th>Operand</th>
-<th>TOP2</th>
-<th>TOP1</th>
-<th>TOP0</th>
-<th></th>
-<th>RES</th>
-<th>IN1</th>
-<th>IN2</th>
-<th>IN3</th>
-<th>IN4</th>
-<th>OUT</th>
-<th>INOUT</th>
-<th>Symbolický popis</th>
-<th>Slovní popis</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>GREF</td>
-<td>GSTKOFFS</td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>o</sub> = <i>GP</i> + STKOFFS</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží na vrchol zásobníku ukazatel na globální hodnotu s posunem stkoffs</note></td>
-</tr>
-<tr>
-<td>LREF</td>
-<td>LSTKOFFS</td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>o</sub> = <i>FP</i> + STKOFFS</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží na vrchol zásobníku ukazatel na lokální hodnotu s posunem stkoffs</note></td>
-</tr>
-<tr>
-<td>SREF</td>
-<td>SSTKOFFS</td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>o</sub> = <i>SP</i> + STKOFFS</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží na vrchol zásobníku ukazatel na lokální hodnotu s posunem stkoffs</note></td>
-</tr>
-</tbody>
-</table><img src="./Instrukce_ICM_files/gen_mop_ref.png"><table border="1">
-<thead><tr>
-<th>Opcode</th>
-<th>Operand</th>
-<th>TOP2</th>
-<th>TOP1</th>
-<th>TOP0</th>
-<th></th>
-<th>RES</th>
-<th>IN1</th>
-<th>IN2</th>
-<th>IN3</th>
-<th>IN4</th>
-<th>OUT</th>
-<th>INOUT</th>
-<th>Symbolický popis</th>
-<th>Slovní popis</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>INITB</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = undef<sub>B</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">zkonstruuje neinicializovanou hodnotu typu BOOLEAN na vrcholu zásobníku</note></td>
-</tr>
-<tr>
-<td>INITI</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub> = undef<sub>I</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">zkonstruuje neinicializovanou hodnotu typu INTEGER na vrcholu zásobníku</note></td>
-</tr>
-<tr>
-<td>INITR</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub> = undef<sub>R</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">zkonstruuje neinicializovanou hodnotu typu REAL na vrcholu zásobníku</note></td>
-</tr>
-<tr>
-<td>INITS</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>o</sub> = undef<sub>S</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">zkonstruuje neinicializovanou hodnotu typu STRING na vrcholu zásobníku</note></td>
-</tr>
-</tbody>
-</table><img src="./Instrukce_ICM_files/gen_mop_init.png"><table border="1">
-<thead><tr>
-<th>Opcode</th>
-<th>Operand</th>
-<th>TOP2</th>
-<th>TOP1</th>
-<th>TOP0</th>
-<th></th>
-<th>RES</th>
-<th>IN1</th>
-<th>IN2</th>
-<th>IN3</th>
-<th>IN4</th>
-<th>OUT</th>
-<th>INOUT</th>
-<th>Symbolický popis</th>
-<th>Slovní popis</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>LDLITB</td>
-<td>ABSNUM</td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub> = static_cast&lt;BOOLEAN&gt;(operand)</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">vytvoří na zásobníku konstantu typu BOOLEAN podle přímého operandu v instrukci; 0==FALSE, 1==TRUE</note></td>
-</tr>
-<tr>
-<td>LDLITI</td>
-<td>LITINT</td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub> = literal<sub>I</sub>[INTIDX]</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte konstantu typu INTEGER s indexem INTIDX na zásobník</note></td>
-</tr>
-<tr>
-<td>LDLITR</td>
-<td>LITREAL</td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub> = literal<sub>R</sub>[REALIDX]</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte konstantu typu REAL s indexem REALIDX na zásobník</note></td>
-</tr>
-<tr>
-<td>LDLITS</td>
-<td>LITSTR</td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>1</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>1</sub> = literal<sub>S</sub>[STRIDX]</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte konstantu typu STRING s indexem STRIDX na zásobník</note></td>
-</tr>
-</tbody>
-</table><img src="./Instrukce_ICM_files/gen_mop_lit.png"><table border="1">
-<thead><tr>
-<th>Opcode</th>
-<th>Operand</th>
-<th>TOP2</th>
-<th>TOP1</th>
-<th>TOP0</th>
-<th></th>
-<th>RES</th>
-<th>IN1</th>
-<th>IN2</th>
-<th>IN3</th>
-<th>IN4</th>
-<th>OUT</th>
-<th>INOUT</th>
-<th>Symbolický popis</th>
-<th>Slovní popis</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>CVRTIR</td>
-<td></td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub> = real( I<sub>1</sub>)</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">převede hodnotu typu INTEGER z vrcholu zásobníku na REAL a uloží ji na vrchol zásobníku</note></td>
-</tr>
-<tr>
-<td>CVRTRI</td>
-<td></td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub> = integer( R<sub>1</sub>)</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">převede hodnotu typu REAL z vrcholu zásobníku na INTEGER a uloží ji na vrchol zásobníku</note></td>
-</tr>
-<tr>
-<td>MINUSI</td>
-<td></td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub> = -<sub>I</sub> I<sub>1</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">unární minus typu INTEGER</note></td>
-</tr>
-<tr>
-<td>MINUSR</td>
-<td></td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub> = -<sub>R</sub> R<sub>1</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">unární minus typu REAL</note></td>
-</tr>
-<tr>
-<td>NOT</td>
-<td></td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = not B<sub>1</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">negace</note></td>
-</tr>
-</tbody>
-</table><img src="./Instrukce_ICM_files/gen_mop_unarit.png"><table border="1">
-<thead><tr>
-<th>Opcode</th>
-<th>Operand</th>
-<th>TOP2</th>
-<th>TOP1</th>
-<th>TOP0</th>
-<th></th>
-<th>RES</th>
-<th>IN1</th>
-<th>IN2</th>
-<th>IN3</th>
-<th>IN4</th>
-<th>OUT</th>
-<th>INOUT</th>
-<th>Symbolický popis</th>
-<th>Slovní popis</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>AND</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = B<sub>1</sub> and B<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">booleovský součin</note></td>
-</tr>
-<tr>
-<td>OR</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = B<sub>1</sub> or B<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">booleovský součet</note></td>
-</tr>
-</tbody>
-</table><img src="./Instrukce_ICM_files/gen_mop_binb.png"><table border="1">
-<thead><tr>
-<th>Opcode</th>
-<th>Operand</th>
-<th>TOP2</th>
-<th>TOP1</th>
-<th>TOP0</th>
-<th></th>
-<th>RES</th>
-<th>IN1</th>
-<th>IN2</th>
-<th>IN3</th>
-<th>IN4</th>
-<th>OUT</th>
-<th>INOUT</th>
-<th>Symbolický popis</th>
-<th>Slovní popis</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>EQB</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = B<sub>1</sub> ==<sub>B</sub> B<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání = typu BOOLEAN, výsledek je typu BOOLEAN</note></td>
-</tr>
-<tr>
-<td>GEB</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = B<sub>1</sub> &gt;=<sub>B</sub> B<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &gt;= typu BOOLEAN, výsledek je typu BOOLEAN</note></td>
-</tr>
-<tr>
-<td>GTB</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = B<sub>1</sub> &gt;<sub>B</sub> B<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &gt; typu BOOLEAN, výsledek je typu BOOLEAN</note></td>
-</tr>
-<tr>
-<td>LEB</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = B<sub>1</sub> &lt;=<sub>B</sub> B<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &lt;= typu BOOLEAN, výsledek je typu BOOLEAN</note></td>
-</tr>
-<tr>
-<td>LTB</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = B<sub>1</sub> &lt;<sub>B</sub> B<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &lt; typu BOOLEAN, výsledek je typu BOOLEAN</note></td>
-</tr>
-<tr>
-<td>NEB</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = B<sub>1</sub> &lt;&gt;<sub>B</sub> B<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &lt;&gt; typu BOOLEAN, výsledek je typu BOOLEAN</note></td>
-</tr>
-</tbody>
-</table><img src="./Instrukce_ICM_files/gen_mop_cmpb.png"><table border="1">
-<thead><tr>
-<th>Opcode</th>
-<th>Operand</th>
-<th>TOP2</th>
-<th>TOP1</th>
-<th>TOP0</th>
-<th></th>
-<th>RES</th>
-<th>IN1</th>
-<th>IN2</th>
-<th>IN3</th>
-<th>IN4</th>
-<th>OUT</th>
-<th>INOUT</th>
-<th>Symbolický popis</th>
-<th>Slovní popis</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>ADDI</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub> = I<sub>1</sub> +<sub>I</sub> I<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">součet typu INTEGER</note></td>
-</tr>
-<tr>
-<td>ADDP</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>o</sub> = P<sub>1</sub> +<sub>I</sub> I<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">součet POINTER + INTEGER</note></td>
-</tr>
-<tr>
-<td>DIVI</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub> = I<sub>1</sub> div I<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">celočíselné dělení</note></td>
-</tr>
-<tr>
-<td>MODI</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub> = I<sub>1</sub> mod I<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">celočíselné modulo</note></td>
-</tr>
-<tr>
-<td>MULI</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub> = I<sub>1</sub> *<sub>I</sub> I<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">součin typu INTEGER</note></td>
-</tr>
-<tr>
-<td>SUBI</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub> = I<sub>1</sub> -<sub>I</sub> I<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">rozdíl typu INTEGER</note></td>
-</tr>
-<tr>
-<td>SUBP</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>o</sub> = P<sub>1</sub> -<sub>I</sub> I<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">rozdíl POINTER - INTEGER</note></td>
-</tr>
-</tbody>
-</table><img src="./Instrukce_ICM_files/gen_mop_bini.png"><table border="1">
-<thead><tr>
-<th>Opcode</th>
-<th>Operand</th>
-<th>TOP2</th>
-<th>TOP1</th>
-<th>TOP0</th>
-<th></th>
-<th>RES</th>
-<th>IN1</th>
-<th>IN2</th>
-<th>IN3</th>
-<th>IN4</th>
-<th>OUT</th>
-<th>INOUT</th>
-<th>Symbolický popis</th>
-<th>Slovní popis</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>EQI</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = I<sub>1</sub> ==<sub>I</sub> I<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání = typu INTEGER, výsledek je typu BOOLEAN</note></td>
-</tr>
-<tr>
-<td>GEI</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = I<sub>1</sub> &gt;=<sub>I</sub> I<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &gt;= typu INTEGER, výsledek je typu BOOLEAN</note></td>
-</tr>
-<tr>
-<td>GTI</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = I<sub>1</sub> &gt;<sub>I</sub> I<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &gt; typu INTEGER, výsledek je typu BOOLEAN</note></td>
-</tr>
-<tr>
-<td>LEI</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = I<sub>1</sub> &lt;=<sub>I</sub> I<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &lt;= typu INTEGER, výsledek je typu BOOLEAN</note></td>
-</tr>
-<tr>
-<td>LTI</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = I<sub>1</sub> &lt;<sub>I</sub> I<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &lt; typu INTEGER, výsledek je typu BOOLEAN</note></td>
-</tr>
-<tr>
-<td>NEI</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = I<sub>1</sub> &lt;&gt;<sub>I</sub> I<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &lt;&gt; typu INTEGER, výsledek je typu BOOLEAN</note></td>
-</tr>
-</tbody>
-</table><img src="./Instrukce_ICM_files/gen_mop_cmpi.png"><table border="1">
-<thead><tr>
-<th>Opcode</th>
-<th>Operand</th>
-<th>TOP2</th>
-<th>TOP1</th>
-<th>TOP0</th>
-<th></th>
-<th>RES</th>
-<th>IN1</th>
-<th>IN2</th>
-<th>IN3</th>
-<th>IN4</th>
-<th>OUT</th>
-<th>INOUT</th>
-<th>Symbolický popis</th>
-<th>Slovní popis</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>ADDR</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub> = R<sub>1</sub> +<sub>R</sub> R<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">součet typu REAL</note></td>
-</tr>
-<tr>
-<td>DIVR</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub> = R<sub>1</sub> /<sub>R</sub> R<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">reálné dělení</note></td>
-</tr>
-<tr>
-<td>MULR</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub> = R<sub>1</sub> *<sub>R</sub> R<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">součin typu REAL</note></td>
-</tr>
-<tr>
-<td>SUBR</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub> = R<sub>1</sub> -<sub>R</sub> R<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">rozdíl typu REAL</note></td>
-</tr>
-</tbody>
-</table><img src="./Instrukce_ICM_files/gen_mop_binr.png"><table border="1">
-<thead><tr>
-<th>Opcode</th>
-<th>Operand</th>
-<th>TOP2</th>
-<th>TOP1</th>
-<th>TOP0</th>
-<th></th>
-<th>RES</th>
-<th>IN1</th>
-<th>IN2</th>
-<th>IN3</th>
-<th>IN4</th>
-<th>OUT</th>
-<th>INOUT</th>
-<th>Symbolický popis</th>
-<th>Slovní popis</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>EQR</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = R<sub>1</sub> ==<sub>R</sub> R<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání = typu REAL, výsledek je typu BOOLEAN</note></td>
-</tr>
-<tr>
-<td>GER</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = R<sub>1</sub> &gt;=<sub>R</sub> R<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &gt;= typu REAL, výsledek je typu BOOLEAN</note></td>
-</tr>
-<tr>
-<td>GTR</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = R<sub>1</sub> &gt;<sub>R</sub> R<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &gt; typu REAL, výsledek je typu BOOLEAN</note></td>
-</tr>
-<tr>
-<td>LER</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = R<sub>1</sub> &lt;=<sub>R</sub> R<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &lt;= typu REAL, výsledek je typu BOOLEAN</note></td>
-</tr>
-<tr>
-<td>LTR</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = R<sub>1</sub> &lt;<sub>R</sub> R<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &lt; typu REAL, výsledek je typu BOOLEAN</note></td>
-</tr>
-<tr>
-<td>NER</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = R<sub>1</sub> &lt;&gt;<sub>R</sub> R<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &lt;&gt; typu REAL, výsledek je typu BOOLEAN</note></td>
-</tr>
-</tbody>
-</table><img src="./Instrukce_ICM_files/gen_mop_cmpr.png"><table border="1">
-<thead><tr>
-<th>Opcode</th>
-<th>Operand</th>
-<th>TOP2</th>
-<th>TOP1</th>
-<th>TOP0</th>
-<th></th>
-<th>RES</th>
-<th>IN1</th>
-<th>IN2</th>
-<th>IN3</th>
-<th>IN4</th>
-<th>OUT</th>
-<th>INOUT</th>
-<th>Symbolický popis</th>
-<th>Slovní popis</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>ADDS</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>o</sub> = S<sub>1</sub> +<sub>S</sub> S<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">sloučení dvou řetězců</note></td>
-</tr>
-<tr>
-<td>EQS</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = S<sub>1</sub> ==<sub>S</sub> S<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání = typu STRING, výsledek je typu BOOLEAN</note></td>
-</tr>
-<tr>
-<td>GES</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = S<sub>1</sub> &gt;=<sub>S</sub> S<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &gt;= typu STRING, výsledek je typu BOOLEAN</note></td>
-</tr>
-<tr>
-<td>GTS</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = S<sub>1</sub> &gt;<sub>S</sub> S<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &gt; typu STRING, výsledek je typu BOOLEAN</note></td>
-</tr>
-<tr>
-<td>LES</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = S<sub>1</sub> &lt;=<sub>S</sub> S<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &lt;= typu STRING, výsledek je typu BOOLEAN</note></td>
-</tr>
-<tr>
-<td>LTS</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = S<sub>1</sub> &lt;<sub>S</sub> S<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &lt; typu STRING, výsledek je typu BOOLEAN</note></td>
-</tr>
-<tr>
-<td>NES</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = S<sub>1</sub> &lt;&gt;<sub>S</sub> S<sub>2</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &lt;&gt; typu STRING, výsledek je typu BOOLEAN</note></td>
-</tr>
-</tbody>
-</table><img src="./Instrukce_ICM_files/gen_mop_bins.png"><table border="1">
-<thead><tr>
-<th>Opcode</th>
-<th>Operand</th>
-<th>TOP2</th>
-<th>TOP1</th>
-<th>TOP0</th>
-<th></th>
-<th>RES</th>
-<th>IN1</th>
-<th>IN2</th>
-<th>IN3</th>
-<th>IN4</th>
-<th>OUT</th>
-<th>INOUT</th>
-<th>Symbolický popis</th>
-<th>Slovní popis</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>DTORB</td>
-<td></td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">nothing</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">zruší hodnotu typu BOOLEAN na vrcholu zásobníku</note></td>
-</tr>
-<tr>
-<td>DTORI</td>
-<td></td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">nothing</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">zruší hodnotu typu INTEGER na vrcholu zásobníku</note></td>
-</tr>
-<tr>
-<td>DTORP</td>
-<td></td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">nothing</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">zruší hodnotu typu ukazatel na vrcholu zásobníku</note></td>
-</tr>
-<tr>
-<td>DTORR</td>
-<td></td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">nothing</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">zruší hodnotu typu REAL na vrcholu zásobníku</note></td>
-</tr>
-<tr>
-<td>DTORS</td>
-<td></td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">nothing</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">zruší hodnotu typu STRING na vrcholu zásobníku</note></td>
-</tr>
-</tbody>
-</table><img src="./Instrukce_ICM_files/gen_mop_dtor.png"><table border="1">
-<thead><tr>
-<th>Opcode</th>
-<th>Operand</th>
-<th>TOP2</th>
-<th>TOP1</th>
-<th>TOP0</th>
-<th></th>
-<th>RES</th>
-<th>IN1</th>
-<th>IN2</th>
-<th>IN3</th>
-<th>IN4</th>
-<th>OUT</th>
-<th>INOUT</th>
-<th>Symbolický popis</th>
-<th>Slovní popis</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>GLDB</td>
-<td>GSTKOFFS</td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = *<sub>B</sub> (<i>GP</i> + STKOFFS)</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte obsah globální hodnoty s posunem stkoffs typu BOOLEAN na vrchol zásobníku</note></td>
-</tr>
-<tr>
-<td>GLDI</td>
-<td>GSTKOFFS</td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub> = *<sub>I</sub> (<i>GP</i> + STKOFFS)</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte obsah globální hodnoty s posunem stkoffs typu INTEGER na vrchol zásobníku</note></td>
-</tr>
-<tr>
-<td>GLDR</td>
-<td>GSTKOFFS</td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub> = *<sub>R</sub> (<i>GP</i> + STKOFFS)</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte obsah globální hodnoty s posunem stkoffs typu REAL na vrchol zásobníku</note></td>
-</tr>
-<tr>
-<td>GLDS</td>
-<td>GSTKOFFS</td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>o</sub> = *<sub>S</sub> (<i>GP</i> + STKOFFS)</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte obsah globální hodnoty s posunem stkoffs typu STRING na vrchol zásobníku</note></td>
-</tr>
-</tbody>
-</table><img src="./Instrukce_ICM_files/gen_mop_gld.png"><table border="1">
-<thead><tr>
-<th>Opcode</th>
-<th>Operand</th>
-<th>TOP2</th>
-<th>TOP1</th>
-<th>TOP0</th>
-<th></th>
-<th>RES</th>
-<th>IN1</th>
-<th>IN2</th>
-<th>IN3</th>
-<th>IN4</th>
-<th>OUT</th>
-<th>INOUT</th>
-<th>Symbolický popis</th>
-<th>Slovní popis</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>GSTB</td>
-<td>GSTKOFFS</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>B</sub> (<i>GP</i> + STKOFFS) = B<sub>1</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží vrchol zásobníku do globální hodnoty s posunem stkoffs typu BOOLEAN</note></td>
-</tr>
-<tr>
-<td>GSTI</td>
-<td>GSTKOFFS</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>I</sub> (<i>GP</i> + STKOFFS) = I<sub>1</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží vrchol zásobníku do globální hodnoty s posunem stkoffs typu INTEGER</note></td>
-</tr>
-<tr>
-<td>GSTR</td>
-<td>GSTKOFFS</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>R</sub> (<i>GP</i> + STKOFFS) = R<sub>1</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží vrchol zásobníku do globální hodnoty s posunem stkoffs typu REAL</note></td>
-</tr>
-<tr>
-<td>GSTS</td>
-<td>GSTKOFFS</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>S</sub> (<i>GP</i> + STKOFFS) = S<sub>1</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží vrchol zásobníku do globální hodnoty s posunem stkoffs typu STRING</note></td>
-</tr>
-</tbody>
-</table><img src="./Instrukce_ICM_files/gen_mop_gst.png"><table border="1">
-<thead><tr>
-<th>Opcode</th>
-<th>Operand</th>
-<th>TOP2</th>
-<th>TOP1</th>
-<th>TOP0</th>
-<th></th>
-<th>RES</th>
-<th>IN1</th>
-<th>IN2</th>
-<th>IN3</th>
-<th>IN4</th>
-<th>OUT</th>
-<th>INOUT</th>
-<th>Symbolický popis</th>
-<th>Slovní popis</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>LLDB</td>
-<td>LSTKOFFS</td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = *<sub>B</sub> (<i>FP</i> + STKOFFS)</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte obsah lokální hodnoty s posunem stkoffs typu BOOLEAN na vrchol zásobníku</note></td>
-</tr>
-<tr>
-<td>LLDI</td>
-<td>LSTKOFFS</td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub> = *<sub>U</sub> (<i>FP</i> + STKOFFS)</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte obsah lokální hodnoty s posunem stkoffs typu INTEGER na vrchol zásobníku</note></td>
-</tr>
-<tr>
-<td>LLDP</td>
-<td>LSTKOFFS</td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>o</sub> = *<sub>P</sub> (<i>FP</i> + STKOFFS)</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte obsah lokální hodnoty s posunem stkoffs typu ukazatel na vrchol zásobníku</note></td>
-</tr>
-<tr>
-<td>LLDR</td>
-<td>LSTKOFFS</td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub> = *<sub>R</sub> (<i>FP</i> + STKOFFS)</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte obsah lokální hodnoty s posunem stkoffs typu REAL na vrchol zásobníku</note></td>
-</tr>
-<tr>
-<td>LLDS</td>
-<td>LSTKOFFS</td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>o</sub> = *<sub>S</sub> (<i>FP</i> + STKOFFS)</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte obsah lokální hodnoty s posunem stkoffs typu STRING na vrchol zásobníku</note></td>
-</tr>
-</tbody>
-</table><img src="./Instrukce_ICM_files/gen_mop_lld.png"><table border="1">
-<thead><tr>
-<th>Opcode</th>
-<th>Operand</th>
-<th>TOP2</th>
-<th>TOP1</th>
-<th>TOP0</th>
-<th></th>
-<th>RES</th>
-<th>IN1</th>
-<th>IN2</th>
-<th>IN3</th>
-<th>IN4</th>
-<th>OUT</th>
-<th>INOUT</th>
-<th>Symbolický popis</th>
-<th>Slovní popis</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>LSTB</td>
-<td>LSTKOFFS</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>B</sub> (<i>FP</i> + STKOFFS) = B<sub>1</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží vrchol zásobníku do lokální hodnoty s posunem stkoffs typu BOOLEAN</note></td>
-</tr>
-<tr>
-<td>LSTI</td>
-<td>LSTKOFFS</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>I</sub> (<i>FP</i> + STKOFFS) = I<sub>1</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží vrchol zásobníku do lokální hodnoty s posunem stkoffs typu INTEGER</note></td>
-</tr>
-<tr>
-<td>LSTR</td>
-<td>LSTKOFFS</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>R</sub> (<i>FP</i> + STKOFFS) = R<sub>1</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží vrchol zásobníku do lokální hodnoty s posunem stkoffs typu REAL</note></td>
-</tr>
-<tr>
-<td>LSTS</td>
-<td>LSTKOFFS</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>S</sub> (<i>FP</i> + STKOFFS) = S<sub>1</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží vrchol zásobníku do lokální hodnoty s posunem stkoffs typu STRING</note></td>
-</tr>
-</tbody>
-</table><img src="./Instrukce_ICM_files/gen_mop_lst.png"><table border="1">
-<thead><tr>
-<th>Opcode</th>
-<th>Operand</th>
-<th>TOP2</th>
-<th>TOP1</th>
-<th>TOP0</th>
-<th></th>
-<th>RES</th>
-<th>IN1</th>
-<th>IN2</th>
-<th>IN3</th>
-<th>IN4</th>
-<th>OUT</th>
-<th>INOUT</th>
-<th>Symbolický popis</th>
-<th>Slovní popis</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>SLDB</td>
-<td>SSTKOFFS</td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = *<sub>B</sub> (<i>SP</i> + STKOFFS)</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte obsah lokální hodnoty s posunem stkoffs typu BOOLEAN na vrchol zásobníku</note></td>
-</tr>
-<tr>
-<td>SLDI</td>
-<td>SSTKOFFS</td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub> = *<sub>U</sub> (<i>SP</i> + STKOFFS)</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte obsah lokální hodnoty s posunem stkoffs typu INTEGER na vrchol zásobníku</note></td>
-</tr>
-<tr>
-<td>SLDP</td>
-<td>SSTKOFFS</td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>o</sub> = *<sub>P</sub> (<i>SP</i> + STKOFFS)</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte obsah lokální hodnoty s posunem stkoffs typu ukazatel na vrchol zásobníku</note></td>
-</tr>
-<tr>
-<td>SLDR</td>
-<td>SSTKOFFS</td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub> = *<sub>R</sub> (<i>SP</i> + STKOFFS)</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte obsah lokální hodnoty s posunem stkoffs typu REAL na vrchol zásobníku</note></td>
-</tr>
-<tr>
-<td>SLDS</td>
-<td>SSTKOFFS</td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>o</sub> = *<sub>S</sub> (<i>SP</i> + STKOFFS)</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte obsah lokální hodnoty s posunem stkoffs typu STRING na vrchol zásobníku</note></td>
-</tr>
-</tbody>
-</table><img src="./Instrukce_ICM_files/gen_mop_sld.png"><table border="1">
-<thead><tr>
-<th>Opcode</th>
-<th>Operand</th>
-<th>TOP2</th>
-<th>TOP1</th>
-<th>TOP0</th>
-<th></th>
-<th>RES</th>
-<th>IN1</th>
-<th>IN2</th>
-<th>IN3</th>
-<th>IN4</th>
-<th>OUT</th>
-<th>INOUT</th>
-<th>Symbolický popis</th>
-<th>Slovní popis</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>SSTB</td>
-<td>SSTKOFFS</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>B</sub> (<i>SP</i> + STKOFFS) = B<sub>1</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží vrchol zásobníku do lokální hodnoty s posunem stkoffs typu BOOLEAN</note></td>
-</tr>
-<tr>
-<td>SSTI</td>
-<td>SSTKOFFS</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>I</sub> (<i>SP</i> + STKOFFS) = I<sub>1</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží vrchol zásobníku do lokální hodnoty s posunem stkoffs typu INTEGER</note></td>
-</tr>
-<tr>
-<td>SSTP</td>
-<td>SSTKOFFS</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>P</sub> (<i>SP</i> + STKOFFS) = P<sub>1</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží vrchol zásobníku do lokální hodnoty s posunem stkoffs typu POINTER</note></td>
-</tr>
-<tr>
-<td>SSTR</td>
-<td>SSTKOFFS</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>R</sub> (<i>SP</i> + STKOFFS) = R<sub>1</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží vrchol zásobníku do lokální hodnoty s posunem stkoffs typu REAL</note></td>
-</tr>
-<tr>
-<td>SSTS</td>
-<td>SSTKOFFS</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>S</sub> (<i>SP</i> + STKOFFS) = S<sub>1</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží vrchol zásobníku do lokální hodnoty s posunem stkoffs typu STRING</note></td>
-</tr>
-</tbody>
-</table><img src="./Instrukce_ICM_files/gen_mop_sst.png"><table border="1">
-<thead><tr>
-<th>Opcode</th>
-<th>Operand</th>
-<th>TOP2</th>
-<th>TOP1</th>
-<th>TOP0</th>
-<th></th>
-<th>RES</th>
-<th>IN1</th>
-<th>IN2</th>
-<th>IN3</th>
-<th>IN4</th>
-<th>OUT</th>
-<th>INOUT</th>
-<th>Symbolický popis</th>
-<th>Slovní popis</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>XLDB</td>
-<td></td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = *<sub>B</sub> P<sub>1</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte na vrchol zásobníku obsah proměnné typu BOOLEAN přes ukazatel</note></td>
-</tr>
-<tr>
-<td>XLDI</td>
-<td></td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub> = *<sub>I</sub> P<sub>1</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte na vrchol zásobníku obsah proměnné typu INTEGER přes ukazatel</note></td>
-</tr>
-<tr>
-<td>XLDR</td>
-<td></td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub> = *<sub>R</sub> P<sub>1</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte na vrchol zásobníku obsah proměnné typu REAL přes ukazatel</note></td>
-</tr>
-<tr>
-<td>XLDS</td>
-<td></td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>o</sub> = *<sub>S</sub> P<sub>1</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte na vrchol zásobníku obsah proměnné typu STRING přes ukazatel</note></td>
-</tr>
-</tbody>
-</table><img src="./Instrukce_ICM_files/gen_mop_xld.png"><table border="1">
-<thead><tr>
-<th>Opcode</th>
-<th>Operand</th>
-<th>TOP2</th>
-<th>TOP1</th>
-<th>TOP0</th>
-<th></th>
-<th>RES</th>
-<th>IN1</th>
-<th>IN2</th>
-<th>IN3</th>
-<th>IN4</th>
-<th>OUT</th>
-<th>INOUT</th>
-<th>Symbolický popis</th>
-<th>Slovní popis</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>XSTB</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>B</sub> P<sub>2</sub> = B<sub>1</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží B<sub>1</sub> do proměnné typu BOOLEAN přes ukazatel</note></td>
-</tr>
-<tr>
-<td>XSTI</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>I</sub> P<sub>2</sub> = I<sub>1</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží I<sub>1</sub> do proměnné typu INTEGER přes ukazatel</note></td>
-</tr>
-<tr>
-<td>XSTR</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>R</sub> P<sub>2</sub> = R<sub>1</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží R<sub>1</sub> do proměnné typu REAL přes ukazatel</note></td>
-</tr>
-<tr>
-<td>XSTS</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>1</sub>
-				</text></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>2</sub>
-				</text></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>S</sub> P<sub>2</sub> = S<sub>1</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží S<sub>1</sub> do proměnné typu STRING přes ukazatel</note></td>
-</tr>
-</tbody>
-</table><img src="./Instrukce_ICM_files/gen_mop_xst.png"><table border="1">
-<thead><tr>
-<th>Opcode</th>
-<th>Operand</th>
-<th>TOP2</th>
-<th>TOP1</th>
-<th>TOP0</th>
-<th></th>
-<th>RES</th>
-<th>IN1</th>
-<th>IN2</th>
-<th>IN3</th>
-<th>IN4</th>
-<th>OUT</th>
-<th>INOUT</th>
-<th>Symbolický popis</th>
-<th>Slovní popis</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>CALL</td>
-<td>ABSJUMP</td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">F<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">F<sub>o</sub>.RA = <i>IP</i> + 1<br>F<sub>o</sub>.PFP = <i>FP</i>
-				<br>
-				<i>IP</i> = ABSNUM<br>
-				<i>FP</i> = &amp; F<sub>o</sub>
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">skok do funkce/procedury s absolutní adresou</note></td>
-</tr>
-<tr>
-<td>HALT</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"></symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Konec programu</note></td>
-</tr>
-<tr>
-<td>JMP</td>
-<td>RELJUMP</td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-				<i>IP</i> = <i>IP</i> + RELNUM</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">nepodmíněný skok s relativním posunem</note></td>
-</tr>
-<tr>
-<td>RET</td>
-<td></td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">F<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-				<i>IP</i> = F<sub>1</sub>.RA<br>
-				<i>FP</i> = F<sub>1</sub>.PFP</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">návrat z funkce/procedury</note></td>
-</tr>
-</tbody>
-</table><img src="./Instrukce_ICM_files/gen_mop_ujump.png"><table border="1">
-<thead><tr>
-<th>Opcode</th>
-<th>Operand</th>
-<th>TOP2</th>
-<th>TOP1</th>
-<th>TOP0</th>
-<th></th>
-<th>RES</th>
-<th>IN1</th>
-<th>IN2</th>
-<th>IN3</th>
-<th>IN4</th>
-<th>OUT</th>
-<th>INOUT</th>
-<th>Symbolický popis</th>
-<th>Slovní popis</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>JF</td>
-<td>RELJUMP</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">if not B<sub>1</sub> then <i>IP</i> = <i>IP</i> + RELNUM</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">podmíněný skok s relativním posunem, pokud je na vrcholu zásobníku FALSE</note></td>
-</tr>
-<tr>
-<td>JT</td>
-<td>RELJUMP</td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">if B<sub>1</sub> then <i>IP</i> = <i>IP</i> + RELNUM</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">podmíněný skok s relativním posunem, pokud je na vrcholu zásobníku TRUE</note></td>
-</tr>
-</tbody>
-</table><img src="./Instrukce_ICM_files/gen_mop_jump.png"><table border="1">
-<thead><tr>
-<th>Opcode</th>
-<th>Operand</th>
-<th>TOP2</th>
-<th>TOP1</th>
-<th>TOP0</th>
-<th></th>
-<th>RES</th>
-<th>IN1</th>
-<th>IN2</th>
-<th>IN3</th>
-<th>IN4</th>
-<th>OUT</th>
-<th>INOUT</th>
-<th>Symbolický popis</th>
-<th>Slovní popis</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>FNCREADI</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub>=READI
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">volání předdefinované funkce READI</note></td>
-</tr>
-<tr>
-<td>FNCREADR</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub>=READR
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">volání předdefinované funkce READR</note></td>
-</tr>
-<tr>
-<td>FNCREADS</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>o</sub>
-				</text></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>o</sub>=READS
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">volání předdefinované funkce READS</note></td>
-</tr>
-<tr>
-<td>FNCWRITEI</td>
-<td></td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">WRITEI(I<sub>1</sub>)
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">volání předdefinované funkce WRITEI</note></td>
-</tr>
-<tr>
-<td>FNCWRITELN</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">WRITELN()</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">volání předdefinované funkce WRITELN</note></td>
-</tr>
-<tr>
-<td>FNCWRITER</td>
-<td></td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">WRITER(R<sub>1</sub>)
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">volání předdefinované funkce WRITER</note></td>
-</tr>
-<tr>
-<td>FNCWRITES</td>
-<td></td>
-<td></td>
-<td></td>
-<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>1</sub>
-				</text></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">WRITES(S<sub>1</sub>)
-			</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">volání předdefinované funkce WRITES</note></td>
-</tr>
-<tr>
-<td>NOP</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> </symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">nedělá nic</note></td>
-</tr>
-<tr>
-<td>SADD</td>
-<td>SSTKOFFS</td>
-<td></td>
-<td></td>
-<td></td>
-<td>→</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-				<i>SP</i> =<i>SP</i> + STKOFFS</symb_note></td>
-<td><note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">přičte konstantu (případně zápornou) k ukazateli zásobníku</note></td>
-</tr>
-</tbody>
-</table><img src="./Instrukce_ICM_files/gen_mop_other.png"></div></body></html>
+
+<body>
+	<h1>Instrukce ICM</h1>
+	<ul>
+		<a href="#C_ref">
+			<li>Adresa proměnné - zásobníkový stroj</li>
+		</a><a href="#C_init">
+			<li>Inicializace - zásobníkový stroj</li>
+		</a><a href="#C_lit">
+			<li>Načtení literálů - zásobníkový stroj</li>
+		</a><a href="#C_unarit">
+			<li>Unární aritmetické operace - zásobníkový stroj</li>
+		</a><a href="#C_binb">
+			<li>Binární booleovské operace - zásobníkový stroj</li>
+		</a><a href="#C_cmpb">
+			<li>Porovnání booleovské - zásobníkový stroj</li>
+		</a><a href="#C_bini">
+			<li>Binární celočíselné operace - zásobníkový stroj</li>
+		</a><a href="#C_cmpi">
+			<li>Porovnání celočíselné - zásobníkový stroj</li>
+		</a><a href="#C_binr">
+			<li>Binární reálné operace - zásobníkový stroj</li>
+		</a><a href="#C_cmpr">
+			<li>Porovnání reálné - zásobníkový stroj</li>
+		</a><a href="#C_bins">
+			<li>Binární řetězcové operace - zásobníkový stroj</li>
+		</a><a href="#C_dtor">
+			<li>Destrukce proměnných - zásobníkový stroj</li>
+		</a><a href="#C_gld">
+			<li>Čtení globálních proměnných - zásobníkový stroj</li>
+		</a><a href="#C_gst">
+			<li>Zápis do globálních proměnných - zásobníkový stroj</li>
+		</a><a href="#C_lld">
+			<li>Čtení lokálních proměnných - zásobníkový stroj</li>
+		</a><a href="#C_lst">
+			<li>Zápis do lokálních proměnných - zásobníkový stroj</li>
+		</a><a href="#C_sld">
+			<li>Čtení pomocných proměnných - zásobníkový stroj</li>
+		</a><a href="#C_sst">
+			<li>Zápis do pomocných proměnných - zásobníkový stroj</li>
+		</a><a href="#C_epush">
+			<li>Přidání na zásobníku - registrový stroj</li>
+		</a><a href="#C_epop">
+			<li>Odebrání ze zásobníku - registrový stroj</li>
+		</a><a href="#C_xld">
+			<li>Nepřímé čtení - zásobníkový stroj</li>
+		</a><a href="#C_xst">
+			<li>Nepřímý zápis - zásobníkový stroj</li>
+		</a><a href="#C_ujump">
+			<li>Skoky - univerzální</li>
+		</a><a href="#C_jump">
+			<li>Skoky - zásobníkový stroj</li>
+		</a><a href="#C_other">
+			<li>Ostatní - univerzální</li>
+		</a>
+	</ul>
+	<h4>Legenda</h4>
+	<p>TOP0 je vrchol zásobníku, TOP1 je hodnota pod vrcholem zásobníku a TOP2 je druhá hodnota pod vrcholem
+		zásobníku. RES je případný výsledek, který se uloží na vrcholek zásobníku.</p>
+	<p>IN1, IN2, IN3 a IN4 jsou vstupní registry, OUT je výstupní registr, INOUT je vstupně/výstupní registr.</p><a
+		name="C_ref">
+		<h2>Adresa proměnné - zásobníkový stroj</h2>
+	</a>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Opcode</th>
+				<th>Operand</th>
+				<th>TOP2</th>
+				<th>TOP1</th>
+				<th>TOP0</th>
+				<th></th>
+				<th>RES</th>
+				<th>IN1</th>
+				<th>IN2</th>
+				<th>IN3</th>
+				<th>IN4</th>
+				<th>OUT</th>
+				<th>INOUT</th>
+				<th>Symbolický popis</th>
+				<th>Slovní popis</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>GREF</td>
+				<td>GSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>o</sub> = <i>GP</i> +
+						STKOFFS</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží na vrchol zásobníku ukazatel
+						na globální hodnotu s posunem stkoffs</note>
+				</td>
+			</tr>
+			<tr>
+				<td>LREF</td>
+				<td>LSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>o</sub> = <i>FP</i> +
+						STKOFFS</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží na vrchol zásobníku ukazatel
+						na lokální hodnotu s posunem stkoffs</note>
+				</td>
+			</tr>
+			<tr>
+				<td>SREF</td>
+				<td>SSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>o</sub> = <i>SP</i> +
+						STKOFFS</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží na vrchol zásobníku ukazatel
+						na lokální hodnotu s posunem stkoffs</note>
+				</td>
+			</tr>
+		</tbody>
+	</table><img src="./Instrukce_ICM_files/gen_mop_ref.png"><a name="C_init">
+		<h2>Inicializace - zásobníkový stroj</h2>
+	</a>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Opcode</th>
+				<th>Operand</th>
+				<th>TOP2</th>
+				<th>TOP1</th>
+				<th>TOP0</th>
+				<th></th>
+				<th>RES</th>
+				<th>IN1</th>
+				<th>IN2</th>
+				<th>IN3</th>
+				<th>IN4</th>
+				<th>OUT</th>
+				<th>INOUT</th>
+				<th>Symbolický popis</th>
+				<th>Slovní popis</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>INITB</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> =
+						undef<sub>B</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">zkonstruuje neinicializovanou
+						hodnotu typu BOOLEAN na vrcholu zásobníku</note>
+				</td>
+			</tr>
+			<tr>
+				<td>INITI</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub> =
+						undef<sub>I</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">zkonstruuje neinicializovanou
+						hodnotu typu INTEGER na vrcholu zásobníku</note>
+				</td>
+			</tr>
+			<tr>
+				<td>INITR</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub> =
+						undef<sub>R</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">zkonstruuje neinicializovanou
+						hodnotu typu REAL na vrcholu zásobníku</note>
+				</td>
+			</tr>
+			<tr>
+				<td>INITS</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>o</sub> =
+						undef<sub>S</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">zkonstruuje neinicializovanou
+						hodnotu typu STRING na vrcholu zásobníku</note>
+				</td>
+			</tr>
+		</tbody>
+	</table><img src="./Instrukce_ICM_files/gen_mop_init.png"><a name="C_lit">
+		<h2>Načtení literálů - zásobníkový stroj</h2>
+	</a>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Opcode</th>
+				<th>Operand</th>
+				<th>TOP2</th>
+				<th>TOP1</th>
+				<th>TOP0</th>
+				<th></th>
+				<th>RES</th>
+				<th>IN1</th>
+				<th>IN2</th>
+				<th>IN3</th>
+				<th>IN4</th>
+				<th>OUT</th>
+				<th>INOUT</th>
+				<th>Symbolický popis</th>
+				<th>Slovní popis</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>LDLITB</td>
+				<td>ABSNUM</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub> =
+						static_cast&lt;BOOLEAN&gt;(operand)</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">vytvoří na zásobníku konstantu typu
+						BOOLEAN podle přímého operandu v instrukci; 0==FALSE, 1==TRUE</note>
+				</td>
+			</tr>
+			<tr>
+				<td>LDLITI</td>
+				<td>LITINT</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub> =
+						literal<sub>I</sub>[INTIDX]</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte konstantu typu INTEGER s
+						indexem INTIDX na zásobník</note>
+				</td>
+			</tr>
+			<tr>
+				<td>LDLITR</td>
+				<td>LITREAL</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub> =
+						literal<sub>R</sub>[REALIDX]</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte konstantu typu REAL s indexem
+						REALIDX na zásobník</note>
+				</td>
+			</tr>
+			<tr>
+				<td>LDLITS</td>
+				<td>LITSTR</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>1</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>1</sub> =
+						literal<sub>S</sub>[STRIDX]</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte konstantu typu STRING s
+						indexem STRIDX na zásobník</note>
+				</td>
+			</tr>
+		</tbody>
+	</table><img src="./Instrukce_ICM_files/gen_mop_lit.png"><a name="C_unarit">
+		<h2>Unární aritmetické operace - zásobníkový stroj</h2>
+	</a>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Opcode</th>
+				<th>Operand</th>
+				<th>TOP2</th>
+				<th>TOP1</th>
+				<th>TOP0</th>
+				<th></th>
+				<th>RES</th>
+				<th>IN1</th>
+				<th>IN2</th>
+				<th>IN3</th>
+				<th>IN4</th>
+				<th>OUT</th>
+				<th>INOUT</th>
+				<th>Symbolický popis</th>
+				<th>Slovní popis</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>CVRTIR</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub> = real(
+						I<sub>1</sub>)</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">převede hodnotu typu INTEGER z
+						vrcholu zásobníku na REAL a uloží ji na vrchol zásobníku</note>
+				</td>
+			</tr>
+			<tr>
+				<td>CVRTRI</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub> = integer(
+						R<sub>1</sub>)</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">převede hodnotu typu REAL z vrcholu
+						zásobníku na INTEGER a uloží ji na vrchol zásobníku</note>
+				</td>
+			</tr>
+			<tr>
+				<td>MINUSI</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub> = -<sub>I</sub>
+						I<sub>1</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">unární minus typu INTEGER</note>
+				</td>
+			</tr>
+			<tr>
+				<td>MINUSR</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub> = -<sub>R</sub>
+						R<sub>1</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">unární minus typu REAL</note>
+				</td>
+			</tr>
+			<tr>
+				<td>NOT</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = not
+						B<sub>1</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">negace</note>
+				</td>
+			</tr>
+		</tbody>
+	</table><img src="./Instrukce_ICM_files/gen_mop_unarit.png"><a name="C_binb">
+		<h2>Binární booleovské operace - zásobníkový stroj</h2>
+	</a>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Opcode</th>
+				<th>Operand</th>
+				<th>TOP2</th>
+				<th>TOP1</th>
+				<th>TOP0</th>
+				<th></th>
+				<th>RES</th>
+				<th>IN1</th>
+				<th>IN2</th>
+				<th>IN3</th>
+				<th>IN4</th>
+				<th>OUT</th>
+				<th>INOUT</th>
+				<th>Symbolický popis</th>
+				<th>Slovní popis</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>AND</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = B<sub>1</sub>
+						and B<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">booleovský součin</note>
+				</td>
+			</tr>
+			<tr>
+				<td>OR</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = B<sub>1</sub>
+						or B<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">booleovský součet</note>
+				</td>
+			</tr>
+		</tbody>
+	</table><img src="./Instrukce_ICM_files/gen_mop_binb.png"><a name="C_cmpb">
+		<h2>Porovnání booleovské - zásobníkový stroj</h2>
+	</a>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Opcode</th>
+				<th>Operand</th>
+				<th>TOP2</th>
+				<th>TOP1</th>
+				<th>TOP0</th>
+				<th></th>
+				<th>RES</th>
+				<th>IN1</th>
+				<th>IN2</th>
+				<th>IN3</th>
+				<th>IN4</th>
+				<th>OUT</th>
+				<th>INOUT</th>
+				<th>Symbolický popis</th>
+				<th>Slovní popis</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>EQB</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = B<sub>1</sub>
+						==<sub>B</sub> B<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání = typu BOOLEAN, výsledek
+						je typu BOOLEAN</note>
+				</td>
+			</tr>
+			<tr>
+				<td>GEB</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = B<sub>1</sub>
+						&gt;=<sub>B</sub> B<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &gt;= typu BOOLEAN,
+						výsledek je typu BOOLEAN</note>
+				</td>
+			</tr>
+			<tr>
+				<td>GTB</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = B<sub>1</sub>
+						&gt;<sub>B</sub> B<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &gt; typu BOOLEAN,
+						výsledek je typu BOOLEAN</note>
+				</td>
+			</tr>
+			<tr>
+				<td>LEB</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = B<sub>1</sub>
+						&lt;=<sub>B</sub> B<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &lt;= typu BOOLEAN,
+						výsledek je typu BOOLEAN</note>
+				</td>
+			</tr>
+			<tr>
+				<td>LTB</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = B<sub>1</sub>
+						&lt;<sub>B</sub> B<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &lt; typu BOOLEAN,
+						výsledek je typu BOOLEAN</note>
+				</td>
+			</tr>
+			<tr>
+				<td>NEB</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = B<sub>1</sub>
+						&lt;&gt;<sub>B</sub> B<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &lt;&gt; typu BOOLEAN,
+						výsledek je typu BOOLEAN</note>
+				</td>
+			</tr>
+		</tbody>
+	</table><img src="./Instrukce_ICM_files/gen_mop_cmpb.png"><a name="C_bini">
+		<h2>Binární celočíselné operace - zásobníkový stroj</h2>
+	</a>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Opcode</th>
+				<th>Operand</th>
+				<th>TOP2</th>
+				<th>TOP1</th>
+				<th>TOP0</th>
+				<th></th>
+				<th>RES</th>
+				<th>IN1</th>
+				<th>IN2</th>
+				<th>IN3</th>
+				<th>IN4</th>
+				<th>OUT</th>
+				<th>INOUT</th>
+				<th>Symbolický popis</th>
+				<th>Slovní popis</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>ADDI</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub> = I<sub>1</sub>
+						+<sub>I</sub> I<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">součet typu INTEGER</note>
+				</td>
+			</tr>
+			<tr>
+				<td>ADDP</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>o</sub> = P<sub>1</sub>
+						+<sub>I</sub> I<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">součet POINTER + INTEGER</note>
+				</td>
+			</tr>
+			<tr>
+				<td>DIVI</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub> = I<sub>1</sub>
+						div I<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">celočíselné dělení</note>
+				</td>
+			</tr>
+			<tr>
+				<td>MODI</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub> = I<sub>1</sub>
+						mod I<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">celočíselné modulo</note>
+				</td>
+			</tr>
+			<tr>
+				<td>MULI</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub> = I<sub>1</sub>
+						*<sub>I</sub> I<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">součin typu INTEGER</note>
+				</td>
+			</tr>
+			<tr>
+				<td>SUBI</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub> = I<sub>1</sub>
+						-<sub>I</sub> I<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">rozdíl typu INTEGER</note>
+				</td>
+			</tr>
+			<tr>
+				<td>SUBP</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>o</sub> = P<sub>1</sub>
+						-<sub>I</sub> I<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">rozdíl POINTER - INTEGER</note>
+				</td>
+			</tr>
+		</tbody>
+	</table><img src="./Instrukce_ICM_files/gen_mop_bini.png"><a name="C_cmpi">
+		<h2>Porovnání celočíselné - zásobníkový stroj</h2>
+	</a>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Opcode</th>
+				<th>Operand</th>
+				<th>TOP2</th>
+				<th>TOP1</th>
+				<th>TOP0</th>
+				<th></th>
+				<th>RES</th>
+				<th>IN1</th>
+				<th>IN2</th>
+				<th>IN3</th>
+				<th>IN4</th>
+				<th>OUT</th>
+				<th>INOUT</th>
+				<th>Symbolický popis</th>
+				<th>Slovní popis</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>EQI</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = I<sub>1</sub>
+						==<sub>I</sub> I<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání = typu INTEGER, výsledek
+						je typu BOOLEAN</note>
+				</td>
+			</tr>
+			<tr>
+				<td>GEI</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = I<sub>1</sub>
+						&gt;=<sub>I</sub> I<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &gt;= typu INTEGER,
+						výsledek je typu BOOLEAN</note>
+				</td>
+			</tr>
+			<tr>
+				<td>GTI</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = I<sub>1</sub>
+						&gt;<sub>I</sub> I<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &gt; typu INTEGER,
+						výsledek je typu BOOLEAN</note>
+				</td>
+			</tr>
+			<tr>
+				<td>LEI</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = I<sub>1</sub>
+						&lt;=<sub>I</sub> I<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &lt;= typu INTEGER,
+						výsledek je typu BOOLEAN</note>
+				</td>
+			</tr>
+			<tr>
+				<td>LTI</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = I<sub>1</sub>
+						&lt;<sub>I</sub> I<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &lt; typu INTEGER,
+						výsledek je typu BOOLEAN</note>
+				</td>
+			</tr>
+			<tr>
+				<td>NEI</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = I<sub>1</sub>
+						&lt;&gt;<sub>I</sub> I<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &lt;&gt; typu INTEGER,
+						výsledek je typu BOOLEAN</note>
+				</td>
+			</tr>
+		</tbody>
+	</table><img src="./Instrukce_ICM_files/gen_mop_cmpi.png"><a name="C_binr">
+		<h2>Binární reálné operace - zásobníkový stroj</h2>
+	</a>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Opcode</th>
+				<th>Operand</th>
+				<th>TOP2</th>
+				<th>TOP1</th>
+				<th>TOP0</th>
+				<th></th>
+				<th>RES</th>
+				<th>IN1</th>
+				<th>IN2</th>
+				<th>IN3</th>
+				<th>IN4</th>
+				<th>OUT</th>
+				<th>INOUT</th>
+				<th>Symbolický popis</th>
+				<th>Slovní popis</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>ADDR</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub> = R<sub>1</sub>
+						+<sub>R</sub> R<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">součet typu REAL</note>
+				</td>
+			</tr>
+			<tr>
+				<td>DIVR</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub> = R<sub>1</sub>
+						/<sub>R</sub> R<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">reálné dělení</note>
+				</td>
+			</tr>
+			<tr>
+				<td>MULR</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub> = R<sub>1</sub>
+						*<sub>R</sub> R<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">součin typu REAL</note>
+				</td>
+			</tr>
+			<tr>
+				<td>SUBR</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub> = R<sub>1</sub>
+						-<sub>R</sub> R<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">rozdíl typu REAL</note>
+				</td>
+			</tr>
+		</tbody>
+	</table><img src="./Instrukce_ICM_files/gen_mop_binr.png"><a name="C_cmpr">
+		<h2>Porovnání reálné - zásobníkový stroj</h2>
+	</a>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Opcode</th>
+				<th>Operand</th>
+				<th>TOP2</th>
+				<th>TOP1</th>
+				<th>TOP0</th>
+				<th></th>
+				<th>RES</th>
+				<th>IN1</th>
+				<th>IN2</th>
+				<th>IN3</th>
+				<th>IN4</th>
+				<th>OUT</th>
+				<th>INOUT</th>
+				<th>Symbolický popis</th>
+				<th>Slovní popis</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>EQR</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = R<sub>1</sub>
+						==<sub>R</sub> R<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání = typu REAL, výsledek je
+						typu BOOLEAN</note>
+				</td>
+			</tr>
+			<tr>
+				<td>GER</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = R<sub>1</sub>
+						&gt;=<sub>R</sub> R<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &gt;= typu REAL, výsledek
+						je typu BOOLEAN</note>
+				</td>
+			</tr>
+			<tr>
+				<td>GTR</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = R<sub>1</sub>
+						&gt;<sub>R</sub> R<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &gt; typu REAL, výsledek
+						je typu BOOLEAN</note>
+				</td>
+			</tr>
+			<tr>
+				<td>LER</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = R<sub>1</sub>
+						&lt;=<sub>R</sub> R<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &lt;= typu REAL, výsledek
+						je typu BOOLEAN</note>
+				</td>
+			</tr>
+			<tr>
+				<td>LTR</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = R<sub>1</sub>
+						&lt;<sub>R</sub> R<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &lt; typu REAL, výsledek
+						je typu BOOLEAN</note>
+				</td>
+			</tr>
+			<tr>
+				<td>NER</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = R<sub>1</sub>
+						&lt;&gt;<sub>R</sub> R<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &lt;&gt; typu REAL,
+						výsledek je typu BOOLEAN</note>
+				</td>
+			</tr>
+		</tbody>
+	</table><img src="./Instrukce_ICM_files/gen_mop_cmpr.png"><a name="C_bins">
+		<h2>Binární řetězcové operace - zásobníkový stroj</h2>
+	</a>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Opcode</th>
+				<th>Operand</th>
+				<th>TOP2</th>
+				<th>TOP1</th>
+				<th>TOP0</th>
+				<th></th>
+				<th>RES</th>
+				<th>IN1</th>
+				<th>IN2</th>
+				<th>IN3</th>
+				<th>IN4</th>
+				<th>OUT</th>
+				<th>INOUT</th>
+				<th>Symbolický popis</th>
+				<th>Slovní popis</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>ADDS</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>o</sub> = S<sub>1</sub>
+						+<sub>S</sub> S<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">sloučení dvou řetězců</note>
+				</td>
+			</tr>
+			<tr>
+				<td>EQS</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = S<sub>1</sub>
+						==<sub>S</sub> S<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání = typu STRING, výsledek je
+						typu BOOLEAN</note>
+				</td>
+			</tr>
+			<tr>
+				<td>GES</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = S<sub>1</sub>
+						&gt;=<sub>S</sub> S<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &gt;= typu STRING,
+						výsledek je typu BOOLEAN</note>
+				</td>
+			</tr>
+			<tr>
+				<td>GTS</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = S<sub>1</sub>
+						&gt;<sub>S</sub> S<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &gt; typu STRING, výsledek
+						je typu BOOLEAN</note>
+				</td>
+			</tr>
+			<tr>
+				<td>LES</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = S<sub>1</sub>
+						&lt;=<sub>S</sub> S<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &lt;= typu STRING,
+						výsledek je typu BOOLEAN</note>
+				</td>
+			</tr>
+			<tr>
+				<td>LTS</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = S<sub>1</sub>
+						&lt;<sub>S</sub> S<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &lt; typu STRING, výsledek
+						je typu BOOLEAN</note>
+				</td>
+			</tr>
+			<tr>
+				<td>NES</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = S<sub>1</sub>
+						&lt;&gt;<sub>S</sub> S<sub>2</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">porovnání &lt;&gt; typu STRING,
+						výsledek je typu BOOLEAN</note>
+				</td>
+			</tr>
+		</tbody>
+	</table><img src="./Instrukce_ICM_files/gen_mop_bins.png"><a name="C_dtor">
+		<h2>Destrukce proměnných - zásobníkový stroj</h2>
+	</a>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Opcode</th>
+				<th>Operand</th>
+				<th>TOP2</th>
+				<th>TOP1</th>
+				<th>TOP0</th>
+				<th></th>
+				<th>RES</th>
+				<th>IN1</th>
+				<th>IN2</th>
+				<th>IN3</th>
+				<th>IN4</th>
+				<th>OUT</th>
+				<th>INOUT</th>
+				<th>Symbolický popis</th>
+				<th>Slovní popis</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>DTORB</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">nothing</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">zruší hodnotu typu BOOLEAN na
+						vrcholu zásobníku</note>
+				</td>
+			</tr>
+			<tr>
+				<td>DTORI</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">nothing</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">zruší hodnotu typu INTEGER na
+						vrcholu zásobníku</note>
+				</td>
+			</tr>
+			<tr>
+				<td>DTORP</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">nothing</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">zruší hodnotu typu ukazatel na
+						vrcholu zásobníku</note>
+				</td>
+			</tr>
+			<tr>
+				<td>DTORR</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">nothing</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">zruší hodnotu typu REAL na vrcholu
+						zásobníku</note>
+				</td>
+			</tr>
+			<tr>
+				<td>DTORS</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">nothing</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">zruší hodnotu typu STRING na vrcholu
+						zásobníku</note>
+				</td>
+			</tr>
+		</tbody>
+	</table><img src="./Instrukce_ICM_files/gen_mop_dtor.png"><a name="C_gld">
+		<h2>Čtení globálních proměnných - zásobníkový stroj</h2>
+	</a>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Opcode</th>
+				<th>Operand</th>
+				<th>TOP2</th>
+				<th>TOP1</th>
+				<th>TOP0</th>
+				<th></th>
+				<th>RES</th>
+				<th>IN1</th>
+				<th>IN2</th>
+				<th>IN3</th>
+				<th>IN4</th>
+				<th>OUT</th>
+				<th>INOUT</th>
+				<th>Symbolický popis</th>
+				<th>Slovní popis</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>GLDB</td>
+				<td>GSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = *<sub>B</sub>
+						(<i>GP</i> + STKOFFS)</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte obsah globální hodnoty s
+						posunem stkoffs typu BOOLEAN na vrchol zásobníku</note>
+				</td>
+			</tr>
+			<tr>
+				<td>GLDI</td>
+				<td>GSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub> = *<sub>I</sub>
+						(<i>GP</i> + STKOFFS)</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte obsah globální hodnoty s
+						posunem stkoffs typu INTEGER na vrchol zásobníku</note>
+				</td>
+			</tr>
+			<tr>
+				<td>GLDR</td>
+				<td>GSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub> = *<sub>R</sub>
+						(<i>GP</i> + STKOFFS)</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte obsah globální hodnoty s
+						posunem stkoffs typu REAL na vrchol zásobníku</note>
+				</td>
+			</tr>
+			<tr>
+				<td>GLDS</td>
+				<td>GSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>o</sub> = *<sub>S</sub>
+						(<i>GP</i> + STKOFFS)</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte obsah globální hodnoty s
+						posunem stkoffs typu STRING na vrchol zásobníku</note>
+				</td>
+			</tr>
+		</tbody>
+	</table><img src="./Instrukce_ICM_files/gen_mop_gld.png"><a name="C_gst">
+		<h2>Zápis do globálních proměnných - zásobníkový stroj</h2>
+	</a>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Opcode</th>
+				<th>Operand</th>
+				<th>TOP2</th>
+				<th>TOP1</th>
+				<th>TOP0</th>
+				<th></th>
+				<th>RES</th>
+				<th>IN1</th>
+				<th>IN2</th>
+				<th>IN3</th>
+				<th>IN4</th>
+				<th>OUT</th>
+				<th>INOUT</th>
+				<th>Symbolický popis</th>
+				<th>Slovní popis</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>GSTB</td>
+				<td>GSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>B</sub> (<i>GP</i> +
+						STKOFFS) = B<sub>1</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží vrchol zásobníku do globální
+						hodnoty s posunem stkoffs typu BOOLEAN</note>
+				</td>
+			</tr>
+			<tr>
+				<td>GSTI</td>
+				<td>GSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>I</sub> (<i>GP</i> +
+						STKOFFS) = I<sub>1</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží vrchol zásobníku do globální
+						hodnoty s posunem stkoffs typu INTEGER</note>
+				</td>
+			</tr>
+			<tr>
+				<td>GSTR</td>
+				<td>GSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>R</sub> (<i>GP</i> +
+						STKOFFS) = R<sub>1</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží vrchol zásobníku do globální
+						hodnoty s posunem stkoffs typu REAL</note>
+				</td>
+			</tr>
+			<tr>
+				<td>GSTS</td>
+				<td>GSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>S</sub> (<i>GP</i> +
+						STKOFFS) = S<sub>1</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží vrchol zásobníku do globální
+						hodnoty s posunem stkoffs typu STRING</note>
+				</td>
+			</tr>
+		</tbody>
+	</table><img src="./Instrukce_ICM_files/gen_mop_gst.png"><a name="C_lld">
+		<h2>Čtení lokálních proměnných - zásobníkový stroj</h2>
+	</a>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Opcode</th>
+				<th>Operand</th>
+				<th>TOP2</th>
+				<th>TOP1</th>
+				<th>TOP0</th>
+				<th></th>
+				<th>RES</th>
+				<th>IN1</th>
+				<th>IN2</th>
+				<th>IN3</th>
+				<th>IN4</th>
+				<th>OUT</th>
+				<th>INOUT</th>
+				<th>Symbolický popis</th>
+				<th>Slovní popis</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>LLDB</td>
+				<td>LSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = *<sub>B</sub>
+						(<i>FP</i> + STKOFFS)</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte obsah lokální hodnoty s
+						posunem stkoffs typu BOOLEAN na vrchol zásobníku</note>
+				</td>
+			</tr>
+			<tr>
+				<td>LLDI</td>
+				<td>LSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub> = *<sub>U</sub>
+						(<i>FP</i> + STKOFFS)</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte obsah lokální hodnoty s
+						posunem stkoffs typu INTEGER na vrchol zásobníku</note>
+				</td>
+			</tr>
+			<tr>
+				<td>LLDP</td>
+				<td>LSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>o</sub> = *<sub>P</sub>
+						(<i>FP</i> + STKOFFS)</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte obsah lokální hodnoty s
+						posunem stkoffs typu ukazatel na vrchol zásobníku</note>
+				</td>
+			</tr>
+			<tr>
+				<td>LLDR</td>
+				<td>LSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub> = *<sub>R</sub>
+						(<i>FP</i> + STKOFFS)</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte obsah lokální hodnoty s
+						posunem stkoffs typu REAL na vrchol zásobníku</note>
+				</td>
+			</tr>
+			<tr>
+				<td>LLDS</td>
+				<td>LSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>o</sub> = *<sub>S</sub>
+						(<i>FP</i> + STKOFFS)</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte obsah lokální hodnoty s
+						posunem stkoffs typu STRING na vrchol zásobníku</note>
+				</td>
+			</tr>
+		</tbody>
+	</table><img src="./Instrukce_ICM_files/gen_mop_lld.png"><a name="C_lst">
+		<h2>Zápis do lokálních proměnných - zásobníkový stroj</h2>
+	</a>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Opcode</th>
+				<th>Operand</th>
+				<th>TOP2</th>
+				<th>TOP1</th>
+				<th>TOP0</th>
+				<th></th>
+				<th>RES</th>
+				<th>IN1</th>
+				<th>IN2</th>
+				<th>IN3</th>
+				<th>IN4</th>
+				<th>OUT</th>
+				<th>INOUT</th>
+				<th>Symbolický popis</th>
+				<th>Slovní popis</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>LSTB</td>
+				<td>LSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>B</sub> (<i>FP</i> +
+						STKOFFS) = B<sub>1</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží vrchol zásobníku do lokální
+						hodnoty s posunem stkoffs typu BOOLEAN</note>
+				</td>
+			</tr>
+			<tr>
+				<td>LSTI</td>
+				<td>LSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>I</sub> (<i>FP</i> +
+						STKOFFS) = I<sub>1</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží vrchol zásobníku do lokální
+						hodnoty s posunem stkoffs typu INTEGER</note>
+				</td>
+			</tr>
+			<tr>
+				<td>LSTR</td>
+				<td>LSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>R</sub> (<i>FP</i> +
+						STKOFFS) = R<sub>1</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží vrchol zásobníku do lokální
+						hodnoty s posunem stkoffs typu REAL</note>
+				</td>
+			</tr>
+			<tr>
+				<td>LSTS</td>
+				<td>LSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>S</sub> (<i>FP</i> +
+						STKOFFS) = S<sub>1</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží vrchol zásobníku do lokální
+						hodnoty s posunem stkoffs typu STRING</note>
+				</td>
+			</tr>
+		</tbody>
+	</table><img src="./Instrukce_ICM_files/gen_mop_lst.png"><a name="C_sld">
+		<h2>Čtení pomocných proměnných - zásobníkový stroj</h2>
+	</a>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Opcode</th>
+				<th>Operand</th>
+				<th>TOP2</th>
+				<th>TOP1</th>
+				<th>TOP0</th>
+				<th></th>
+				<th>RES</th>
+				<th>IN1</th>
+				<th>IN2</th>
+				<th>IN3</th>
+				<th>IN4</th>
+				<th>OUT</th>
+				<th>INOUT</th>
+				<th>Symbolický popis</th>
+				<th>Slovní popis</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>SLDB</td>
+				<td>SSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = *<sub>B</sub>
+						(<i>SP</i> + STKOFFS)</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte obsah lokální hodnoty s
+						posunem stkoffs typu BOOLEAN na vrchol zásobníku</note>
+				</td>
+			</tr>
+			<tr>
+				<td>SLDI</td>
+				<td>SSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub> = *<sub>U</sub>
+						(<i>SP</i> + STKOFFS)</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte obsah lokální hodnoty s
+						posunem stkoffs typu INTEGER na vrchol zásobníku</note>
+				</td>
+			</tr>
+			<tr>
+				<td>SLDP</td>
+				<td>SSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>o</sub> = *<sub>P</sub>
+						(<i>SP</i> + STKOFFS)</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte obsah lokální hodnoty s
+						posunem stkoffs typu ukazatel na vrchol zásobníku</note>
+				</td>
+			</tr>
+			<tr>
+				<td>SLDR</td>
+				<td>SSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub> = *<sub>R</sub>
+						(<i>SP</i> + STKOFFS)</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte obsah lokální hodnoty s
+						posunem stkoffs typu REAL na vrchol zásobníku</note>
+				</td>
+			</tr>
+			<tr>
+				<td>SLDS</td>
+				<td>SSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>o</sub> = *<sub>S</sub>
+						(<i>SP</i> + STKOFFS)</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte obsah lokální hodnoty s
+						posunem stkoffs typu STRING na vrchol zásobníku</note>
+				</td>
+			</tr>
+		</tbody>
+	</table><img src="./Instrukce_ICM_files/gen_mop_sld.png"><a name="C_sst">
+		<h2>Zápis do pomocných proměnných - zásobníkový stroj</h2>
+	</a>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Opcode</th>
+				<th>Operand</th>
+				<th>TOP2</th>
+				<th>TOP1</th>
+				<th>TOP0</th>
+				<th></th>
+				<th>RES</th>
+				<th>IN1</th>
+				<th>IN2</th>
+				<th>IN3</th>
+				<th>IN4</th>
+				<th>OUT</th>
+				<th>INOUT</th>
+				<th>Symbolický popis</th>
+				<th>Slovní popis</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>SSTB</td>
+				<td>SSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>B</sub> (<i>SP</i> +
+						STKOFFS) = B<sub>1</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží vrchol zásobníku do lokální
+						hodnoty s posunem stkoffs typu BOOLEAN</note>
+				</td>
+			</tr>
+			<tr>
+				<td>SSTI</td>
+				<td>SSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>I</sub> (<i>SP</i> +
+						STKOFFS) = I<sub>1</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží vrchol zásobníku do lokální
+						hodnoty s posunem stkoffs typu INTEGER</note>
+				</td>
+			</tr>
+			<tr>
+				<td>SSTP</td>
+				<td>SSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>P</sub> (<i>SP</i> +
+						STKOFFS) = P<sub>1</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží vrchol zásobníku do lokální
+						hodnoty s posunem stkoffs typu POINTER</note>
+				</td>
+			</tr>
+			<tr>
+				<td>SSTR</td>
+				<td>SSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>R</sub> (<i>SP</i> +
+						STKOFFS) = R<sub>1</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží vrchol zásobníku do lokální
+						hodnoty s posunem stkoffs typu REAL</note>
+				</td>
+			</tr>
+			<tr>
+				<td>SSTS</td>
+				<td>SSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>S</sub> (<i>SP</i> +
+						STKOFFS) = S<sub>1</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží vrchol zásobníku do lokální
+						hodnoty s posunem stkoffs typu STRING</note>
+				</td>
+			</tr>
+		</tbody>
+	</table><img src="./Instrukce_ICM_files/gen_mop_sst.png"><a name="C_xld">
+		<h2>Nepřímé čtení - zásobníkový stroj</h2>
+	</a>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Opcode</th>
+				<th>Operand</th>
+				<th>TOP2</th>
+				<th>TOP1</th>
+				<th>TOP0</th>
+				<th></th>
+				<th>RES</th>
+				<th>IN1</th>
+				<th>IN2</th>
+				<th>IN3</th>
+				<th>IN4</th>
+				<th>OUT</th>
+				<th>INOUT</th>
+				<th>Symbolický popis</th>
+				<th>Slovní popis</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>XLDB</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>o</sub> = *<sub>B</sub>
+						P<sub>1</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte na vrchol zásobníku obsah
+						proměnné typu BOOLEAN přes ukazatel</note>
+				</td>
+			</tr>
+			<tr>
+				<td>XLDI</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub> = *<sub>I</sub>
+						P<sub>1</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte na vrchol zásobníku obsah
+						proměnné typu INTEGER přes ukazatel</note>
+				</td>
+			</tr>
+			<tr>
+				<td>XLDR</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub> = *<sub>R</sub>
+						P<sub>1</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte na vrchol zásobníku obsah
+						proměnné typu REAL přes ukazatel</note>
+				</td>
+			</tr>
+			<tr>
+				<td>XLDS</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>o</sub> = *<sub>S</sub>
+						P<sub>1</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">načte na vrchol zásobníku obsah
+						proměnné typu STRING přes ukazatel</note>
+				</td>
+			</tr>
+		</tbody>
+	</table><img src="./Instrukce_ICM_files/gen_mop_xld.png"><a name="C_xst">
+		<h2>Nepřímý zápis - zásobníkový stroj</h2>
+	</a>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Opcode</th>
+				<th>Operand</th>
+				<th>TOP2</th>
+				<th>TOP1</th>
+				<th>TOP0</th>
+				<th></th>
+				<th>RES</th>
+				<th>IN1</th>
+				<th>IN2</th>
+				<th>IN3</th>
+				<th>IN4</th>
+				<th>OUT</th>
+				<th>INOUT</th>
+				<th>Symbolický popis</th>
+				<th>Slovní popis</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>XSTB</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>B</sub> P<sub>2</sub> =
+						B<sub>1</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží B<sub>1</sub> do proměnné typu
+						BOOLEAN přes ukazatel</note>
+				</td>
+			</tr>
+			<tr>
+				<td>XSTI</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>I</sub> P<sub>2</sub> =
+						I<sub>1</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží I<sub>1</sub> do proměnné typu
+						INTEGER přes ukazatel</note>
+				</td>
+			</tr>
+			<tr>
+				<td>XSTR</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>R</sub> P<sub>2</sub> =
+						R<sub>1</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží R<sub>1</sub> do proměnné typu
+						REAL přes ukazatel</note>
+				</td>
+			</tr>
+			<tr>
+				<td>XSTS</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>1</sub>
+					</text></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">P<sub>2</sub>
+					</text></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">*<sub>S</sub> P<sub>2</sub> =
+						S<sub>1</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">uloží S<sub>1</sub> do proměnné typu
+						STRING přes ukazatel</note>
+				</td>
+			</tr>
+		</tbody>
+	</table><img src="./Instrukce_ICM_files/gen_mop_xst.png"><a name="C_ujump">
+		<h2>Skoky - univerzální</h2>
+	</a>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Opcode</th>
+				<th>Operand</th>
+				<th>TOP2</th>
+				<th>TOP1</th>
+				<th>TOP0</th>
+				<th></th>
+				<th>RES</th>
+				<th>IN1</th>
+				<th>IN2</th>
+				<th>IN3</th>
+				<th>IN4</th>
+				<th>OUT</th>
+				<th>INOUT</th>
+				<th>Symbolický popis</th>
+				<th>Slovní popis</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>CALL</td>
+				<td>ABSJUMP</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">F<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">F<sub>o</sub>.RA = <i>IP</i> +
+						1<br>F<sub>o</sub>.PFP = <i>FP</i>
+						<br>
+						<i>IP</i> = ABSNUM<br>
+						<i>FP</i> = &amp; F<sub>o</sub>
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">skok do funkce/procedury s absolutní
+						adresou</note>
+				</td>
+			</tr>
+			<tr>
+				<td>HALT</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"></symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Konec programu</note>
+				</td>
+			</tr>
+			<tr>
+				<td>JMP</td>
+				<td>RELJUMP</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+						<i>IP</i> = <i>IP</i> + RELNUM</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">nepodmíněný skok s relativním
+						posunem</note>
+				</td>
+			</tr>
+			<tr>
+				<td>RET</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">F<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+						<i>IP</i> = F<sub>1</sub>.RA<br>
+						<i>FP</i> = F<sub>1</sub>.PFP</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">návrat z funkce/procedury</note>
+				</td>
+			</tr>
+		</tbody>
+	</table><img src="./Instrukce_ICM_files/gen_mop_ujump.png"><a name="C_jump">
+		<h2>Skoky - zásobníkový stroj</h2>
+	</a>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Opcode</th>
+				<th>Operand</th>
+				<th>TOP2</th>
+				<th>TOP1</th>
+				<th>TOP0</th>
+				<th></th>
+				<th>RES</th>
+				<th>IN1</th>
+				<th>IN2</th>
+				<th>IN3</th>
+				<th>IN4</th>
+				<th>OUT</th>
+				<th>INOUT</th>
+				<th>Symbolický popis</th>
+				<th>Slovní popis</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>JF</td>
+				<td>RELJUMP</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">if not B<sub>1</sub> then
+						<i>IP</i> = <i>IP</i> + RELNUM</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">podmíněný skok s relativním posunem,
+						pokud je na vrcholu zásobníku FALSE</note>
+				</td>
+			</tr>
+			<tr>
+				<td>JT</td>
+				<td>RELJUMP</td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">B<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">if B<sub>1</sub> then <i>IP</i>
+						= <i>IP</i> + RELNUM</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">podmíněný skok s relativním posunem,
+						pokud je na vrcholu zásobníku TRUE</note>
+				</td>
+			</tr>
+		</tbody>
+	</table><img src="./Instrukce_ICM_files/gen_mop_jump.png"><a name="C_other">
+		<h2>Ostatní - univerzální</h2>
+	</a>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Opcode</th>
+				<th>Operand</th>
+				<th>TOP2</th>
+				<th>TOP1</th>
+				<th>TOP0</th>
+				<th></th>
+				<th>RES</th>
+				<th>IN1</th>
+				<th>IN2</th>
+				<th>IN3</th>
+				<th>IN4</th>
+				<th>OUT</th>
+				<th>INOUT</th>
+				<th>Symbolický popis</th>
+				<th>Slovní popis</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>FNCREADI</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub>=READI
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">volání předdefinované funkce READI
+					</note>
+				</td>
+			</tr>
+			<tr>
+				<td>FNCREADR</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>o</sub>=READR
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">volání předdefinované funkce READR
+					</note>
+				</td>
+			</tr>
+			<tr>
+				<td>FNCREADS</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>o</sub>
+					</text></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>o</sub>=READS
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">volání předdefinované funkce READS
+					</note>
+				</td>
+			</tr>
+			<tr>
+				<td>FNCWRITEI</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">I<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">WRITEI(I<sub>1</sub>)
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">volání předdefinované funkce WRITEI
+					</note>
+				</td>
+			</tr>
+			<tr>
+				<td>FNCWRITELN</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">WRITELN()</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">volání předdefinované funkce WRITELN
+					</note>
+				</td>
+			</tr>
+			<tr>
+				<td>FNCWRITER</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">R<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">WRITER(R<sub>1</sub>)
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">volání předdefinované funkce WRITER
+					</note>
+				</td>
+			</tr>
+			<tr>
+				<td>FNCWRITES</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><text xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">S<sub>1</sub>
+					</text></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">WRITES(S<sub>1</sub>)
+					</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">volání předdefinované funkce WRITES
+					</note>
+				</td>
+			</tr>
+			<tr>
+				<td>NOP</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> </symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">nedělá nic</note>
+				</td>
+			</tr>
+			<tr>
+				<td>SADD</td>
+				<td>SSTKOFFS</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>→</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<symb_note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+						<i>SP</i> =<i>SP</i> + STKOFFS</symb_note>
+				</td>
+				<td>
+					<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">přičte konstantu (případně zápornou)
+						k ukazateli zásobníku</note>
+				</td>
+			</tr>
+		</tbody>
+	</table><img src="./Instrukce_ICM_files/gen_mop_other.png">
+</body>
+
+</html>

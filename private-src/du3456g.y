@@ -603,7 +603,7 @@ real_par_list:
     ;
 
 expression:
-    simple_expression
+    simple_expression { $$ = std::move($simple_expression); }
     | simple_expression OPER_REL simple_expression
     ;
 
@@ -619,7 +619,7 @@ add_expression:
     ;
 
 mul_expression:
-    factor
+    factor { $$ = std::move($factor); }
     | mul_expression OPER_MUL factor
     ;
 

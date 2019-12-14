@@ -193,7 +193,8 @@ namespace mlc {
         ls_real_index _val;
     };
 
-    struct id_list {
+    class id_list {
+     public:
         typedef std::shared_ptr<id_list> pointer;
 
         id_list() = default;
@@ -225,6 +226,22 @@ namespace mlc {
         var_def() noexcept = default;
 
         id_list::pointer _list;
+        type_pointer _type;
+    };
+
+    struct expression {
+        typedef std::shared_ptr<expression> pointer;
+        expression(
+            icblock_pointer ib,
+            type_pointer type
+        ) :
+            _ib{std::move(ib)},
+            _type{type} {
+        }
+
+        expression() noexcept = default;
+
+        icblock_pointer _ib;
         type_pointer _type;
     };
 }

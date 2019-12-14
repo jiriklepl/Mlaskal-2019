@@ -230,16 +230,19 @@ namespace mlc {
     struct expression {
         typedef std::shared_ptr<expression> pointer;
         expression(
-            icblock_pointer ib,
+            icblock_pointer constr,
+            icblock_pointer destr,
             type_pointer type
         ) :
-            _ib{std::move(ib)},
+            _constr{std::move(constr)},
+            _destr{std::move(destr)},
             _type{type} {
         }
 
         expression() noexcept = default;
 
-        icblock_pointer _ib;
+        icblock_pointer _constr;
+        icblock_pointer _destr;
         type_pointer _type;
     };
 }

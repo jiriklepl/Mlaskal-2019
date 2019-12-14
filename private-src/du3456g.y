@@ -104,18 +104,7 @@
 %token<mlc::DUTOKGE_OPER_MUL> OPER_MUL           /* *, /, div, mod, and */
 %token<mlc::DUTOKGE_FOR_DIRECTION> FOR_DIRECTION /* to, downto */
 
-/* expressions */
-%type<mlc::expression::pointer> factor
-%type<mlc::expression::pointer> mul_expression
-%type<mlc::expression::pointer> add_expression
-%type<mlc::expression::pointer> simple_expression
-%type<mlc::expression::pointer> expression
-
-/* variables */
-%type<mlc::id_list::pointer> variable_noidentifier
-%type<mlc::id_list::pointer> variable
-
-/* profuns-definition */
+/* profuns */
 %type<mlc::parameter_list_ptr> formal_par_list
 %type<mlc::parameter_list_ptr> formal_par
 %type<std::tuple<mlc::ls_id_index, mlc::parameter_list_ptr>> profun_header
@@ -400,19 +389,33 @@ identifier_list:
 
 profun_def_list:
     /* empty */
-    | profun_def_list PROCEDURE profun_header {
+    | profun_def_list procedure_header SEMICOLON block SEMICOLON[END] {
+        ctx->tab->leave(@END);
+    }
+    | profun_def_list function_header SEMICOLON block SEMICOLON[END] {
+        ctx->tab->leave(@END);
+    }
+    ;
+
+procedure_header: PROCEDURE profun_header {
         ctx->tab->add_proc(
             @profun_header,
-            std::get<0>($profun_header),
-            std::get<1>($profun_header));
+            std::get<
+                0
+                >($profun_header),
+            std::get<
+                1
+                >($profun_header));
 
         ctx->tab->enter(
             @profun_header,
-            std::get<0>($profun_header));
-    } SEMICOLON block SEMICOLON[END] {
-        ctx->tab->leave(@END);
+            std::get<
+                0
+                >($profun_header));
     }
-    | profun_def_list FUNCTION profun_header COLON IDENTIFIER {
+    ;
+
+function_header: FUNCTION profun_header COLON IDENTIFIER {
         mlc::symbol_pointer sp = ctx->tab->find_symbol($IDENTIFIER);
 
         if (!sp || (sp->kind() != SKIND_TYPE)) {
@@ -421,15 +424,18 @@ profun_def_list:
 
         ctx->tab->add_fnc(
             @profun_header,
-            std::get<0>($profun_header),
+            std::get<0
+            >($profun_header),
             sp->access_type()->type(),
-            std::get<1>($profun_header));
+            std::get<
+                1
+                >($profun_header));
 
         ctx->tab->enter(
             @profun_header,
-            std::get<0>($profun_header));
-    } SEMICOLON block SEMICOLON[END] {
-        ctx->tab->leave(@END);
+            std::get<
+                0
+                >($profun_header));
     }
     ;
 

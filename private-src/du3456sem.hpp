@@ -193,8 +193,7 @@ namespace mlc {
         ls_real_index _val;
     };
 
-    class id_list {
-     public:
+    struct id_list {
         typedef std::shared_ptr<id_list> pointer;
 
         id_list() = default;
@@ -212,8 +211,7 @@ namespace mlc {
         std::vector<ls_id_index> _ids;
     };
 
-    class var_def {
-     public:
+    struct var_def {
         typedef std::shared_ptr<var_def> pointer;
         var_def(
             id_list::pointer list,

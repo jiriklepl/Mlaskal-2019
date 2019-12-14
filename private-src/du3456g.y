@@ -104,7 +104,18 @@
 %token<mlc::DUTOKGE_OPER_MUL> OPER_MUL           /* *, /, div, mod, and */
 %token<mlc::DUTOKGE_FOR_DIRECTION> FOR_DIRECTION /* to, downto */
 
-/* profuns */
+/* expressions */
+%type<mlc::expression::pointer> factor
+%type<mlc::expression::pointer> mul_expression
+%type<mlc::expression::pointer> add_expression
+%type<mlc::expression::pointer> simple_expression
+%type<mlc::expression::pointer> expression
+
+/* variables */
+%type<mlc::id_list::pointer> variable_noidentifier
+%type<mlc::id_list::pointer> variable
+
+/* profuns-definition */
 %type<mlc::parameter_list_ptr> formal_par_list
 %type<mlc::parameter_list_ptr> formal_par
 %type<std::tuple<mlc::ls_id_index, mlc::parameter_list_ptr>> profun_header

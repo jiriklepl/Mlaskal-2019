@@ -93,6 +93,14 @@ namespace mlc {
         return number;
     }
 
+    auto expression::rexpressionize(pointer expr) -> r_pointer {
+        if (expr->get_type() == type::REXPRESSION) {
+            return std::dynamic_pointer_cast<r_expression>(expr);
+        } else {
+            return nullptr; /* TODO: */
+        }
+    }
+
 }
 
 /*****************************************/

@@ -616,7 +616,7 @@ expression:
     ;
 
 simple_expression:
-    add_expression
+    add_expression { $$ = std::move($add_expression); }
     | OPER_SIGNADD add_expression
     ;
 
@@ -627,7 +627,7 @@ add_expression:
     ;
 
 mul_expression:
-    factor { $$ = std::move($factor); }
+    factor
     | mul_expression OPER_MUL factor
     ;
 
@@ -637,7 +637,7 @@ factor:
     | IDENTIFIER  // IDENTIFIER: function || variable || unsigned_constant
     | IDENTIFIER LPAR real_par_list RPAR  // IDENTIFIER: function
     | LPAR expression RPAR
-    | NOT factor
+    | NOT factor 
     ;
 
 constant:

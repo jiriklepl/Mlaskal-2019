@@ -620,7 +620,26 @@ expression:
 
 simple_expression:
     add_expression { $$ = std::move($add_expression); }
-    | OPER_SIGNADD add_expression
+    | OPER_SIGNADD add_expression {
+        r_expression::pointer r_expr = expression::rexpressionize($add_expression);
+
+        if ($OPER_SIGNADD == DUTOKGE_OPER_SIGNADD::DUTOKGE_MINUS) {
+            switch (r_expr->_type->cat()) {
+                case TCAT_INT:
+                    r_expr->_constr->append<ai::MINUSI>();
+                break;
+
+                case TCAT_REAL:
+                    r_expr->_constr->append<ai::MINUSR>();
+                break;
+
+                default:
+                break;
+            }
+        }
+
+        $$ = std::move(r_expr);
+    }
     ;
 
 add_expression:

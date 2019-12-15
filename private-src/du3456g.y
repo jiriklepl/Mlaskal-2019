@@ -639,8 +639,7 @@ factor:
     | variable_noidentifier
     | IDENTIFIER  // IDENTIFIER: function || variable || unsigned_constant
     | IDENTIFIER LPAR real_par_list RPAR  // IDENTIFIER: function
-    | LPAR expression RPAR
-    | NOT factor 
+    | NOT factor
     ;
 
 constant:

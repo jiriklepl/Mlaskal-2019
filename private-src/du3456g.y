@@ -108,7 +108,9 @@
 %type<mlc::icblock_pointer> simple_statement
 %type<mlc::icblock_pointer> if_statement
 %type<mlc::icblock_pointer> safe_statement
+%type<mlc::icblock_pointer> headered_statement
 %type<mlc::icblock_pointer> headered_safe_statement
+%type<mlc::icblock_pointer> headered_if_statement
 %type<mlc::icblock_pointer> whilefor_header
 %type<mlc::icblock_pointer> statement
 
@@ -118,6 +120,7 @@
 %type<mlc::expression::pointer> add_expression
 %type<mlc::expression::pointer> simple_expression
 %type<mlc::expression::pointer> expression
+%type<mlc::expression::pointer> real_par_list
 
 /* variables */
 %type<mlc::id_list::pointer> variable_noidentifier

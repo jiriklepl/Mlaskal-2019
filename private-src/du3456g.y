@@ -601,15 +601,15 @@ simple_statement:
 
 variable:
     IDENTIFIER  // IDENTIFIER: variable
-    | variable_noidentifier
+    | variable_noidentifier { $$ = std::move($variable_noidentifier); }
     ;
 
 variable_noidentifier:
-    variable DOT IDENTIFIER  // IDENTIFIER: record_variable, field_identifier
+    variable DOT IDENTIFIER  // IDENTIFIER: field_identifier
     ;
 
 real_par_list:
-    expression
+    expression { $$ = std::move($expression); }
     | real_par_list COMMA expression
     ;
 
@@ -624,13 +624,13 @@ simple_expression:
     ;
 
 add_expression:
-    mul_expression
+    mul_expression { $$ = std::move($mul_expression); }
     | add_expression OPER_SIGNADD mul_expression
     | add_expression OR mul_expression
     ;
 
 mul_expression:
-    factor
+    factor { $$ = std::move($factor); }
     | mul_expression OPER_MUL factor
     ;
 
@@ -639,6 +639,7 @@ factor:
     | variable_noidentifier
     | IDENTIFIER  // IDENTIFIER: function || variable || unsigned_constant
     | IDENTIFIER LPAR real_par_list RPAR  // IDENTIFIER: function
+    | LPAR expression RPAR { $$ = std::move($expression); }
     | NOT factor
     ;
 

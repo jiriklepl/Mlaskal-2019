@@ -227,24 +227,73 @@ namespace mlc {
         type_pointer _type;
     };
 
-    struct expression {
+    class r_expression;
+    class l_expression;
+
+    class expression {
+     public:
         typedef std::shared_ptr<expression> pointer;
-        expression(
-            icblock_pointer constr,
-            icblock_pointer destr,
-            type_pointer type
-        ) :
-            _constr{std::move(constr)},
-            _destr{std::move(destr)},
-            _type{type} {
+        typedef std::shared_ptr<r_expression> r_pointer;
+        typedef std::shared_ptr<l_expression> l_pointer;
+        enum class type {
+            REXPRESSION,
+            LEXPRESSION
+        };
+
+        expression(type_pointer type
+        ) : _type{type} {
         }
 
-        expression() noexcept = default;
+        virtual ~expression() noexcept = default;
+        virtual type get_type() const = 0;
+
+        static r_pointer rexpressionize(pointer);
+
+        type_pointer _type;
+    };
+
+    class r_expression : public expression {
+     public:
+        typedef r_pointer pointer;
+        r_expression(
+            type_pointer type,
+            icblock_pointer constr,
+            icblock_pointer destr
+        ) : expression(type),
+            _constr{std::move(constr)},
+            _destr{std::move(destr)} {
+        }
+
+        ~r_expression() noexcept override = default;
+
+        type get_type() const override {
+            return type::REXPRESSION;
+        }
 
         icblock_pointer _constr;
         icblock_pointer _destr;
         type_pointer _type;
     };
+
+    class l_expression : public expression {
+     public:
+        typedef l_pointer pointer;
+        l_expression(
+            type_pointer type,
+            id_list::pointer ids
+        ) : expression(type),
+            _ids{std::move(ids)} {
+        }
+
+        ~l_expression() noexcept override = default;
+
+        type get_type() const override {
+            return type::REXPRESSION;
+        }
+
+        id_list::pointer _ids;
+    };
+
 }
 
 #endif  // DU3456SEM_HPP_

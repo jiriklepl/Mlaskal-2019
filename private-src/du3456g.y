@@ -644,7 +644,21 @@ simple_expression:
 
 add_expression:
     mul_expression { $$ = std::move($mul_expression); }
-    | add_expression OPER_SIGNADD mul_expression
+    | add_expression[lft_expression] OPER_SIGNADD mul_expression {
+        r_expression::pointer r_expr1 = expression::rexpressionize($lft_expression);
+        r_expression::pointer r_expr2 = expression::rexpressionize($add_expression);
+
+        type_category tcat1 = r_expr1->_type->cat();
+        type_category tcat2 = r_expr2->_type->cat();
+
+        if (tcat1 < tcat2) {
+            std::swap(tcat1, tcat2);
+        }
+
+        // tcat1 >= tcat2 from here...
+
+
+    }
     | add_expression OR mul_expression
     ;
 
@@ -654,12 +668,61 @@ mul_expression:
     ;
 
 factor:
-    unsigned_constant_noidentifier
-    | variable_noidentifier
+    unsigned_constant_noidentifier[constant] {
+        type_pointer type;
+        icblock_pointer constr = icblock_create();
+        icblock_pointer destr = icblock_create();
+
+        switch(type = $constant->get_type()) {
+            case constant_value::type::UINT_CONSTANT:
+                constr->append<ai::LDLITI>($constant->_val);
+                destr->append<ai::DTORI>($constant->_val);
+            break;
+
+            case constant_value::type::STR_CONSTANT:
+                constr->append<ai::LDLITS>($constant->_val);
+                destr->append<ai::DTORS>($constant->_val);
+            break;
+
+            case constant_value::type::REAL_CONSTANT:
+                constr->append<ai::LDLITR>($constant->_val);
+                destr->append<ai::DTORR>($constant->_val);
+            break;
+
+            default:
+            /* shouldn't be able to get here */
+            break;
+        }
+
+        $$ = std::make_shared<r_expression>(
+            type,
+            1,
+            constr,
+            destr);
+    }
+    | variable_noidentifier {
+        $$ = std::make_shared<l_expression>(
+            nullptr, /* TODO: do the type */
+            $variable_noidentifier);
+    }
     | IDENTIFIER  // IDENTIFIER: function || variable || unsigned_constant
     | IDENTIFIER LPAR real_par_list RPAR  // IDENTIFIER: function
     | LPAR expression RPAR { $$ = std::move($expression); }
-    | NOT factor
+    | NOT factor {
+        r_expression::pointer r_expr = expression::rexpressionize($factor);
+
+        switch (r_expr->_type->cat()) {
+            case TCAT_BOOL:
+                r_expr->_constr->append<ai::NOT>();
+                ++r_expr->_length;
+            break;
+
+            default:
+            break;
+        }
+
+        $$ = std::move(r_expr);
+    }
     ;
 
 constant:

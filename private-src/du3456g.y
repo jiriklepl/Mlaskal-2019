@@ -126,7 +126,7 @@
 %type<mlc::id_list::pointer> variable_noidentifier
 %type<mlc::id_list::pointer> variable
 
-/* profuns-definition */
+/* profun-definition */
 %type<mlc::parameter_list_ptr> formal_par_list
 %type<mlc::parameter_list_ptr> formal_par
 %type<std::tuple<mlc::ls_id_index, mlc::parameter_list_ptr>> profun_header

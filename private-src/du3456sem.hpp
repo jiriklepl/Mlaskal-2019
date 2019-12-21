@@ -257,10 +257,12 @@ namespace mlc {
         typedef r_pointer pointer;
         r_expression(
             type_pointer type,
+            std::size_t length,
             icblock_pointer constr,
             icblock_pointer destr
         ) : expression(type),
             _constr{std::move(constr)},
+            _length{std::move(length)},
             _destr{std::move(destr)} {
         }
 
@@ -270,6 +272,7 @@ namespace mlc {
             return type::REXPRESSION;
         }
 
+        std::size_t _length;
         icblock_pointer _constr;
         icblock_pointer _destr;
         type_pointer _type;

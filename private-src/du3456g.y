@@ -651,15 +651,70 @@ add_expression:
         type_category tcat1 = r_expr1->_type->cat();
         type_category tcat2 = r_expr2->_type->cat();
 
-        if (tcat1 < tcat2) {
-            std::swap(tcat1, tcat2);
+        if (tcat1 == TCAT_REAL) {
+            if (tcat2 == TCAT_REAL) {
+                r_expr1->_constr->icblock_merge_and_kill(r_expr2->_constr);
+                // destructor is good
+            } else if (tcat2 == TCAT_INT) {
+                r_expr2->_constr->append<ai::CVRTIR>();
+                r_expr1->_constr->icblock_merge_and_kill(r_expr2->_constr);
+            } else {
+                // TODO
+            }
+
+            if (DUTOKGE_OPER_SIGNADD::DUTOKGE_PLUS) {
+                r_expr1->_constr->append<ai::ADDR>();
+            } else {
+                r_expr1->_constr->append<ai::SUBR>();
+            }
+        } else if (tcat1 == TCAT_INT) {
+            if (tcat2 == TCAT_REAL) {
+                r_expr1->_constr->append<ai::CVRTIR>();
+                r_expr1->_constr->icblock_merge_and_kill(r_expr2->_constr);
+                r_expr1->_destr = std::move(r_expr2->_destr);
+
+                if (DUTOKGE_OPER_SIGNADD::DUTOKGE_PLUS) {
+                    r_expr1->_constr->append<ai::ADDR>();
+                } else {
+                    r_expr1->_constr->append<ai::SUBR>();
+                }
+            } else if (tcat2 == TCAT_INT) {
+                r_expr1->_constr->icblock_merge_and_kill(r_expr2->_constr);
+
+                if (DUTOKGE_OPER_SIGNADD::DUTOKGE_PLUS) {
+                    r_expr1->_constr->append<ai::ADDI>();
+                } else {
+                    r_expr1->_constr->append<ai::SUBI>();
+                }
+            } else {
+                // TODO
+            }
+        } else {
+            // TODO
         }
 
-        // tcat1 >= tcat2 from here...
-
-
+        $$ = r_expr1;
     }
-    | add_expression OR mul_expression
+    | add_expression OR mul_expression{
+        r_expression::pointer r_expr1 = expression::rexpressionize($lft_expression);
+        r_expression::pointer r_expr2 = expression::rexpressionize($add_expression);
+
+        type_category tcat1 = r_expr1->_type->cat();
+        type_category tcat2 = r_expr2->_type->cat();
+
+        if (tcat1 == TCAT_BOOL) {
+            if (tcat2 == TCAT_BOOL) {
+                r_expr1->_constr->icblock_merge_and_kill(r_expr2->_constr);
+                r_expr1->_constr->append<ai::OR>();
+            } else {
+                // TODO
+            }
+        } else {
+            // TODO
+        }
+
+        $$ = r_expr1;
+    }
     ;
 
 mul_expression:

@@ -760,7 +760,13 @@ factor:
             nullptr, /* TODO: do the type */
             $variable_noidentifier);
     }
-    | IDENTIFIER  // IDENTIFIER: function || variable || unsigned_constant
+    | IDENTIFIER {
+        // IDENTIFIER: function || variable || unsigned_constant
+
+        std::make_shared<l_expression>(
+            nullptr, /* TODO: do the type */
+            std::make_shared<id_list>($IDENTIFIER));
+    }
     | IDENTIFIER LPAR real_par_list RPAR  // IDENTIFIER: function
     | LPAR expression RPAR { $$ = std::move($expression); }
     | NOT factor {

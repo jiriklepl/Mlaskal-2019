@@ -775,7 +775,6 @@ factor:
         switch (r_expr->_type->cat()) {
             case TCAT_BOOL:
                 r_expr->_constr->append<ai::NOT>();
-                ++r_expr->_length;
             break;
 
             default:

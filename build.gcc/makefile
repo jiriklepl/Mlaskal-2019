@@ -223,7 +223,7 @@ BYPRODUCT_FILES = lex.backup $(PRIVATE_BISON_NAMES3456:%=%.output)
 
 TEMPORARY_FILES = $(BYPRODUCT_FILES) $(GENERATED_FILES) $(LINKED_OBJS) $(TARGET_FILE12) $(TARGET_FILE3) $(TARGET_FILE4) $(TARGET_FILE56)
 
-INCLUDED_HEADER_FILES = $(PUBLIC_HEADER_FILES)
+INCLUDED_HEADER_FILES = $(PUBLIC_HEADER_FILES) $(PRIVATE_HEADER_FILES) $(GENERATED_HEADER_FILES)
 
 INCLUDE_OPTS = \
 	-I$(PUBLIC_FOLDER) \
@@ -234,9 +234,9 @@ FLEX_COMMAND = flex -Cf -b -p -p -o$*.cpp $<
 
 BISON_COMMAND = bison --report=all -d -o$*.cpp $<
 
-COMPILE_COMMAND = g++ -c -O2 -march=native -DNDEBUG -pipe -std=c++17 -Wall -Wextra -Wpedantic $(INCLUDE_OPTS) -o$@ $<
+COMPILE_COMMAND = g++ -c -g -std=c++17 $(INCLUDE_OPTS) -o$@ $<
 
-LINK_COMMAND = g++ -O2 -march=native -DNDEBUG -pipe -Wall -Wextra -Wpedantic -o$@ $^
+LINK_COMMAND = g++ -g -o$@ $^
 
 #############################################################################
 
@@ -319,21 +319,12 @@ $(TARGET_FILE56): $(LINKED_OBJS56)
 $(TEMP_FOLDER)/%.o: %.cpp $(INCLUDED_HEADER_FILES)
 	$(COMPILE_COMMAND)
 
-$(TEMP_FOLDER)/du3456g.o: du3456g.cpp $(INCLUDED_HEADER_FILES) $(GENERATED_HEADER_FILES) $(PRIVATE_HEADER_FILES)
-	$(COMPILE_COMMAND)
-
-$(TEMP_FOLDER)/du12l.o: du12l.cpp $(INCLUDED_HEADER_FILES) $(GENERATED_HEADER_FILES) $(PRIVATE_HEADER_FILES)
-	$(COMPILE_COMMAND)
-
-$(TEMP_FOLDER)/du3456l.o: du3456l.cpp $(INCLUDED_HEADER_FILES) $(GENERATED_HEADER_FILES) $(PRIVATE_HEADER_FILES)
-	$(COMPILE_COMMAND)
-
-%.cpp %.hpp: %.y $(PRIVATE_HEADER_FILES)
+%.cpp %.hpp: %.y
 	$(BISON_COMMAND)
 
 stack.hh: $(PRIVATE_BISON_NAMES3456:%=%.hpp)
 
-%.cpp: %.lex $(PRIVATE_HEADER_FILES)
+%.cpp: %.lex
 	$(FLEX_COMMAND)
 
 ##################################################################################

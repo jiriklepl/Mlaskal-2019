@@ -247,7 +247,7 @@ namespace mlc {
         virtual ~expression() noexcept = default;
         virtual type get_type() const = 0;
 
-        static r_pointer rexpressionize(pointer);
+        static r_pointer rexpressionize(MlaskalCtx* ctx, pointer);
 
         type_pointer _type;
     };

@@ -108,11 +108,15 @@
 %type<mlc::icblock_pointer> simple_statement
 %type<mlc::icblock_pointer> if_statement
 %type<mlc::icblock_pointer> safe_statement
-%type<mlc::icblock_pointer> headered_statement
 %type<mlc::icblock_pointer> headered_safe_statement
 %type<mlc::icblock_pointer> headered_if_statement
+%type<mlc::icblock_pointer> block
+%type<mlc::icblock_pointer> block_body
+%type<mlc::icblock_pointer> program_block
+%type<mlc::icblock_pointer> program
 %type<mlc::icblock_pointer> whilefor_header
 %type<mlc::icblock_pointer> statement
+%type<mlc::icblock_pointer> statement_list
 
 /* expressions */
 %type<mlc::expression::pointer> factor
@@ -149,13 +153,13 @@
 %%
 
 program:
-    PROGRAM IDENTIFIER SEMICOLON program_block DOT
+    PROGRAM IDENTIFIER SEMICOLON program_block DOT { $$ = std::move($program_block); }
     ;
 
 program_block:
     block_header
     profun_def_list
-    block_body
+    block_body { $$ = std::move($block_body); }
     ;
 
 block_header:
@@ -186,16 +190,16 @@ block_header_var:
     ;
 
 block:
-    block_header block_body
+    block_header block_body { $$ = std::move($block_body); }
     ;
 
 block_body:
-    BEGIN statement_list END
+    BEGIN statement_list END { $$ = std::move($statement_list); }
     ;
 
 statement_list:
-    statement
-    | statement_list SEMICOLON statement
+    statement { $$ = std::move($statement); }
+    | statement_list[lft_list] SEMICOLON statement { $$ = icblock_merge_and_kill($lft_list, $statement); }
     ;
 
 label_list:
@@ -572,7 +576,7 @@ safe_statement:
     | IF expression THEN headered_safe_statement ELSE headered_safe_statement
     | REPEAT statement_list UNTIL expression
     | whilefor_header headered_safe_statement
-    | simple_statement
+    | simple_statement { $$ = std::move($simple_statement); }
     ;
 
 headered_if_statement:
@@ -591,12 +595,74 @@ label_header:
     ;
 
 simple_statement:
-    IDENTIFIER ASSIGN expression  // IDENTIFIER: variable || function identifier (return value)
+    IDENTIFIER ASSIGN expression {
+        // IDENTIFIER: variable || function identifier (return value)
+
+        auto r_expr = expression::rexpressionize(ctx, $expression);
+        auto symbol = ctx->tab->find_symbol($IDENTIFIER);
+        auto kind = symbol->kind();
+        type_pointer type;
+
+        switch (kind) {
+            case SKIND_GLOBAL_VARIABLE:
+                type = symbol->access_global_variable()->type();
+                switch (type->cat()) {
+                    case TCAT_BOOL:
+                        r_expr->_constr->append<ai::GSTB>(symbol->access_global_variable()->address());
+                    break;
+
+                    case TCAT_INT:
+                        r_expr->_constr->append<ai::GSTI>(symbol->access_global_variable()->address());
+                    break;
+
+                    case TCAT_REAL:
+                        r_expr->_constr->append<ai::GSTR>(symbol->access_global_variable()->address());
+                    break;
+
+                    case TCAT_STR:
+                        r_expr->_constr->append<ai::GSTS>(symbol->access_global_variable()->address());
+                    break;
+
+                    case TCAT_RECORD:
+                        // TODO
+                    break;
+                }
+            break;
+
+            case SKIND_LOCAL_VARIABLE:
+                type = symbol->access_local_variable()->type();
+                switch (type->cat()) {
+                    case TCAT_BOOL:
+                        r_expr->_constr->append<ai::LSTB>(symbol->access_local_variable()->address());
+                    break;
+
+                    case TCAT_INT:
+                        r_expr->_constr->append<ai::LSTI>(symbol->access_local_variable()->address());
+                    break;
+
+                    case TCAT_REAL:
+                        r_expr->_constr->append<ai::LSTR>(symbol->access_local_variable()->address());
+                    break;
+
+                    case TCAT_STR:
+                        r_expr->_constr->append<ai::LSTS>(symbol->access_local_variable()->address());
+                    break;
+
+                    case TCAT_RECORD:
+                        // TODO
+                    break;
+                }
+            break;
+
+        }
+
+        $$ = std::move(r_expr->_constr);
+    }
     | variable_noidentifier ASSIGN expression  // IDENTIFIER: variable || function identifier (return value)
     | IDENTIFIER  // IDENTIFIER: procedure || function
     | IDENTIFIER LPAR real_par_list RPAR  // IDENTIFIER: function || procedure
     | GOTO UINT
-    | block_body
+    | block_body { $$ = std::move($block_body); }
     ;
 
 variable:
@@ -615,13 +681,110 @@ real_par_list:
 
 expression:
     simple_expression { $$ = std::move($simple_expression); }
-    | simple_expression OPER_REL simple_expression
+    | simple_expression[lft_expression] OPER_REL simple_expression[rgt_expression] {
+        r_expression::pointer r_expr1 = expression::rexpressionize(ctx, $lft_expression);
+        r_expression::pointer r_expr2 = expression::rexpressionize(ctx, $rgt_expression);
+
+        type_category tcat1 = r_expr1->_type->cat();
+        type_category tcat2 = r_expr2->_type->cat();
+        if (tcat1 == TCAT_REAL) {
+            if (tcat2 == TCAT_REAL) {
+                r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+                // destructor is good
+            } else if (tcat2 == TCAT_INT) {
+                r_expr2->_constr->append<ai::CVRTIR>();
+                r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+            } else {
+                // TODO
+            }
+
+            switch ($OPER_REL) {
+                case DUTOKGE_OPER_REL::DUTOKGE_LT:
+                    r_expr1->_constr->append<ai::LTR>();
+                break;
+
+                case DUTOKGE_OPER_REL::DUTOKGE_LE:
+                    r_expr1->_constr->append<ai::LER>();
+                break;
+
+                case DUTOKGE_OPER_REL::DUTOKGE_NE:
+                    r_expr1->_constr->append<ai::NER>();
+                break;
+
+                case DUTOKGE_OPER_REL::DUTOKGE_GE:
+                    r_expr1->_constr->append<ai::GER>();
+                break;
+
+                case DUTOKGE_OPER_REL::DUTOKGE_GT:
+                    r_expr1->_constr->append<ai::GTR>();
+                break;
+            }
+        } else if (tcat1 == TCAT_INT) {
+            if (tcat2 == TCAT_REAL) {
+                r_expr1->_constr->append<ai::CVRTIR>();
+                r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+                r_expr1->_destr = std::move(r_expr2->_destr);
+
+                switch ($OPER_REL) {
+                    case DUTOKGE_OPER_REL::DUTOKGE_LT:
+                        r_expr1->_constr->append<ai::LTR>();
+                    break;
+
+                    case DUTOKGE_OPER_REL::DUTOKGE_LE:
+                        r_expr1->_constr->append<ai::LER>();
+                    break;
+
+                    case DUTOKGE_OPER_REL::DUTOKGE_NE:
+                        r_expr1->_constr->append<ai::NER>();
+                    break;
+
+                    case DUTOKGE_OPER_REL::DUTOKGE_GE:
+                        r_expr1->_constr->append<ai::GER>();
+                    break;
+
+                    case DUTOKGE_OPER_REL::DUTOKGE_GT:
+                        r_expr1->_constr->append<ai::GTR>();
+                    break;
+                }
+            } else if (tcat2 == TCAT_INT) {
+                r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+
+                switch ($OPER_REL) {
+                    case DUTOKGE_OPER_REL::DUTOKGE_LT:
+                        r_expr1->_constr->append<ai::LTI>();
+                    break;
+
+                    case DUTOKGE_OPER_REL::DUTOKGE_LE:
+                        r_expr1->_constr->append<ai::LEI>();
+                    break;
+
+                    case DUTOKGE_OPER_REL::DUTOKGE_NE:
+                        r_expr1->_constr->append<ai::NEI>();
+                    break;
+
+                    case DUTOKGE_OPER_REL::DUTOKGE_GE:
+                        r_expr1->_constr->append<ai::GEI>();
+                    break;
+
+                    case DUTOKGE_OPER_REL::DUTOKGE_GT:
+                        r_expr1->_constr->append<ai::GTI>();
+                    break;
+                }
+            } else {
+                // TODO
+            }
+        } else {
+            // TODO
+        }
+
+        $$ = std::move(r_expr1);
+    }
     ;
 
 simple_expression:
     add_expression { $$ = std::move($add_expression); }
     | OPER_SIGNADD add_expression {
-        r_expression::pointer r_expr = expression::rexpressionize($add_expression);
+        r_expression::pointer r_expr = expression::rexpressionize(ctx, $add_expression);
 
         if ($OPER_SIGNADD == DUTOKGE_OPER_SIGNADD::DUTOKGE_MINUS) {
             switch (r_expr->_type->cat()) {
@@ -645,24 +808,24 @@ simple_expression:
 add_expression:
     mul_expression { $$ = std::move($mul_expression); }
     | add_expression[lft_expression] OPER_SIGNADD mul_expression {
-        r_expression::pointer r_expr1 = expression::rexpressionize($lft_expression);
-        r_expression::pointer r_expr2 = expression::rexpressionize($add_expression);
+        r_expression::pointer r_expr1 = expression::rexpressionize(ctx, $lft_expression);
+        r_expression::pointer r_expr2 = expression::rexpressionize(ctx, $mul_expression);
 
         type_category tcat1 = r_expr1->_type->cat();
         type_category tcat2 = r_expr2->_type->cat();
 
         if (tcat1 == TCAT_REAL) {
             if (tcat2 == TCAT_REAL) {
-                r_expr1->_constr->icblock_merge_and_kill(r_expr2->_constr);
+                r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
                 // destructor is good
             } else if (tcat2 == TCAT_INT) {
                 r_expr2->_constr->append<ai::CVRTIR>();
-                r_expr1->_constr->icblock_merge_and_kill(r_expr2->_constr);
+                r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
             } else {
                 // TODO
             }
 
-            if (DUTOKGE_OPER_SIGNADD::DUTOKGE_PLUS) {
+            if ($OPER_SIGNADD == DUTOKGE_OPER_SIGNADD::DUTOKGE_PLUS) {
                 r_expr1->_constr->append<ai::ADDR>();
             } else {
                 r_expr1->_constr->append<ai::SUBR>();
@@ -670,18 +833,18 @@ add_expression:
         } else if (tcat1 == TCAT_INT) {
             if (tcat2 == TCAT_REAL) {
                 r_expr1->_constr->append<ai::CVRTIR>();
-                r_expr1->_constr->icblock_merge_and_kill(r_expr2->_constr);
+                r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
                 r_expr1->_destr = std::move(r_expr2->_destr);
 
-                if (DUTOKGE_OPER_SIGNADD::DUTOKGE_PLUS) {
+                if ($OPER_SIGNADD == DUTOKGE_OPER_SIGNADD::DUTOKGE_PLUS) {
                     r_expr1->_constr->append<ai::ADDR>();
                 } else {
                     r_expr1->_constr->append<ai::SUBR>();
                 }
             } else if (tcat2 == TCAT_INT) {
-                r_expr1->_constr->icblock_merge_and_kill(r_expr2->_constr);
+                r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
 
-                if (DUTOKGE_OPER_SIGNADD::DUTOKGE_PLUS) {
+                if ($OPER_SIGNADD == DUTOKGE_OPER_SIGNADD::DUTOKGE_PLUS) {
                     r_expr1->_constr->append<ai::ADDI>();
                 } else {
                     r_expr1->_constr->append<ai::SUBI>();
@@ -693,18 +856,18 @@ add_expression:
             // TODO
         }
 
-        $$ = r_expr1;
+        $$ = std::move(r_expr1);
     }
-    | add_expression OR mul_expression{
-        r_expression::pointer r_expr1 = expression::rexpressionize($lft_expression);
-        r_expression::pointer r_expr2 = expression::rexpressionize($add_expression);
+    | add_expression[lft_expression] OR mul_expression {
+        r_expression::pointer r_expr1 = expression::rexpressionize(ctx, $lft_expression);
+        r_expression::pointer r_expr2 = expression::rexpressionize(ctx, $mul_expression);
 
         type_category tcat1 = r_expr1->_type->cat();
         type_category tcat2 = r_expr2->_type->cat();
 
         if (tcat1 == TCAT_BOOL) {
             if (tcat2 == TCAT_BOOL) {
-                r_expr1->_constr->icblock_merge_and_kill(r_expr2->_constr);
+                r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
                 r_expr1->_constr->append<ai::OR>();
             } else {
                 // TODO
@@ -713,13 +876,159 @@ add_expression:
             // TODO
         }
 
-        $$ = r_expr1;
+        $$ = std::move(r_expr1);
     }
     ;
 
 mul_expression:
     factor { $$ = std::move($factor); }
-    | mul_expression OPER_MUL factor
+    | mul_expression[lft_expression] OPER_MUL factor {
+        r_expression::pointer r_expr1 = expression::rexpressionize(ctx, $lft_expression);
+        r_expression::pointer r_expr2 = expression::rexpressionize(ctx, $factor);
+
+        type_category tcat1 = r_expr1->_type->cat();
+        type_category tcat2 = r_expr2->_type->cat();
+
+        switch ($OPER_MUL) {
+            case DUTOKGE_OPER_MUL::DUTOKGE_AND:
+                if (tcat1 == TCAT_BOOL) {
+                    if (tcat2 == TCAT_BOOL) {
+                        r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+                        r_expr1->_constr->append<ai::OR>();
+                    } else {
+                        // TODO
+                    }
+                } else {
+                    // TODO
+                }
+            break;
+
+            case DUTOKGE_OPER_MUL::DUTOKGE_ASTERISK:
+                if (tcat1 == TCAT_REAL) {
+                    if (tcat2 == TCAT_REAL) {
+                        r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+                        // destructor is good
+                    } else if (tcat2 == TCAT_INT) {
+                        r_expr2->_constr->append<ai::CVRTIR>();
+                        r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+                    } else {
+                        // TODO
+                    }
+
+                    r_expr1->_constr->append<ai::MULR>();
+                } else if (tcat1 == TCAT_INT) {
+                    if (tcat2 == TCAT_REAL) {
+                        r_expr1->_constr->append<ai::CVRTIR>();
+                        r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+                        r_expr1->_destr = std::move(r_expr2->_destr);
+                        r_expr1->_constr->append<ai::MULR>();
+                    } else if (tcat2 == TCAT_INT) {
+                        r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+                        r_expr1->_constr->append<ai::MULI>();
+                    } else {
+                        // TODO
+                    }
+                } else {
+                    // TODO
+                }
+            break;
+
+            case DUTOKGE_OPER_MUL::DUTOKGE_SOLIDUS:
+                if (tcat1 == TCAT_REAL) {
+                    if (tcat2 == TCAT_REAL) {
+                        r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+                        // destructor is good
+                    } else if (tcat2 == TCAT_INT) {
+                        r_expr2->_constr->append<ai::CVRTIR>();
+                        r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+                    } else {
+                        // TODO
+                    }
+
+                    r_expr1->_constr->append<ai::DIVR>();
+                } else if (tcat1 == TCAT_INT) {
+                    if (tcat2 == TCAT_REAL) {
+                        r_expr1->_constr->append<ai::CVRTIR>();
+                        r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+                        r_expr1->_destr = std::move(r_expr2->_destr);
+                        r_expr1->_constr->append<ai::DIVR>();
+                    } else if (tcat2 == TCAT_INT) {
+                        r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+                        r_expr1->_constr->append<ai::DIVI>();
+                    } else {
+                        // TODO
+                    }
+                } else {
+                    // TODO
+                }
+            break;
+
+            case DUTOKGE_OPER_MUL::DUTOKGE_DIV:
+                if (tcat1 == TCAT_REAL) {
+                    r_expr1->_constr->append<ai::CVRTRI>();
+                    if (tcat2 == TCAT_REAL) {
+                        r_expr2->_constr->append<ai::CVRTRI>();
+                        r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+                        // destructor is good
+                    } else if (tcat2 == TCAT_INT) {
+                        r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+                    } else {
+                        // TODO
+                    }
+
+                    r_expr1->_constr->append<ai::DIVI>();
+                } else if (tcat1 == TCAT_INT) {
+                    if (tcat2 == TCAT_REAL) {
+                        r_expr2->_constr->append<ai::CVRTRI>();
+                        r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+                        r_expr1->_destr = std::move(r_expr2->_destr);
+                    } else if (tcat2 == TCAT_INT) {
+                        r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+                    } else {
+                        // TODO
+                    }
+
+                    r_expr1->_constr->append<ai::DIVI>();
+                } else {
+                    // TODO
+                }
+            break;
+
+            case DUTOKGE_OPER_MUL::DUTOKGE_MOD:
+                if (tcat1 == TCAT_REAL) {
+                    r_expr1->_constr->append<ai::CVRTRI>();
+                    if (tcat2 == TCAT_REAL) {
+                        r_expr2->_constr->append<ai::CVRTRI>();
+                        r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+                        // destructor is good
+                    } else if (tcat2 == TCAT_INT) {
+                        r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+                    } else {
+                        // TODO
+                    }
+
+                    r_expr1->_constr->append<ai::MODI>();
+                } else if (tcat1 == TCAT_INT) {
+                    if (tcat2 == TCAT_REAL) {
+                        r_expr2->_constr->append<ai::CVRTRI>();
+                        r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+                        r_expr1->_destr = std::move(r_expr2->_destr);
+                    } else if (tcat2 == TCAT_INT) {
+                        r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+                    } else {
+                        // TODO
+                    }
+
+                    r_expr1->_constr->append<ai::MODI>();
+                } else {
+                    // TODO
+                }
+            break;
+        }
+
+        r_expr1->_type = bool_type_pointer();
+        $$ = std::move(r_expr1);
+    }
     ;
 
 factor:
@@ -728,20 +1037,23 @@ factor:
         icblock_pointer constr = icblock_create();
         icblock_pointer destr = icblock_create();
 
-        switch(type = $constant->get_type()) {
+        switch($constant->get_type()) {
             case constant_value::type::UINT_CONSTANT:
-                constr->append<ai::LDLITI>($constant->_val);
-                destr->append<ai::DTORI>($constant->_val);
+                type = int_type_pointer();
+                constr->append<ai::LDLITI>(((uint_constant*)&*$constant)->_val);
+                destr->append<ai::DTORI>();
             break;
 
             case constant_value::type::STR_CONSTANT:
-                constr->append<ai::LDLITS>($constant->_val);
-                destr->append<ai::DTORS>($constant->_val);
+                type = str_type_pointer();
+                constr->append<ai::LDLITS>(((str_constant*)&*$constant)->_val);
+                destr->append<ai::DTORS>();
             break;
 
             case constant_value::type::REAL_CONSTANT:
-                constr->append<ai::LDLITR>($constant->_val);
-                destr->append<ai::DTORR>($constant->_val);
+                type = real_type_pointer();
+                constr->append<ai::LDLITR>(((real_constant*)&*$constant)->_val);
+                destr->append<ai::DTORR>();
             break;
 
             default:
@@ -751,26 +1063,28 @@ factor:
 
         $$ = std::make_shared<r_expression>(
             type,
-            1,
             constr,
             destr);
     }
     | variable_noidentifier {
-        $$ = std::make_shared<l_expression>(
-            nullptr, /* TODO: do the type */
+        $$ = nullptr;
+        /* TODO:
+            std::make_shared<l_expression>(
+            nullptr,
             $variable_noidentifier);
+        */
     }
     | IDENTIFIER {
         // IDENTIFIER: function || variable || unsigned_constant
 
         std::make_shared<l_expression>(
-            nullptr, /* TODO: do the type */
+            ctx->tab->find_symbol($IDENTIFIER)->access_typed()->type(),
             std::make_shared<id_list>($IDENTIFIER));
     }
-    | IDENTIFIER LPAR real_par_list RPAR  // IDENTIFIER: function
+    | IDENTIFIER LPAR real_par_list RPAR  // TODO: IDENTIFIER: function
     | LPAR expression RPAR { $$ = std::move($expression); }
-    | NOT factor {
-        r_expression::pointer r_expr = expression::rexpressionize($factor);
+    | NOT factor[inner_factor] {
+        r_expression::pointer r_expr = expression::rexpressionize(ctx, $inner_factor);
 
         switch (r_expr->_type->cat()) {
             case TCAT_BOOL:

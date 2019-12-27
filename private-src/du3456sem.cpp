@@ -93,11 +93,108 @@ namespace mlc {
         return number;
     }
 
-    auto expression::rexpressionize(pointer expr) -> r_pointer {
+    icblock_pointer create_destr( type_category t_cat) {
+        icblock_pointer icblock = icblock_create();
+
+        switch (t_cat) {
+            case TCAT_BOOL:
+                icblock->append<ai::DTORB>();
+            break;
+
+            case TCAT_INT:
+                icblock->append<ai::DTORI>();
+            break;
+
+            case TCAT_REAL:
+                icblock->append<ai::DTORR>();
+            break;
+
+            case TCAT_STR:
+                icblock->append<ai::DTORS>();
+            break;
+
+            case TCAT_RECORD:
+                icblock->append<ai::DTORP>();
+            break;
+        }
+
+        return icblock;
+    }
+
+    auto expression::rexpressionize(MlaskalCtx* ctx, pointer expr) -> r_pointer {
         if (expr->get_type() == type::REXPRESSION) {
             return std::dynamic_pointer_cast<r_expression>(expr);
         } else {
-            return nullptr; /* TODO: */
+            l_expression* l_expr = (l_expression*)&*expr;
+            type_pointer type;
+            icblock_pointer constr;
+            icblock_pointer destr;
+
+            constr = icblock_create();
+
+            if(l_expr->_ids->_ids.size() == 1) {
+                ls_id_index id = l_expr->_ids->_ids[0];
+                auto symbol = ctx->tab->find_symbol(id);
+                auto kind = symbol->kind();
+
+                switch (kind) {
+                    case SKIND_GLOBAL_VARIABLE:
+                        type = symbol->access_global_variable()->type();
+                        switch (type->cat()) {
+                            case TCAT_BOOL:
+                                constr->append<ai::GLDB>(symbol->access_global_variable()->address());
+                            break;
+
+                            case TCAT_INT:
+                                constr->append<ai::GLDI>(symbol->access_global_variable()->address());
+                            break;
+
+                            case TCAT_REAL:
+                                constr->append<ai::GLDR>(symbol->access_global_variable()->address());
+                            break;
+
+                            case TCAT_STR:
+                                constr->append<ai::GLDS>(symbol->access_global_variable()->address());
+                            break;
+
+                            case TCAT_RECORD:
+                                // TODO
+                            break;
+                        }
+                    break;
+
+                    case SKIND_LOCAL_VARIABLE:
+                        type = symbol->access_local_variable()->type();
+                        switch (type->cat()) {
+                            case TCAT_BOOL:
+                                constr->append<ai::LLDB>(symbol->access_local_variable()->address());
+                            break;
+
+                            case TCAT_INT:
+                                constr->append<ai::LLDI>(symbol->access_local_variable()->address());
+                            break;
+
+                            case TCAT_REAL:
+                                constr->append<ai::LLDR>(symbol->access_local_variable()->address());
+                            break;
+
+                            case TCAT_STR:
+                                constr->append<ai::LLDS>(symbol->access_local_variable()->address());
+                            break;
+
+                            case TCAT_RECORD:
+                                // TODO
+                            break;
+                        }
+                    break;
+                }
+
+                destr = create_destr(type->cat());
+
+                return std::make_shared<r_expression>(type, constr, destr);
+            } else {
+                return nullptr;
+            }
         }
     }
 

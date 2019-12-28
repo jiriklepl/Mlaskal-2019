@@ -93,7 +93,7 @@ namespace mlc {
         return number;
     }
 
-    icblock_pointer create_destr( type_category t_cat) {
+    icblock_pointer create_destr(type_category t_cat) {
         icblock_pointer icblock = icblock_create();
 
         switch (t_cat) {
@@ -123,7 +123,7 @@ namespace mlc {
 
     auto expression::rexpressionize(MlaskalCtx* ctx, pointer expr) -> r_pointer {
         if (expr->get_type() == type::REXPRESSION) {
-            return std::dynamic_pointer_cast<r_expression>(expr);
+            return std::static_pointer_cast<r_expression>(expr);
         } else {
             l_expression* l_expr = (l_expression*)&*expr;
             type_pointer type;
@@ -132,7 +132,7 @@ namespace mlc {
 
             constr = icblock_create();
 
-            if(l_expr->_ids->_ids.size() == 1) {
+            if (l_expr->_ids->_ids.size() >= 1) {
                 ls_id_index id = l_expr->_ids->_ids[0];
                 auto symbol = ctx->tab->find_symbol(id);
                 auto kind = symbol->kind();
@@ -157,9 +157,37 @@ namespace mlc {
                                 constr->append<ai::GLDS>(symbol->access_global_variable()->address());
                             break;
 
-                            case TCAT_RECORD:
-                                // TODO
-                            break;
+                            case TCAT_RECORD: {
+                                auto address = symbol->access_global_variable()->address();
+                                type = symbol->access_global_variable()->type();
+                                count_address_type(symbol, l_expr->_ids->_ids, type, address);
+
+                                if (count_address_type(symbol, l_expr->_ids->_ids, type, address)) {
+                                    switch (type->cat()) {
+                                        case TCAT_BOOL:
+                                            constr->append<ai::GLDB>(address);
+                                        break;
+
+                                        case TCAT_INT:
+                                            constr->append<ai::GLDI>(address);
+                                        break;
+
+                                        case TCAT_REAL:
+                                            constr->append<ai::GLDR>(address);
+                                        break;
+
+                                        case TCAT_STR:
+                                            constr->append<ai::GLDS>(address);
+                                        break;
+
+                                        default:
+                                            // TODO: ERROR
+                                        break;
+                                    }
+                                } else {
+                                    // TODO: ERROR
+                                }
+                            } break;
                         }
                     break;
 
@@ -182,6 +210,88 @@ namespace mlc {
                                 constr->append<ai::LLDS>(symbol->access_local_variable()->address());
                             break;
 
+                            case TCAT_RECORD: {
+                                auto address = symbol->access_local_variable()->address();
+                                type = symbol->access_local_variable()->type();
+
+
+                                if (count_address_type(symbol, l_expr->_ids->_ids, type, address)) {
+                                    switch (type->cat()) {
+                                        case TCAT_BOOL:
+                                            constr->append<ai::LLDB>(address);
+                                        break;
+
+                                        case TCAT_INT:
+                                            constr->append<ai::LLDI>(address);
+                                        break;
+
+                                        case TCAT_REAL:
+                                            constr->append<ai::LLDR>(address);
+                                        break;
+
+                                        case TCAT_STR:
+                                            constr->append<ai::LLDS>(address);
+                                        break;
+
+                                        default:
+                                            // TODO: ERROR
+                                        break;
+                                    }
+                                } else {
+                                    // TODO: ERROR
+                                }
+                            } break;
+                        }
+                    break;
+
+                    case SKIND_FUNCTION:
+                        type = symbol->access_function()->type();
+
+                        switch (type->cat()) {
+                            case TCAT_BOOL:
+                                constr->append<ai::INITB>();
+                            break;
+
+                            case TCAT_INT:
+                                constr->append<ai::INITI>();
+                            break;
+
+                            case TCAT_REAL:
+                                constr->append<ai::INITR>();
+                            break;
+
+                            case TCAT_STR:
+                                constr->append<ai::INITS>();
+                            break;
+
+                            case TCAT_RECORD:
+                                // TODO
+                            break;
+                        }
+
+                        constr->append<ai::CALL>(symbol->access_function()->code());
+                    break;
+
+                    case SKIND_CONST:
+                        type = symbol->access_const()->type();
+
+                        switch (type->cat()) {
+                            case TCAT_BOOL:
+                                constr->append<ai::LDLITB>(symbol->access_const()->access_bool_const()->bool_value());
+                            break;
+
+                            case TCAT_INT:
+                                constr->append<ai::LDLITI>(symbol->access_const()->access_int_const()->int_value());
+                            break;
+
+                            case TCAT_REAL:
+                                constr->append<ai::LDLITR>(symbol->access_const()->access_real_const()->real_value());
+                            break;
+
+                            case TCAT_STR:
+                                constr->append<ai::LDLITS>(symbol->access_const()->access_str_const()->str_value());
+                            break;
+
                             case TCAT_RECORD:
                                 // TODO
                             break;
@@ -189,9 +299,7 @@ namespace mlc {
                     break;
                 }
 
-                destr = create_destr(type->cat());
-
-                return std::make_shared<r_expression>(type, constr, destr);
+                return std::make_shared<r_expression>(type, constr);
             } else {
                 return nullptr;
             }

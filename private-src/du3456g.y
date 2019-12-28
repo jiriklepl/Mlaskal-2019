@@ -113,7 +113,6 @@
 %type<mlc::icblock_pointer> block
 %type<mlc::icblock_pointer> block_body
 %type<mlc::icblock_pointer> program_block
-%type<mlc::icblock_pointer> program
 %type<mlc::icblock_pointer> whilefor_header
 %type<mlc::icblock_pointer> statement
 %type<mlc::icblock_pointer> statement_list
@@ -124,16 +123,19 @@
 %type<mlc::expression::pointer> add_expression
 %type<mlc::expression::pointer> simple_expression
 %type<mlc::expression::pointer> expression
-%type<mlc::expression::pointer> real_par_list
+
+%type<mlc::real_par_list::pointer> real_par_list
 
 /* variables */
 %type<mlc::id_list::pointer> variable_noidentifier
 %type<mlc::id_list::pointer> variable
 
 /* profun-definition */
+%type<std::tuple<mlc::ls_id_index, mlc::parameter_list_ptr>> profun_header
+%type<std::tuple<mlc::ls_id_index, mlc::parameter_list_ptr>> procedure_header
+%type<std::tuple<mlc::ls_id_index, mlc::parameter_list_ptr>> function_header
 %type<mlc::parameter_list_ptr> formal_par_list
 %type<mlc::parameter_list_ptr> formal_par
-%type<std::tuple<mlc::ls_id_index, mlc::parameter_list_ptr>> profun_header
 
 /* types */
 %type<mlc::type_specifier::pointer> type
@@ -153,7 +155,9 @@
 %%
 
 program:
-    PROGRAM IDENTIFIER SEMICOLON program_block DOT { $$ = std::move($program_block); }
+    PROGRAM IDENTIFIER SEMICOLON program_block DOT {
+        ctx->tab->set_main_code($IDENTIFIER, $program_block);
+    }
     ;
 
 program_block:
@@ -415,11 +419,23 @@ identifier_list:
 
 profun_def_list:
     /* empty */
-    | profun_def_list procedure_header SEMICOLON block SEMICOLON[END] {
-        ctx->tab->leave(@END);
+    | profun_def_list procedure_header SEMICOLON block SEMICOLON[end] {
+        ctx->tab->leave(@end);
+
+        ctx->tab->set_subprogram_code(
+            std::get<
+                0
+                >($procedure_header),
+            $block);
     }
-    | profun_def_list function_header SEMICOLON block SEMICOLON[END] {
-        ctx->tab->leave(@END);
+    | profun_def_list function_header SEMICOLON block SEMICOLON[end] {
+        ctx->tab->leave(@end);
+
+        ctx->tab->set_subprogram_code(
+            std::get<
+                0
+                >($function_header),
+            $block);
     }
     ;
 
@@ -438,6 +454,8 @@ procedure_header: PROCEDURE profun_header {
             std::get<
                 0
                 >($profun_header));
+
+        $$ = std::move($profun_header);
     }
     ;
 
@@ -462,6 +480,8 @@ function_header: FUNCTION profun_header COLON IDENTIFIER {
             std::get<
                 0
                 >($profun_header));
+
+        $$ = std::move($profun_header);
     }
     ;
 
@@ -524,7 +544,6 @@ structured_type:
             @RECORD);
     }
     | RECORD record_body END {
-
         $$ = ctx->tab->create_record_type(
             $record_body,
             @RECORD);
@@ -556,37 +575,37 @@ field_list:
     ;
 
 statement:
-    headered_safe_statement
-    | headered_if_statement
+    headered_safe_statement { $$ = std::move($headered_safe_statement); }
+    | headered_if_statement { $$ = std::move($headered_if_statement); }
     ;
 
 whilefor_header:
-    WHILE expression DO  // expression: bool
+    WHILE expression DO  { $$ = icblock_create(); } // expression: bool
     | FOR IDENTIFIER ASSIGN  // IDENTIFIER: ordinal type variable
     expression FOR_DIRECTION expression  // expression: ordinal
-    DO
+    DO { $$ = icblock_create(); }
     ;
 
 headered_safe_statement:
-    label_header safe_statement
+    label_header safe_statement { $$ = std::move($safe_statement); }
     ;
 
 safe_statement:
-    /* empty */
-    | IF expression THEN headered_safe_statement ELSE headered_safe_statement
-    | REPEAT statement_list UNTIL expression
-    | whilefor_header headered_safe_statement
+    /* empty */  { $$ = icblock_create(); }
+    | IF expression THEN headered_safe_statement ELSE headered_safe_statement { $$ = icblock_create(); }
+    | REPEAT statement_list UNTIL expression { $$ = icblock_create(); }
+    | whilefor_header headered_safe_statement { $$ = icblock_create(); }
     | simple_statement { $$ = std::move($simple_statement); }
     ;
 
 headered_if_statement:
-    label_header if_statement
+    label_header if_statement { $$ = icblock_create(); }
     ;
 
 if_statement:
-    IF expression THEN statement
-    | IF expression THEN headered_safe_statement ELSE headered_if_statement
-    | whilefor_header headered_if_statement
+    IF expression THEN statement { $$ = icblock_create(); }
+    | IF expression THEN headered_safe_statement ELSE headered_if_statement { $$ = icblock_create(); }
+    | whilefor_header headered_if_statement { $$ = icblock_create(); }
     ;
 
 label_header:
@@ -616,6 +635,12 @@ simple_statement:
                     break;
 
                     case TCAT_REAL:
+                        if (r_expr->_type->cat() == TCAT_INT) {
+                            r_expr->_constr->append<ai::CVRTIR>();
+                        } else if (r_expr->_type->cat() != TCAT_INT) {
+                            // TODO: cannot be converted to real
+                        }
+
                         r_expr->_constr->append<ai::GSTR>(symbol->access_global_variable()->address());
                     break;
 
@@ -641,6 +666,12 @@ simple_statement:
                     break;
 
                     case TCAT_REAL:
+                        if (r_expr->_type->cat() == TCAT_INT) {
+                            r_expr->_constr->append<ai::CVRTIR>();
+                        } else if (r_expr->_type->cat() != TCAT_INT) {
+                            // TODO: cannot be converted to real
+                        }
+
                         r_expr->_constr->append<ai::LSTR>(symbol->access_local_variable()->address());
                     break;
 
@@ -654,29 +685,126 @@ simple_statement:
                 }
             break;
 
+            case SKIND_FUNCTION:
+                if (ctx->tab->nested() && ctx->tab->my_function_name() == $IDENTIFIER) {
+                    type = symbol->access_function()->type();
+
+                    switch (type->cat()) {
+                        case TCAT_BOOL:
+                            r_expr->_constr->append<ai::LSTB>(ctx->tab->my_return_address());
+                        break;
+
+                        case TCAT_INT:
+                            r_expr->_constr->append<ai::LSTI>(ctx->tab->my_return_address());
+                        break;
+
+                        case TCAT_REAL:
+                            r_expr->_constr->append<ai::LSTR>(ctx->tab->my_return_address());
+                        break;
+
+                        case TCAT_STR:
+                            r_expr->_constr->append<ai::LSTS>(ctx->tab->my_return_address());
+                        break;
+
+                        case TCAT_RECORD:
+                            // TODO
+                        break;
+                    }
+                } else {
+                    // TODO: wrong return
+                }
+            break;
         }
 
         $$ = std::move(r_expr->_constr);
     }
-    | variable_noidentifier ASSIGN expression  // IDENTIFIER: variable || function identifier (return value)
-    | IDENTIFIER  // IDENTIFIER: procedure || function
-    | IDENTIFIER LPAR real_par_list RPAR  // IDENTIFIER: function || procedure
-    | GOTO UINT
+    | variable_noidentifier ASSIGN expression {
+        // IDENTIFIER: variable || function identifier (return value)
+        /* TODO */
+        $$ = icblock_create();
+    }
+    | IDENTIFIER {
+        // IDENTIFIER: procedure
+
+        auto symbol = ctx->tab->find_symbol($IDENTIFIER);
+        auto kind = symbol->kind();
+        icblock_pointer constr = icblock_create();
+
+        if (kind == SKIND_PROCEDURE) {
+            constr->append<ai::CALL>(symbol->access_procedure()->code());
+
+            $$ = std::move(constr);
+        } else {
+            // TODO: calling a non-procedure
+        }
+    }
+    | IDENTIFIER LPAR real_par_list RPAR {
+        // IDENTIFIER: procedure
+
+        auto symbol = ctx->tab->find_symbol($IDENTIFIER);
+        auto kind = symbol->kind();
+        icblock_pointer constr = icblock_create();
+        icblock_pointer destr = icblock_create();
+
+        if (kind == SKIND_PROCEDURE) {
+            for (
+                auto [par, real_par] = std::tuple{
+                    symbol->access_procedure()->parameters()->begin(),
+                    $real_par_list->_pars.begin()
+                };
+
+                (par != symbol->access_procedure()->parameters()->end()) &&
+                (real_par != $real_par_list->_pars.end());
+
+                ++par,
+                ++real_par
+            ) {
+                if (par->partype == PMODE_BY_VALUE) {
+                    auto expr = expression::rexpressionize(ctx, *real_par);
+
+                    constr = icblock_merge_and_kill(constr, expr->_constr);
+                    destr = icblock_merge_and_kill(create_destr(expr->_type->cat()), destr);
+                } else {
+                    // TODO: pass by reference
+                }
+            }
+
+            constr->append<ai::CALL>(symbol->access_procedure()->code());
+
+            $$ = icblock_merge_and_kill(constr, destr);
+        } else {
+            // TODO: calling a non-procedure
+        }
+    }
+    | GOTO UINT {
+        /* TODO */
+        $$ = icblock_create();
+    }
     | block_body { $$ = std::move($block_body); }
     ;
 
 variable:
-    IDENTIFIER  // IDENTIFIER: variable
+    IDENTIFIER {
+        // TODO: IDENTIFIER: variable
+        $$ = std::make_shared<id_list>($IDENTIFIER);
+    }
     | variable_noidentifier { $$ = std::move($variable_noidentifier); }
     ;
 
 variable_noidentifier:
-    variable DOT IDENTIFIER  // IDENTIFIER: field_identifier
+    variable DOT IDENTIFIER {
+        // IDENTIFIER: field_identifier
+        $variable->append($IDENTIFIER);
+        $$ = std::move($variable);
+    }
     ;
 
 real_par_list:
-    expression { $$ = std::move($expression); }
-    | real_par_list COMMA expression
+    expression { $$ = std::make_shared<real_par_list>($expression); }
+    | real_par_list[lft_list] COMMA expression {
+        $lft_list->append($expression);
+        $$ = std::move($lft_list);
+    }
     ;
 
 expression:
@@ -690,7 +818,6 @@ expression:
         if (tcat1 == TCAT_REAL) {
             if (tcat2 == TCAT_REAL) {
                 r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
-                // destructor is good
             } else if (tcat2 == TCAT_INT) {
                 r_expr2->_constr->append<ai::CVRTIR>();
                 r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
@@ -723,7 +850,6 @@ expression:
             if (tcat2 == TCAT_REAL) {
                 r_expr1->_constr->append<ai::CVRTIR>();
                 r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
-                r_expr1->_destr = std::move(r_expr2->_destr);
 
                 switch ($OPER_REL) {
                     case DUTOKGE_OPER_REL::DUTOKGE_LT:
@@ -817,7 +943,6 @@ add_expression:
         if (tcat1 == TCAT_REAL) {
             if (tcat2 == TCAT_REAL) {
                 r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
-                // destructor is good
             } else if (tcat2 == TCAT_INT) {
                 r_expr2->_constr->append<ai::CVRTIR>();
                 r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
@@ -834,7 +959,6 @@ add_expression:
             if (tcat2 == TCAT_REAL) {
                 r_expr1->_constr->append<ai::CVRTIR>();
                 r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
-                r_expr1->_destr = std::move(r_expr2->_destr);
 
                 if ($OPER_SIGNADD == DUTOKGE_OPER_SIGNADD::DUTOKGE_PLUS) {
                     r_expr1->_constr->append<ai::ADDR>();
@@ -852,6 +976,14 @@ add_expression:
             } else {
                 // TODO
             }
+        } else if (tcat1 == TCAT_STR && tcat2 == TCAT_STR) {
+                r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+
+                if ($OPER_SIGNADD == DUTOKGE_OPER_SIGNADD::DUTOKGE_PLUS) {
+                    r_expr1->_constr->append<ai::ADDS>();
+                } else {
+                    // TODO
+                }
         } else {
             // TODO
         }
@@ -882,8 +1014,8 @@ add_expression:
 
 mul_expression:
     factor { $$ = std::move($factor); }
-    | mul_expression[lft_expression] OPER_MUL factor {
-        r_expression::pointer r_expr1 = expression::rexpressionize(ctx, $lft_expression);
+    | mul_expression[lft_expr] OPER_MUL factor {
+        r_expression::pointer r_expr1 = expression::rexpressionize(ctx, $lft_expr);
         r_expression::pointer r_expr2 = expression::rexpressionize(ctx, $factor);
 
         type_category tcat1 = r_expr1->_type->cat();
@@ -907,7 +1039,6 @@ mul_expression:
                 if (tcat1 == TCAT_REAL) {
                     if (tcat2 == TCAT_REAL) {
                         r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
-                        // destructor is good
                     } else if (tcat2 == TCAT_INT) {
                         r_expr2->_constr->append<ai::CVRTIR>();
                         r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
@@ -920,7 +1051,6 @@ mul_expression:
                     if (tcat2 == TCAT_REAL) {
                         r_expr1->_constr->append<ai::CVRTIR>();
                         r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
-                        r_expr1->_destr = std::move(r_expr2->_destr);
                         r_expr1->_constr->append<ai::MULR>();
                     } else if (tcat2 == TCAT_INT) {
                         r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
@@ -937,7 +1067,6 @@ mul_expression:
                 if (tcat1 == TCAT_REAL) {
                     if (tcat2 == TCAT_REAL) {
                         r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
-                        // destructor is good
                     } else if (tcat2 == TCAT_INT) {
                         r_expr2->_constr->append<ai::CVRTIR>();
                         r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
@@ -950,7 +1079,6 @@ mul_expression:
                     if (tcat2 == TCAT_REAL) {
                         r_expr1->_constr->append<ai::CVRTIR>();
                         r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
-                        r_expr1->_destr = std::move(r_expr2->_destr);
                         r_expr1->_constr->append<ai::DIVR>();
                     } else if (tcat2 == TCAT_INT) {
                         r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
@@ -969,7 +1097,6 @@ mul_expression:
                     if (tcat2 == TCAT_REAL) {
                         r_expr2->_constr->append<ai::CVRTRI>();
                         r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
-                        // destructor is good
                     } else if (tcat2 == TCAT_INT) {
                         r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
                     } else {
@@ -981,7 +1108,6 @@ mul_expression:
                     if (tcat2 == TCAT_REAL) {
                         r_expr2->_constr->append<ai::CVRTRI>();
                         r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
-                        r_expr1->_destr = std::move(r_expr2->_destr);
                     } else if (tcat2 == TCAT_INT) {
                         r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
                     } else {
@@ -1000,7 +1126,6 @@ mul_expression:
                     if (tcat2 == TCAT_REAL) {
                         r_expr2->_constr->append<ai::CVRTRI>();
                         r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
-                        // destructor is good
                     } else if (tcat2 == TCAT_INT) {
                         r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
                     } else {
@@ -1012,7 +1137,6 @@ mul_expression:
                     if (tcat2 == TCAT_REAL) {
                         r_expr2->_constr->append<ai::CVRTRI>();
                         r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
-                        r_expr1->_destr = std::move(r_expr2->_destr);
                     } else if (tcat2 == TCAT_INT) {
                         r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
                     } else {
@@ -1026,7 +1150,6 @@ mul_expression:
             break;
         }
 
-        r_expr1->_type = bool_type_pointer();
         $$ = std::move(r_expr1);
     }
     ;
@@ -1035,25 +1158,21 @@ factor:
     unsigned_constant_noidentifier[constant] {
         type_pointer type;
         icblock_pointer constr = icblock_create();
-        icblock_pointer destr = icblock_create();
 
         switch($constant->get_type()) {
             case constant_value::type::UINT_CONSTANT:
-                type = int_type_pointer();
+                type = ctx->tab->logical_integer();
                 constr->append<ai::LDLITI>(((uint_constant*)&*$constant)->_val);
-                destr->append<ai::DTORI>();
             break;
 
             case constant_value::type::STR_CONSTANT:
-                type = str_type_pointer();
+                type = ctx->tab->logical_string();
                 constr->append<ai::LDLITS>(((str_constant*)&*$constant)->_val);
-                destr->append<ai::DTORS>();
             break;
 
             case constant_value::type::REAL_CONSTANT:
-                type = real_type_pointer();
+                type = ctx->tab->logical_real();
                 constr->append<ai::LDLITR>(((real_constant*)&*$constant)->_val);
-                destr->append<ai::DTORR>();
             break;
 
             default:
@@ -1063,8 +1182,7 @@ factor:
 
         $$ = std::make_shared<r_expression>(
             type,
-            constr,
-            destr);
+            constr);
     }
     | variable_noidentifier {
         $$ = nullptr;
@@ -1077,11 +1195,71 @@ factor:
     | IDENTIFIER {
         // IDENTIFIER: function || variable || unsigned_constant
 
-        std::make_shared<l_expression>(
+        $$ = std::make_shared<l_expression>(
             ctx->tab->find_symbol($IDENTIFIER)->access_typed()->type(),
             std::make_shared<id_list>($IDENTIFIER));
     }
-    | IDENTIFIER LPAR real_par_list RPAR  // TODO: IDENTIFIER: function
+    | IDENTIFIER LPAR real_par_list RPAR {
+        // IDENTIFIER: function
+
+        auto symbol = ctx->tab->find_symbol($IDENTIFIER);
+        auto kind = symbol->kind();
+        icblock_pointer constr = icblock_create();
+        icblock_pointer destr = icblock_create();
+
+        if (kind == SKIND_FUNCTION) {
+            type_pointer type = symbol->access_function()->type();
+            switch (type->cat()) {
+                case TCAT_BOOL:
+                    constr->append<ai::INITB>();
+                break;
+
+                case TCAT_INT:
+                    constr->append<ai::INITI>();
+                break;
+
+                case TCAT_REAL:
+                    constr->append<ai::INITR>();
+                break;
+
+                case TCAT_STR:
+                    constr->append<ai::INITS>();
+                break;
+
+                case TCAT_RECORD:
+                    // TODO: function returning a record
+                break;
+            }
+
+            for (
+                auto [par, real_par] = std::tuple{
+                    symbol->access_function()->parameters()->begin(),
+                    $real_par_list->_pars.begin()
+                };
+
+                (par != symbol->access_function()->parameters()->end()) &&
+                (real_par != $real_par_list->_pars.end());
+
+                ++par,
+                ++real_par
+            ) {
+                if (par->partype == PMODE_BY_VALUE) {
+                    auto expr = expression::rexpressionize(ctx, *real_par);
+
+                    constr = icblock_merge_and_kill(constr, expr->_constr);
+                    destr = icblock_merge_and_kill(create_destr(expr->_type->cat()), destr);
+                } else {
+                    // TODO: pass by reference
+                }
+            }
+
+            constr->append<ai::CALL>(symbol->access_function()->code());
+
+            $$ = std::make_shared<r_expression>(type, icblock_merge_and_kill(constr, destr));
+        } else {
+            // TODO: calling a non-function
+        }
+    }
     | LPAR expression RPAR { $$ = std::move($expression); }
     | NOT factor[inner_factor] {
         r_expression::pointer r_expr = expression::rexpressionize(ctx, $inner_factor);

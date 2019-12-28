@@ -121,6 +121,29 @@ namespace mlc {
         return icblock;
     }
 
+    bool count_field_recur(
+        symbol_pointer symbol,
+        const std::vector<ls_id_index>& ids,
+        type_pointer& type,
+        stack_address& address
+    ) {
+        for (
+            auto i = ids.cbegin() + 1;
+            i != ids.cend();
+            ++i
+        ) {
+            auto field = type->access_record()->find(*i);
+            if (!field) {
+                return false;
+            }
+
+            type = field->type();
+            address += field->offset();
+        }
+
+        return true;
+    }
+
     auto expression::rexpressionize(MlaskalCtx* ctx, pointer expr) -> r_pointer {
         if (expr->get_type() == type::REXPRESSION) {
             return std::static_pointer_cast<r_expression>(expr);
@@ -160,9 +183,8 @@ namespace mlc {
                             case TCAT_RECORD: {
                                 auto address = symbol->access_global_variable()->address();
                                 type = symbol->access_global_variable()->type();
-                                count_address_type(symbol, l_expr->_ids->_ids, type, address);
 
-                                if (count_address_type(symbol, l_expr->_ids->_ids, type, address)) {
+                                if (count_field_recur(symbol, l_expr->_ids->_ids, type, address)) {
                                     switch (type->cat()) {
                                         case TCAT_BOOL:
                                             constr->append<ai::GLDB>(address);
@@ -214,8 +236,7 @@ namespace mlc {
                                 auto address = symbol->access_local_variable()->address();
                                 type = symbol->access_local_variable()->type();
 
-
-                                if (count_address_type(symbol, l_expr->_ids->_ids, type, address)) {
+                                if (count_field_recur(symbol, l_expr->_ids->_ids, type, address)) {
                                     switch (type->cat()) {
                                         case TCAT_BOOL:
                                             constr->append<ai::LLDB>(address);

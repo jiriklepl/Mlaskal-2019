@@ -44,24 +44,7 @@ namespace mlc {
         symbol_pointer symbol,
         const std::vector<ls_id_index>& ids,
         type_pointer& type,
-        stack_address& address
-    ) {
-        for (
-            auto i = ids.cbegin() + 1;
-            i != ids.cend();
-            ++i
-        ) {
-            auto field = type->access_record()->find(*i);
-            if (!field) {
-                return false;
-            }
-
-            type = field->type();
-            address += field->offset();
-        }
-
-        return true;
-    }
+        stack_address& address);
 
     class type_specifier {
      public:

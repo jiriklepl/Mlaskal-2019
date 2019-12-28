@@ -637,7 +637,7 @@ simple_statement:
                     case TCAT_REAL:
                         if (r_expr->_type->cat() == TCAT_INT) {
                             r_expr->_constr->append<ai::CVRTIR>();
-                        } else if (r_expr->_type->cat() != TCAT_INT) {
+                        } else if (r_expr->_type->cat() != TCAT_REAL) {
                             // TODO: cannot be converted to real
                         }
 
@@ -668,7 +668,7 @@ simple_statement:
                     case TCAT_REAL:
                         if (r_expr->_type->cat() == TCAT_INT) {
                             r_expr->_constr->append<ai::CVRTIR>();
-                        } else if (r_expr->_type->cat() != TCAT_INT) {
+                        } else if (r_expr->_type->cat() != TCAT_REAL) {
                             // TODO: cannot be converted to real
                         }
 
@@ -699,6 +699,12 @@ simple_statement:
                         break;
 
                         case TCAT_REAL:
+                            if (r_expr->_type->cat() == TCAT_INT) {
+                                r_expr->_constr->append<ai::CVRTIR>();
+                            } else if (r_expr->_type->cat() != TCAT_REAL) {
+                                // TODO: cannot be converted to real
+                            }
+
                             r_expr->_constr->append<ai::LSTR>(ctx->tab->my_return_address());
                         break;
 
@@ -720,8 +726,112 @@ simple_statement:
     }
     | variable_noidentifier ASSIGN expression {
         // IDENTIFIER: variable || function identifier (return value)
-        /* TODO */
-        $$ = icblock_create();
+
+        auto r_expr = expression::rexpressionize(ctx, $expression);
+        auto symbol = ctx->tab->find_symbol($variable_noidentifier->_ids[
+            0
+            ]);
+        auto kind = symbol->kind();
+        type_pointer type;
+
+        switch (kind) {
+            case SKIND_GLOBAL_VARIABLE:
+                type = symbol->access_global_variable()->type();
+                switch (type->cat()) {
+                    case TCAT_RECORD:{
+                        auto address = symbol->access_global_variable()->address();
+                        type = symbol->access_global_variable()->type();
+
+                        if (count_field_recur(symbol, $variable_noidentifier->_ids, type, address)) {
+                            switch (type->cat()) {
+                                case TCAT_BOOL:
+                                    r_expr->_constr->append<ai::GSTB>(address);
+                                break;
+
+                                case TCAT_INT:
+                                    r_expr->_constr->append<ai::GSTI>(address);
+                                break;
+
+                                case TCAT_REAL:
+                                    if (r_expr->_type->cat() == TCAT_INT) {
+                                        r_expr->_constr->append<ai::CVRTIR>();
+                                    } else if (r_expr->_type->cat() != TCAT_REAL) {
+                                        // TODO: cannot be converted to real
+                                    }
+
+                                    r_expr->_constr->append<ai::GSTR>(address);
+                                break;
+
+                                case TCAT_STR:
+                                    r_expr->_constr->append<ai::GSTS>(address);
+                                break;
+
+                                default:
+                                    // TODO: ERROR
+                                break;
+                            }
+                        } else {
+                            // TODO: ERROR
+                        }
+                    } break;
+
+                    default:
+                        // TODO: ERROR
+                    break;
+                }
+            break;
+
+            case SKIND_LOCAL_VARIABLE:
+                type = symbol->access_local_variable()->type();
+                switch (type->cat()) {
+                    case TCAT_RECORD: {
+                        auto address = symbol->access_local_variable()->address();
+                        type = symbol->access_local_variable()->type();
+
+                        if (count_field_recur(symbol, $variable_noidentifier->_ids, type, address)) {
+                            switch (type->cat()) {
+                                case TCAT_BOOL:
+                                    r_expr->_constr->append<ai::LSTB>(address);
+                                break;
+
+                                case TCAT_INT:
+                                    r_expr->_constr->append<ai::LSTI>(address);
+                                break;
+
+                                case TCAT_REAL:
+                                    if (r_expr->_type->cat() == TCAT_INT) {
+                                        r_expr->_constr->append<ai::CVRTIR>();
+                                    } else if (r_expr->_type->cat() != TCAT_REAL) {
+                                        // TODO: cannot be converted to real
+                                    }
+
+                                    r_expr->_constr->append<ai::LSTR>(address);
+                                break;
+
+                                case TCAT_STR:
+                                    r_expr->_constr->append<ai::LSTS>(address);
+                                break;
+
+                                default:
+                                    // TODO: ERROR
+                                break;
+                            }
+                        } else {
+                            // TODO: ERROR
+                        }
+                    } break;
+
+                    default:
+                        // TODO: ERROR
+                    break;
+                }
+
+            default:
+                // TODO: ERROR
+            break;
+        }
+
+        $$ = std::move(r_expr->_constr);
     }
     | IDENTIFIER {
         // IDENTIFIER: procedure
@@ -762,8 +872,30 @@ simple_statement:
                 if (par->partype == PMODE_BY_VALUE) {
                     auto expr = expression::rexpressionize(ctx, *real_par);
 
+                    auto tcat1 = par->ltype->cat();
+                    auto tcat2 = expr->_type->cat();
+
+                    if (tcat1 != tcat2) {
+                        if (tcat1 == TCAT_REAL) {
+                            if (tcat2 == TCAT_INT) {
+                                expr->_constr->append<ai::CVRTIR>();
+                            } else {
+                                // TODO
+                            }
+                        } else if (tcat1 == TCAT_INT) {
+                            if (tcat2 == TCAT_REAL) {
+                                // TODO: warning
+                                expr->_constr->append<ai::CVRTRI>();
+                            } else {
+                                // TODO
+                            }
+                        } else {
+                            // TODO
+                        }
+                    }
+
                     constr = icblock_merge_and_kill(constr, expr->_constr);
-                    destr = icblock_merge_and_kill(create_destr(expr->_type->cat()), destr);
+                    destr = icblock_merge_and_kill(create_destr(par->ltype->cat()), destr);
                 } else {
                     // TODO: pass by reference
                 }
@@ -1074,21 +1206,23 @@ mul_expression:
                         // TODO
                     }
 
-                    r_expr1->_constr->append<ai::DIVR>();
                 } else if (tcat1 == TCAT_INT) {
+                    r_expr1->_constr->append<ai::CVRTIR>();
+
                     if (tcat2 == TCAT_REAL) {
-                        r_expr1->_constr->append<ai::CVRTIR>();
                         r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
-                        r_expr1->_constr->append<ai::DIVR>();
                     } else if (tcat2 == TCAT_INT) {
+                        r_expr2->_constr->append<ai::CVRTIR>();
                         r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
-                        r_expr1->_constr->append<ai::DIVI>();
                     } else {
                         // TODO
                     }
                 } else {
                     // TODO
                 }
+
+                r_expr1->_type = ctx->tab->logical_real();
+                r_expr1->_constr->append<ai::DIVR>();
             break;
 
             case DUTOKGE_OPER_MUL::DUTOKGE_DIV:
@@ -1185,12 +1319,11 @@ factor:
             constr);
     }
     | variable_noidentifier {
-        $$ = nullptr;
-        /* TODO:
-            std::make_shared<l_expression>(
-            nullptr,
+        $$ = std::make_shared<l_expression>(
+            ctx->tab->find_symbol($variable_noidentifier->_ids[
+                0
+                ])->access_typed()->type(),
             $variable_noidentifier);
-        */
     }
     | IDENTIFIER {
         // IDENTIFIER: function || variable || unsigned_constant
@@ -1231,6 +1364,8 @@ factor:
                 break;
             }
 
+            // TODO: test for lengths of parameter lists
+
             for (
                 auto [par, real_par] = std::tuple{
                     symbol->access_function()->parameters()->begin(),
@@ -1246,8 +1381,30 @@ factor:
                 if (par->partype == PMODE_BY_VALUE) {
                     auto expr = expression::rexpressionize(ctx, *real_par);
 
+                    auto tcat1 = par->ltype->cat();
+                    auto tcat2 = expr->_type->cat();
+
+                    if (tcat1 != tcat2) {
+                        if (tcat1 == TCAT_REAL) {
+                            if (tcat2 == TCAT_INT) {
+                                expr->_constr->append<ai::CVRTIR>();
+                            } else {
+                                // TODO
+                            }
+                        } else if (tcat1 == TCAT_INT) {
+                            if (tcat2 == TCAT_REAL) {
+                                // TODO: warning
+                                expr->_constr->append<ai::CVRTRI>();
+                            } else {
+                                // TODO
+                            }
+                        } else {
+                            // TODO
+                        }
+                    }
+
                     constr = icblock_merge_and_kill(constr, expr->_constr);
-                    destr = icblock_merge_and_kill(create_destr(expr->_type->cat()), destr);
+                    destr = icblock_merge_and_kill(create_destr(par->ltype->cat()), destr);
                 } else {
                     // TODO: pass by reference
                 }

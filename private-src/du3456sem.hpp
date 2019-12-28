@@ -38,6 +38,31 @@ namespace mlc {
         const char* from,
         decltype(MlaskalCtx::curline) line);
 
+    icblock_pointer create_destr(type_category);
+
+    bool count_field_recur(
+        symbol_pointer symbol,
+        const std::vector<ls_id_index>& ids,
+        type_pointer& type,
+        stack_address& address
+    ) {
+        for (
+            auto i = ids.cbegin() + 1;
+            i != ids.cend();
+            ++i
+        ) {
+            auto field = type->access_record()->find(*i);
+            if (!field) {
+                return false;
+            }
+
+            type = field->type();
+            address += field->offset();
+        }
+
+        return true;
+    }
+
     class type_specifier {
      public:
         typedef std::shared_ptr<type_specifier> pointer;
@@ -257,11 +282,9 @@ namespace mlc {
         typedef r_pointer pointer;
         r_expression(
             type_pointer type,
-            icblock_pointer constr,
-            icblock_pointer destr
+            icblock_pointer constr
         ) : expression(type),
-            _constr{std::move(constr)},
-            _destr{std::move(destr)} {
+            _constr{std::move(constr)} {
         }
 
         ~r_expression() noexcept override = default;
@@ -271,8 +294,6 @@ namespace mlc {
         }
 
         icblock_pointer _constr;
-        icblock_pointer _destr;
-        type_pointer _type;
     };
 
     class l_expression : public expression {
@@ -288,10 +309,32 @@ namespace mlc {
         ~l_expression() noexcept override = default;
 
         type get_type() const override {
-            return type::REXPRESSION;
+            return type::LEXPRESSION;
         }
 
         id_list::pointer _ids;
+    };
+
+    class real_par_list {
+     public:
+        typedef std::shared_ptr<real_par_list> pointer;
+        real_par_list(
+        ) : _pars{} {
+        }
+
+        real_par_list(
+            expression::pointer par
+        ) : _pars{} {
+            _pars.push_back(par);
+        }
+
+        ~real_par_list() noexcept = default;
+
+        void append(expression::pointer par) {
+            _pars.push_back(par);
+        }
+
+        std::vector<expression::pointer> _pars;
     };
 
 }

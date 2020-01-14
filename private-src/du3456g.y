@@ -1035,6 +1035,7 @@ expression:
             // TODO
         }
 
+        r_expr1->_type = ctx->tab->ctx->tab->logical_bool();
         $$ = std::move(r_expr1);
     }
     ;
@@ -1055,6 +1056,7 @@ simple_expression:
                 break;
 
                 default:
+                    // TODO: +- something else than int and real
                 break;
             }
         }
@@ -1091,6 +1093,7 @@ add_expression:
             if (tcat2 == TCAT_REAL) {
                 r_expr1->_constr->append<ai::CVRTIR>();
                 r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+                r_expr1->_type = r_expr2->_type;
 
                 if ($OPER_SIGNADD == DUTOKGE_OPER_SIGNADD::DUTOKGE_PLUS) {
                     r_expr1->_constr->append<ai::ADDR>();
@@ -1184,6 +1187,7 @@ mul_expression:
                         r_expr1->_constr->append<ai::CVRTIR>();
                         r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
                         r_expr1->_constr->append<ai::MULR>();
+                        r_expr1->_type = r_expr2->_type;
                     } else if (tcat2 == TCAT_INT) {
                         r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
                         r_expr1->_constr->append<ai::MULI>();
@@ -1236,8 +1240,6 @@ mul_expression:
                     } else {
                         // TODO
                     }
-
-                    r_expr1->_constr->append<ai::DIVI>();
                 } else if (tcat1 == TCAT_INT) {
                     if (tcat2 == TCAT_REAL) {
                         r_expr2->_constr->append<ai::CVRTRI>();
@@ -1247,11 +1249,12 @@ mul_expression:
                     } else {
                         // TODO
                     }
-
-                    r_expr1->_constr->append<ai::DIVI>();
                 } else {
                     // TODO
                 }
+
+                r_expr1->_type = ctx->tab->logical_integer();
+                r_expr1->_constr->append<ai::DIVI>();
             break;
 
             case DUTOKGE_OPER_MUL::DUTOKGE_MOD:
@@ -1265,8 +1268,6 @@ mul_expression:
                     } else {
                         // TODO
                     }
-
-                    r_expr1->_constr->append<ai::MODI>();
                 } else if (tcat1 == TCAT_INT) {
                     if (tcat2 == TCAT_REAL) {
                         r_expr2->_constr->append<ai::CVRTRI>();
@@ -1276,11 +1277,12 @@ mul_expression:
                     } else {
                         // TODO
                     }
-
-                    r_expr1->_constr->append<ai::MODI>();
                 } else {
                     // TODO
                 }
+
+                r_expr1->_type = ctx->tab->logical_integer();
+                r_expr1->_constr->append<ai::MODI>();
             break;
         }
 

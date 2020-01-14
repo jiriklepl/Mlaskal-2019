@@ -1031,6 +1031,54 @@ expression:
             } else {
                 // TODO
             }
+        } else if (tcat1 == TCAT_BOOL && tcat2 == TCAT_BOOL) {
+            r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+
+            switch ($OPER_REL) {
+                case DUTOKGE_OPER_REL::DUTOKGE_LT:
+                    r_expr1->_constr->append<ai::LTB>();
+                break;
+
+                case DUTOKGE_OPER_REL::DUTOKGE_LE:
+                    r_expr1->_constr->append<ai::LEB>();
+                break;
+
+                case DUTOKGE_OPER_REL::DUTOKGE_NE:
+                    r_expr1->_constr->append<ai::NEB>();
+                break;
+
+                case DUTOKGE_OPER_REL::DUTOKGE_GE:
+                    r_expr1->_constr->append<ai::GEB>();
+                break;
+
+                case DUTOKGE_OPER_REL::DUTOKGE_GT:
+                    r_expr1->_constr->append<ai::GTB>();
+                break;
+            }
+        } else if (tcat1 == TCAT_STRING && tcat2 == TCAT_STRING) {
+            r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+
+            switch ($OPER_REL) {
+                case DUTOKGE_OPER_REL::DUTOKGE_LT:
+                    r_expr1->_constr->append<ai::LTS>();
+                break;
+
+                case DUTOKGE_OPER_REL::DUTOKGE_LE:
+                    r_expr1->_constr->append<ai::LES>();
+                break;
+
+                case DUTOKGE_OPER_REL::DUTOKGE_NE:
+                    r_expr1->_constr->append<ai::NES>();
+                break;
+
+                case DUTOKGE_OPER_REL::DUTOKGE_GE:
+                    r_expr1->_constr->append<ai::GES>();
+                break;
+
+                case DUTOKGE_OPER_REL::DUTOKGE_GT:
+                    r_expr1->_constr->append<ai::GTS>();
+                break;
+            }
         } else {
             // TODO
         }

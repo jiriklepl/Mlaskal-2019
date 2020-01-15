@@ -121,6 +121,149 @@ namespace mlc {
         return icblock;
     }
 
+    icblock_pointer do_assign(
+        MlaskalCtx* ctx,
+        ls_id_index id,
+        expression::pointer expr
+    ) {
+        auto symbol = ctx->tab->find_symbol(id);
+        auto r_expr = expression::rexpressionize(ctx, expr);
+        auto kind = symbol->kind();
+        type_pointer type;
+
+        switch (kind) {
+            case SKIND_GLOBAL_VARIABLE:
+                type = symbol->access_global_variable()->type();
+                switch (type->cat()) {
+                    case TCAT_BOOL:
+                        r_expr->_constr->append<ai::GSTB>(symbol->access_global_variable()->address());
+                    break;
+
+                    case TCAT_INT:
+                        r_expr->_constr->append<ai::GSTI>(symbol->access_global_variable()->address());
+                    break;
+
+                    case TCAT_REAL:
+                        if (r_expr->_type->cat() == TCAT_INT) {
+                            r_expr->_constr->append<ai::CVRTIR>();
+                        } else if (r_expr->_type->cat() != TCAT_REAL) {
+                            // TODO: cannot be converted to real
+                        }
+
+                        r_expr->_constr->append<ai::GSTR>(symbol->access_global_variable()->address());
+                    break;
+
+                    case TCAT_STR:
+                        r_expr->_constr->append<ai::GSTS>(symbol->access_global_variable()->address());
+                    break;
+
+                    case TCAT_RECORD:
+                        // TODO
+                    break;
+                }
+            break;
+
+            case SKIND_LOCAL_VARIABLE:
+                type = symbol->access_local_variable()->type();
+                switch (type->cat()) {
+                    case TCAT_BOOL:
+                        r_expr->_constr->append<ai::LSTB>(symbol->access_local_variable()->address());
+                    break;
+
+                    case TCAT_INT:
+                        r_expr->_constr->append<ai::LSTI>(symbol->access_local_variable()->address());
+                    break;
+
+                    case TCAT_REAL:
+                        if (r_expr->_type->cat() == TCAT_INT) {
+                            r_expr->_constr->append<ai::CVRTIR>();
+                        } else if (r_expr->_type->cat() != TCAT_REAL) {
+                            // TODO: cannot be converted to real
+                        }
+
+                        r_expr->_constr->append<ai::LSTR>(symbol->access_local_variable()->address());
+                    break;
+
+                    case TCAT_STR:
+                        r_expr->_constr->append<ai::LSTS>(symbol->access_local_variable()->address());
+                    break;
+
+                    case TCAT_RECORD:
+                        // TODO
+                    break;
+                }
+            break;
+
+            case SKIND_FUNCTION:
+                if (ctx->tab->nested() && ctx->tab->my_function_name() == id) {
+                    type = symbol->access_function()->type();
+
+                    switch (type->cat()) {
+                        case TCAT_BOOL:
+                            r_expr->_constr->append<ai::LSTB>(ctx->tab->my_return_address());
+                        break;
+
+                        case TCAT_INT:
+                            r_expr->_constr->append<ai::LSTI>(ctx->tab->my_return_address());
+                        break;
+
+                        case TCAT_REAL:
+                            if (r_expr->_type->cat() == TCAT_INT) {
+                                r_expr->_constr->append<ai::CVRTIR>();
+                            } else if (r_expr->_type->cat() != TCAT_REAL) {
+                                // TODO: cannot be converted to real
+                            }
+
+                            r_expr->_constr->append<ai::LSTR>(ctx->tab->my_return_address());
+                        break;
+
+                        case TCAT_STR:
+                            r_expr->_constr->append<ai::LSTS>(ctx->tab->my_return_address());
+                        break;
+
+                        case TCAT_RECORD:
+                            // TODO
+                        break;
+                    }
+                } else {
+                    // TODO: wrong return
+                }
+            break;
+
+            case SKIND_PARAMETER_BY_REFERENCE:
+                type = symbol->access_parameter_by_reference()->type();
+
+                switch (type->cat()) {
+                    case TCAT_BOOL:
+                        r_expr->_constr->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
+                        r_expr->_constr->append<ai::XSTB>();
+                    break;
+
+                    case TCAT_INT:
+                        r_expr->_constr->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
+                        r_expr->_constr->append<ai::XSTI>();
+                    break;
+
+                    case TCAT_REAL:
+                        r_expr->_constr->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
+                        r_expr->_constr->append<ai::XSTR>();
+                    break;
+
+                    case TCAT_STR:
+                        r_expr->_constr->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
+                        r_expr->_constr->append<ai::XSTS>();
+                    break;
+
+                    case TCAT_RECORD:
+                        // TODO
+                    break;
+                }
+            break;
+        }
+
+        return r_expr->_constr;
+    }
+
     bool count_field_recur(
         symbol_pointer symbol,
         const std::vector<ls_id_index>& ids,

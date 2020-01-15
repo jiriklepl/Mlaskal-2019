@@ -679,6 +679,84 @@ namespace mlc {
 
         return icblock;
     }
+
+    icblock_pointer make_call(
+        MlaskalCtx * ctx,
+        parameter_list_const_ptr pars,
+        real_par_list::pointer real_pars,
+        ic_function_pointer code
+    ) {
+        // TODO: test for lengths of parameter lists
+
+        icblock_pointer constr = icblock_create();
+        icblock_pointer destr = icblock_create();
+
+        for (
+            auto [par, real_par] = std::tuple{
+                pars->begin(),
+                real_pars->_pars.begin()
+            };
+
+            (par != pars->end()) &&
+            (real_par != real_pars->_pars.end());
+
+            ++par,
+            ++real_par
+        ) {
+            if (par->partype == PMODE_BY_VALUE) {
+                auto expr = expression::rexpressionize(ctx, *real_par);
+
+                auto tcat1 = par->ltype->cat();
+                auto tcat2 = expr->_type->cat();
+
+                if (tcat1 != tcat2) {
+                    if (tcat1 == TCAT_REAL) {
+                        if (tcat2 == TCAT_INT) {
+                            expr->_constr->append<ai::CVRTIR>();
+                        } else {
+                            // TODO
+                        }
+                    } else if (tcat1 == TCAT_INT) {
+                        if (tcat2 == TCAT_REAL) {
+                            // TODO: warning
+                            expr->_constr->append<ai::CVRTRI>();
+                        } else {
+                            // TODO
+                        }
+                    } else {
+                        // TODO
+                    }
+                }
+
+                constr = icblock_merge_and_kill(constr, expr->_constr);
+                destr = icblock_merge_and_kill(create_destr(par->ltype->cat()), destr);
+            } else {
+                auto pass_par = address_load(ctx, *real_par);
+
+                if (pass_par == nullptr) {
+                    message(DUERR_NOTPARAMVAR, ctx->curline);
+                    continue;
+                }
+
+                constr = icblock_merge_and_kill(
+                    constr,
+                    pass_par);
+
+
+                icblock_pointer icblock = icblock_create();
+                icblock->append<ai::DTORP>();
+
+                destr = icblock_merge_and_kill(
+                    icblock,
+                    destr);
+            }
+        }
+
+        constr->append<ai::CALL>(code);
+
+        return icblock_merge_and_kill(constr, destr);
+    }
+
     bool count_field_recur(
         symbol_pointer symbol,
         const std::vector<ls_id_index>& ids,

@@ -264,6 +264,256 @@ namespace mlc {
         return r_expr->_constr;
     }
 
+    expression::pointer do_compare(
+        MlaskalCtx* ctx,
+        expression::pointer left,
+        expression::pointer right,
+        DUTOKGE_OPER_REL oper
+    ) {
+        r_expression::pointer r_expr1 = expression::rexpressionize(ctx, left);
+        r_expression::pointer r_expr2 = expression::rexpressionize(ctx, right);
+
+        type_category tcat1 = r_expr1->_type->cat();
+        type_category tcat2 = r_expr2->_type->cat();
+        if (tcat1 == TCAT_REAL) {
+            if (tcat2 == TCAT_REAL) {
+                r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+            } else if (tcat2 == TCAT_INT) {
+                r_expr2->_constr->append<ai::CVRTIR>();
+                r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+            } else {
+                // TODO
+            }
+
+            switch (oper) {
+                case DUTOKGE_OPER_REL::DUTOKGE_LT:
+                    r_expr1->_constr->append<ai::LTR>();
+                break;
+
+                case DUTOKGE_OPER_REL::DUTOKGE_LE:
+                    r_expr1->_constr->append<ai::LER>();
+                break;
+
+                case DUTOKGE_OPER_REL::DUTOKGE_NE:
+                    r_expr1->_constr->append<ai::NER>();
+                break;
+
+                case DUTOKGE_OPER_REL::DUTOKGE_GE:
+                    r_expr1->_constr->append<ai::GER>();
+                break;
+
+                case DUTOKGE_OPER_REL::DUTOKGE_GT:
+                    r_expr1->_constr->append<ai::GTR>();
+                break;
+            }
+        } else if (tcat1 == TCAT_INT) {
+            if (tcat2 == TCAT_REAL) {
+                r_expr1->_constr->append<ai::CVRTIR>();
+                r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+
+                switch (oper) {
+                    case DUTOKGE_OPER_REL::DUTOKGE_LT:
+                        r_expr1->_constr->append<ai::LTR>();
+                    break;
+
+                    case DUTOKGE_OPER_REL::DUTOKGE_LE:
+                        r_expr1->_constr->append<ai::LER>();
+                    break;
+
+                    case DUTOKGE_OPER_REL::DUTOKGE_NE:
+                        r_expr1->_constr->append<ai::NER>();
+                    break;
+
+                    case DUTOKGE_OPER_REL::DUTOKGE_GE:
+                        r_expr1->_constr->append<ai::GER>();
+                    break;
+
+                    case DUTOKGE_OPER_REL::DUTOKGE_GT:
+                        r_expr1->_constr->append<ai::GTR>();
+                    break;
+                }
+            } else if (tcat2 == TCAT_INT) {
+                r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+
+                switch (oper) {
+                    case DUTOKGE_OPER_REL::DUTOKGE_LT:
+                        r_expr1->_constr->append<ai::LTI>();
+                    break;
+
+                    case DUTOKGE_OPER_REL::DUTOKGE_LE:
+                        r_expr1->_constr->append<ai::LEI>();
+                    break;
+
+                    case DUTOKGE_OPER_REL::DUTOKGE_NE:
+                        r_expr1->_constr->append<ai::NEI>();
+                    break;
+
+                    case DUTOKGE_OPER_REL::DUTOKGE_GE:
+                        r_expr1->_constr->append<ai::GEI>();
+                    break;
+
+                    case DUTOKGE_OPER_REL::DUTOKGE_GT:
+                        r_expr1->_constr->append<ai::GTI>();
+                    break;
+                }
+            } else {
+                // TODO
+            }
+        } else if (tcat1 == TCAT_BOOL && tcat2 == TCAT_BOOL) {
+            r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+
+            switch (oper) {
+                case DUTOKGE_OPER_REL::DUTOKGE_LT:
+                    r_expr1->_constr->append<ai::LTB>();
+                break;
+
+                case DUTOKGE_OPER_REL::DUTOKGE_LE:
+                    r_expr1->_constr->append<ai::LEB>();
+                break;
+
+                case DUTOKGE_OPER_REL::DUTOKGE_NE:
+                    r_expr1->_constr->append<ai::NEB>();
+                break;
+
+                case DUTOKGE_OPER_REL::DUTOKGE_GE:
+                    r_expr1->_constr->append<ai::GEB>();
+                break;
+
+                case DUTOKGE_OPER_REL::DUTOKGE_GT:
+                    r_expr1->_constr->append<ai::GTB>();
+                break;
+            }
+        } else if (tcat1 == TCAT_STR && tcat2 == TCAT_STR) {
+            r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+
+            switch (oper) {
+                case DUTOKGE_OPER_REL::DUTOKGE_LT:
+                    r_expr1->_constr->append<ai::LTS>();
+                break;
+
+                case DUTOKGE_OPER_REL::DUTOKGE_LE:
+                    r_expr1->_constr->append<ai::LES>();
+                break;
+
+                case DUTOKGE_OPER_REL::DUTOKGE_NE:
+                    r_expr1->_constr->append<ai::NES>();
+                break;
+
+                case DUTOKGE_OPER_REL::DUTOKGE_GE:
+                    r_expr1->_constr->append<ai::GES>();
+                break;
+
+                case DUTOKGE_OPER_REL::DUTOKGE_GT:
+                    r_expr1->_constr->append<ai::GTS>();
+                break;
+            }
+        } else {
+            // TODO
+        }
+
+        r_expr1->_type = ctx->tab->logical_bool();
+        return r_expr1;
+    }
+
+    expression::pointer do_signadd(
+        MlaskalCtx* ctx,
+        expression::pointer left,
+        expression::pointer right,
+        DUTOKGE_OPER_SIGNADD oper
+    ) {
+        r_expression::pointer r_expr1 = expression::rexpressionize(ctx, left);
+        r_expression::pointer r_expr2 = expression::rexpressionize(ctx, right);
+
+        type_category tcat1 = r_expr1->_type->cat();
+        type_category tcat2 = r_expr2->_type->cat();
+
+        if (tcat1 == TCAT_REAL) {
+            if (tcat2 == TCAT_REAL) {
+                r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+            } else if (tcat2 == TCAT_INT) {
+                r_expr2->_constr->append<ai::CVRTIR>();
+                r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+            } else {
+                // TODO
+            }
+
+            if (oper == DUTOKGE_OPER_SIGNADD::DUTOKGE_PLUS) {
+                r_expr1->_constr->append<ai::ADDR>();
+            } else {
+                r_expr1->_constr->append<ai::SUBR>();
+            }
+        } else if (tcat1 == TCAT_INT) {
+            if (tcat2 == TCAT_REAL) {
+                r_expr1->_constr->append<ai::CVRTIR>();
+                r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+                r_expr1->_type = r_expr2->_type;
+
+                if (oper == DUTOKGE_OPER_SIGNADD::DUTOKGE_PLUS) {
+                    r_expr1->_constr->append<ai::ADDR>();
+                } else {
+                    r_expr1->_constr->append<ai::SUBR>();
+                }
+            } else if (tcat2 == TCAT_INT) {
+                r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+
+                if (oper == DUTOKGE_OPER_SIGNADD::DUTOKGE_PLUS) {
+                    r_expr1->_constr->append<ai::ADDI>();
+                } else {
+                    r_expr1->_constr->append<ai::SUBI>();
+                }
+            } else {
+                // TODO
+            }
+        } else if (tcat1 == TCAT_STR && tcat2 == TCAT_STR) {
+                r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
+
+                if (oper == DUTOKGE_OPER_SIGNADD::DUTOKGE_PLUS) {
+                    r_expr1->_constr->append<ai::ADDS>();
+                } else {
+                    // TODO
+                }
+        } else {
+            // TODO
+        }
+
+        return r_expr1;
+    }
+
+    icblock_pointer address_load(
+        MlaskalCtx* ctx,
+        expression::pointer par
+    ) {
+        icblock_pointer icblock = icblock_create();
+
+        if (par->get_type() == expression::type::REXPRESSION) {
+            return nullptr;
+        }
+
+        l_expression* l_expr = (l_expression*)&*par;
+        ls_id_index id = l_expr->_ids->_ids[0];
+        auto symbol = ctx->tab->find_symbol(id);
+        auto kind = symbol->kind();
+
+        switch (kind) {
+            case SKIND_GLOBAL_VARIABLE:
+                icblock->append<ai::GREF>(symbol->access_global_variable()->address());
+            break;
+
+            case SKIND_LOCAL_VARIABLE:
+                icblock->append<ai::LREF>(symbol->access_local_variable()->address());
+            break;
+
+            case SKIND_PARAMETER_BY_REFERENCE:
+                icblock->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
+            break;
+
+            default:
+            break;
+        }
+
+        return icblock;
+    }
+
     bool count_field_recur(
         symbol_pointer symbol,
         const std::vector<ls_id_index>& ids,

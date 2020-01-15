@@ -93,6 +93,115 @@ namespace mlc {
         return number;
     }
 
+    using stack_type = std::vector<std::tuple<
+        type_pointer,
+        type_pointer,
+        stack_address>>;
+
+    void shift_pointer(
+        MlaskalCtx* ctx,
+        icblock_pointer code,
+        stack_address offset
+    ) {
+        if (offset > 0) {
+            code->append<ai::LDLITI>(ctx->tab->ls_int().add(offset));
+            code->append<ai::ADDP>();
+        }
+    }
+
+    template<class action_type>
+    void do_record_actions(
+        MlaskalCtx* ctx,
+        icblock_pointer code,
+        stack_type& stack,
+        action_type bool_action,
+        action_type int_action,
+        action_type real_action,
+        action_type str_action
+    ) {
+        while (!stack.empty()) {
+            auto l_type = std::get<0>(stack.back());
+            auto r_type = std::get<1>(stack.back());
+            auto address = std::get<2>(stack.back());
+
+            stack.pop_back();
+
+            for (
+                auto [i, j] = std::tuple{
+                    l_type->access_record()->begin(),
+                    r_type->access_record()->begin()
+                };
+
+                i != l_type->access_record()->end() &&
+                j != r_type->access_record()->end();
+
+                ++i,
+                ++j
+            ) {
+                if (
+                    i->type()->cat() != j->type()->cat() ||
+                    i->offset() != j->offset()
+                ) {
+                    break;
+                }
+
+                if (i->type()->cat() == TCAT_RECORD) {
+                    stack.emplace_back(
+                        i->type(),
+                        j->type(),
+                        i->offset() + address);
+                    continue;
+                }
+
+
+
+                auto offset = i->offset() + address;
+
+                if (
+                    i + 1 != l_type->access_record()->end() ||
+                    [&stack]() {
+                        stack_address size = 0;
+
+                        for (auto && tuple : stack) {
+                            size += std::get<0>(tuple)->compute_size();
+                        }
+
+                        return size > 0;
+                    }()
+                ) {
+                    code->append<ai::SLDP>(0);
+                }
+
+                shift_pointer(
+                    ctx,
+                    code,
+                    offset);
+
+                switch (i->type()->cat()) {
+                    case TCAT_BOOL:
+                        bool_action(code, offset);
+                    break;
+
+                    case TCAT_INT:
+                        int_action(code, offset);
+                    break;
+
+                    case TCAT_REAL:
+                        real_action(code, offset);
+                    break;
+
+                    case TCAT_STR:
+                        str_action(code, offset);
+                    break;
+
+                    default:
+                        // shouldn't happen
+                    break;
+                }
+            }
+        }
+    }
+
     icblock_pointer create_destr(type_category t_cat) {
         icblock_pointer icblock = icblock_create();
 
@@ -159,82 +268,37 @@ namespace mlc {
 
                     case TCAT_RECORD:
                         if (r_expr->_type->cat() == TCAT_RECORD) {
-                            std::vector<std::tuple<type_pointer, type_pointer, stack_address>> stack{{type, r_expr->_type, 0}};
+                            stack_type stack {{
+                                type,
+                                r_expr->_type,
+                                0}};
 
-                            while (!stack.empty()) {
-                                auto l_type = std::get<0>(stack.back());
-                                auto r_type = std::get<1>(stack.back());
-                                auto address = std::get<2>(stack.back());
+                            std::function<void(icblock_pointer, stack_address)>
+                            bool_action = [&](icblock_pointer code, stack_address offset) {
+                                code->append<ai::XLDB>();
+                                code->append<ai::GSTB>(symbol->access_global_variable()->address() + offset);
+                            },
+                            int_action = [&](icblock_pointer code, stack_address offset) {
+                                code->append<ai::XLDI>();
+                                code->append<ai::GSTI>(symbol->access_global_variable()->address() + offset);
+                            },
+                            real_action = [&](icblock_pointer code, stack_address offset) {
+                                code->append<ai::XLDR>();
+                                code->append<ai::GSTR>(symbol->access_global_variable()->address() + offset);
+                            },
+                            str_action = [&](icblock_pointer code, stack_address offset) {
+                                code->append<ai::XLDS>();
+                                code->append<ai::GSTS>(symbol->access_global_variable()->address() + offset);
+                            };
 
-                                stack.pop_back();
-
-                                for (
-                                    auto [i, j] = std::tuple{
-                                        l_type->access_record()->begin(),
-                                        r_type->access_record()->begin()
-                                    };
-
-                                    i != l_type->access_record()->end() &&
-                                    j != r_type->access_record()->end();
-
-                                    ++i,
-                                    ++j
-                                ) {
-                                    if (
-                                        i->type()->cat() != j->type()->cat() ||
-                                        i->offset() != j->offset()
-                                    ) {
-                                        break;
-                                    }
-
-                                    if (i->type()->cat() == TCAT_RECORD) {
-                                        stack.emplace_back(
-                                            i->type(),
-                                            j->type(),
-                                            i->offset() + address);
-                                        continue;
-                                    }
-
-
-
-                                    auto offset = i->offset() + address;
-                                    r_expr->_constr->append<ai::SLDP>(0);
-                                    r_expr->_constr->append<ai::LDLITI>(ctx->tab->ls_int().add(offset));
-                                    r_expr->_constr->append<ai::ADDP>();
-
-                                    switch (i->type()->cat()) {
-                                        case TCAT_BOOL:
-                                            r_expr->_constr->append<ai::XLDB>();
-                                            r_expr->_constr->append<ai::GSTB>(
-                                                symbol->access_global_variable()->address() + offset);
-                                        break;
-
-                                        case TCAT_INT:
-                                            r_expr->_constr->append<ai::XLDI>();
-                                            r_expr->_constr->append<ai::GSTI>(
-                                                symbol->access_global_variable()->address() + offset);
-                                        break;
-
-                                        case TCAT_REAL:
-                                            r_expr->_constr->append<ai::XLDR>();
-                                            r_expr->_constr->append<ai::GSTR>(
-                                                symbol->access_global_variable()->address() + offset);
-                                        break;
-
-                                        case TCAT_STR:
-                                            r_expr->_constr->append<ai::XLDS>();
-                                            r_expr->_constr->append<ai::GSTS>(
-                                                symbol->access_global_variable()->address() + offset);
-                                        break;
-
-                                        default:
-                                            // shouldn't happen
-                                        break;
-                                    }
-                                }
-                            }
-
-                            r_expr->_constr->append<ai::DTORP>();
+                            do_record_actions<decltype(bool_action)>(
+                                ctx,
+                                r_expr->_constr,
+                                stack,
+                                bool_action,
+                                int_action,
+                                real_action,
+                                str_action);
                         } else {
                             // TODO: error
                         }
@@ -273,83 +337,35 @@ namespace mlc {
 
                     case TCAT_RECORD:
                         if (r_expr->_type->cat() == TCAT_RECORD) {
-                            std::vector<std::tuple<type_pointer, type_pointer, stack_address>> stack{{type, r_expr->_type, 0}};
-
-                            while (!stack.empty()) {
-                                auto l_type = std::get<0>(stack.back());
-                                auto r_type = std::get<1>(stack.back());
-                                auto address = std::get<2>(stack.back());
-
-                                stack.pop_back();
-
-                                for (
-                                    auto [i, j] = std::tuple{
-                                        l_type->access_record()->begin(),
-                                        r_type->access_record()->begin()
-                                    };
-
-                                    i != l_type->access_record()->end() &&
-                                    j != r_type->access_record()->end();
-
-                                    ++i,
-                                    ++j
-                                ) {
-                                    if (
-                                        i->type()->cat() != j->type()->cat() ||
-                                        i->offset() != j->offset()
-                                    ) {
-                                        break;
-                                    }
-
-                                    if (i->type()->cat() == TCAT_RECORD) {
-                                        stack.emplace_back(
-                                            i->type(),
-                                            j->type(),
-                                            i->offset() + address);
-                                        continue;
-                                    }
+                            stack_type stack{{type, r_expr->_type, 0}};
 
 
+                            std::function<void(icblock_pointer, stack_address)>
+                            bool_action = [&](icblock_pointer code, stack_address offset) {
+                                code->append<ai::XLDB>();
+                                code->append<ai::LSTB>(symbol->access_local_variable()->address() + offset);
+                            },
+                            int_action = [&](icblock_pointer code, stack_address offset) {
+                                code->append<ai::XLDI>();
+                                code->append<ai::LSTI>(symbol->access_local_variable()->address() + offset);
+                            },
+                            real_action = [&](icblock_pointer code, stack_address offset) {
+                                code->append<ai::XLDR>();
+                                code->append<ai::LSTR>(symbol->access_local_variable()->address() + offset);
+                            },
+                            str_action = [&](icblock_pointer code, stack_address offset) {
+                                code->append<ai::XLDS>();
+                                code->append<ai::LSTS>(symbol->access_local_variable()->address() + offset);
+                            };
 
-                                    auto offset = i->offset() + address;
-                                    r_expr->_constr->append<ai::SLDP>(0);
-                                    r_expr->_constr->append<ai::LDLITI>(
-                                        ctx->tab->ls_int().add(offset));
-                                    r_expr->_constr->append<ai::ADDP>();
-
-                                    switch (i->type()->cat()) {
-                                        case TCAT_BOOL:
-                                            r_expr->_constr->append<ai::XLDB>();
-                                            r_expr->_constr->append<ai::LSTB>(
-                                                symbol->access_local_variable()->address() + offset);
-                                        break;
-
-                                        case TCAT_INT:
-                                            r_expr->_constr->append<ai::XLDI>();
-                                            r_expr->_constr->append<ai::LSTI>(
-                                                symbol->access_local_variable()->address() + offset);
-                                        break;
-
-                                        case TCAT_REAL:
-                                            r_expr->_constr->append<ai::XLDR>();
-                                            r_expr->_constr->append<ai::LSTR>(
-                                                symbol->access_local_variable()->address() + offset);
-                                        break;
-
-                                        case TCAT_STR:
-                                            r_expr->_constr->append<ai::XLDS>();
-                                            r_expr->_constr->append<ai::LSTS>(
-                                                symbol->access_local_variable()->address() + offset);
-                                        break;
-
-                                        default:
-                                            // shouldn't happen
-                                        break;
-                                    }
-                                }
-                            }
-
-                            r_expr->_constr->append<ai::DTORP>();
+                            do_record_actions<decltype(bool_action)>(
+                                ctx,
+                                r_expr->_constr,
+                                stack,
+                                bool_action,
+                                int_action,
+                                real_action,
+                                str_action);
                         } else {
                             // TODO: error
                         }
@@ -427,93 +443,63 @@ namespace mlc {
 
                     case TCAT_RECORD:
                         if (r_expr->_type->cat() == TCAT_RECORD) {
-                            std::vector<std::tuple<
-                                type_pointer,
-                                type_pointer,
-                                stack_address>> stack{{
-                                    type,
-                                    r_expr->_type,
-                                    0}};
-
-                            while (!stack.empty()) {
-                                auto l_type = std::get<0>(stack.back());
-                                auto r_type = std::get<1>(stack.back());
-                                auto address = std::get<2>(stack.back());
-
-                                stack.pop_back();
-
-                                for (
-                                    auto [i, j] = std::tuple{
-                                        l_type->access_record()->begin(),
-                                        r_type->access_record()->begin()
-                                    };
-
-                                    i != l_type->access_record()->end() &&
-                                    j != r_type->access_record()->end();
-
-                                    ++i,
-                                    ++j
-                                ) {
-                                    if (
-                                        i->type()->cat() != j->type()->cat() ||
-                                        i->offset() != j->offset()
-                                    ) {
-                                        break;
-                                    }
-
-                                    if (i->type()->cat() == TCAT_RECORD) {
-                                        stack.emplace_back(i->type(), j->type(), i->offset() + address);
-                                        continue;
-                                    }
+                            stack_type stack{{type, r_expr->_type, 0}};
 
 
+                            std::function<void(icblock_pointer, stack_address)>
+                            bool_action = [&](icblock_pointer code, stack_address offset) {
+                                code->append<ai::XLDB>();
+                                code->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
 
-                                    auto offset = i->offset() + address;
-                                    r_expr->_constr->append<ai::SLDP>(0);
-                                    r_expr->_constr->append<ai::LDLITI>(ctx->tab->ls_int().add(offset));
-                                    r_expr->_constr->append<ai::ADDP>();
+                                shift_pointer(
+                                    ctx,
+                                    code,
+                                    offset);
 
-                                    switch (i->type()->cat()) {
-                                        case TCAT_BOOL:
-                                            r_expr->_constr->append<ai::XLDB>();
-                                            r_expr->_constr->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
-                                            r_expr->_constr->append<ai::LDLITI>(ctx->tab->ls_int().add(offset));
-                                            r_expr->_constr->append<ai::ADDP>();
-                                            r_expr->_constr->append<ai::XSTB>();
-                                        break;
+                                code->append<ai::XSTB>();
+                            },
+                            int_action = [&](icblock_pointer code, stack_address offset) {
+                                code->append<ai::XLDI>();
+                                code->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
 
-                                        case TCAT_INT:
-                                            r_expr->_constr->append<ai::XLDI>();
-                                            r_expr->_constr->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
-                                            r_expr->_constr->append<ai::LDLITI>(ctx->tab->ls_int().add(offset));
-                                            r_expr->_constr->append<ai::ADDP>();
-                                            r_expr->_constr->append<ai::XSTI>();
-                                        break;
+                                shift_pointer(
+                                    ctx,
+                                    code,
+                                    offset);
 
-                                        case TCAT_REAL:
-                                            r_expr->_constr->append<ai::XLDR>();
-                                            r_expr->_constr->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
-                                            r_expr->_constr->append<ai::LDLITI>(ctx->tab->ls_int().add(offset));
-                                            r_expr->_constr->append<ai::ADDP>();
-                                            r_expr->_constr->append<ai::XSTR>();
-                                        break;
+                                code->append<ai::XSTI>();
+                            },
+                            real_action = [&](icblock_pointer code, stack_address offset) {
+                                code->append<ai::XLDR>();
+                                code->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
 
-                                        case TCAT_STR:
-                                            r_expr->_constr->append<ai::XLDS>();
-                                            r_expr->_constr->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
-                                            r_expr->_constr->append<ai::LDLITI>(ctx->tab->ls_int().add(offset));
-                                            r_expr->_constr->append<ai::ADDP>();
-                                            r_expr->_constr->append<ai::XSTS>();
-                                        break;
+                                shift_pointer(
+                                    ctx,
+                                    code,
+                                    offset);
 
-                                        default:
-                                            // shouldn't happen
-                                        break;
-                                    }
-                                }
-                            }
+                                code->append<ai::XSTR>();
+                            },
+                            str_action = [&](icblock_pointer code, stack_address offset) {
+                                code->append<ai::XLDS>();
+                                code->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
 
-                            r_expr->_constr->append<ai::DTORP>();
+                                shift_pointer(
+                                    ctx,
+                                    code,
+                                    offset);
+
+                                code->append<ai::XSTS>();
+                            };
+
+                            do_record_actions<decltype(bool_action)>(
+                                ctx,
+                                r_expr->_constr,
+                                stack,
+                                bool_action,
+                                int_action,
+                                real_action,
+                                str_action);
                         } else {
                             // TODO: error
                         }
@@ -569,75 +555,35 @@ namespace mlc {
 
                                 case TCAT_RECORD:
                                     if (r_expr->_type->cat() == TCAT_RECORD) {
-                                        std::vector<std::tuple<type_pointer, type_pointer, stack_address>> stack{{type, r_expr->_type, 0}};
-
-                                        while (!stack.empty()) {
-                                            auto l_type = std::get<0>(stack.back());
-                                            auto r_type = std::get<1>(stack.back());
-                                            auto sub_address = std::get<2>(stack.back());
-
-                                            stack.pop_back();
-
-                                            for (
-                                                auto [i, j] = std::tuple{
-                                                    l_type->access_record()->begin(),
-                                                    r_type->access_record()->begin()
-                                                };
-
-                                                i != l_type->access_record()->end() &&
-                                                j != r_type->access_record()->end();
-
-                                                ++i,
-                                                ++j
-                                            ) {
-                                                if (
-                                                    i->type()->cat() != j->type()->cat() ||
-                                                    i->offset() != j->offset()
-                                                ) {
-                                                    break;
-                                                }
-
-                                                if (i->type()->cat() == TCAT_RECORD) {
-                                                    stack.emplace_back(i->type(), j->type(), i->offset() + sub_address);
-                                                    continue;
-                                                }
+                                        stack_type stack{{type, r_expr->_type, 0}};
 
 
+                                        std::function<void(icblock_pointer, stack_address)>
+                                        bool_action = [&](icblock_pointer code, stack_address offset) {
+                                            code->append<ai::XLDB>();
+                                            code->append<ai::GSTB>(address + offset);
+                                        },
+                                        int_action = [&](icblock_pointer code, stack_address offset) {
+                                            code->append<ai::XLDI>();
+                                            code->append<ai::GSTI>(address + offset);
+                                        },
+                                        real_action = [&](icblock_pointer code, stack_address offset) {
+                                            code->append<ai::XLDR>();
+                                            code->append<ai::GSTR>(address + offset);
+                                        },
+                                        str_action = [&](icblock_pointer code, stack_address offset) {
+                                            code->append<ai::XLDS>();
+                                            code->append<ai::GSTS>(address + offset);
+                                        };
 
-                                                auto offset = i->offset() + sub_address;
-                                                r_expr->_constr->append<ai::SLDP>(0);
-                                                r_expr->_constr->append<ai::LDLITI>(ctx->tab->ls_int().add(offset));
-                                                r_expr->_constr->append<ai::ADDP>();
-
-                                                switch (i->type()->cat()) {
-                                                    case TCAT_BOOL:
-                                                        r_expr->_constr->append<ai::XLDB>();
-                                                        r_expr->_constr->append<ai::GSTB>(address + offset);
-                                                    break;
-
-                                                    case TCAT_INT:
-                                                        r_expr->_constr->append<ai::XLDI>();
-                                                        r_expr->_constr->append<ai::GSTI>(address + offset);
-                                                    break;
-
-                                                    case TCAT_REAL:
-                                                        r_expr->_constr->append<ai::XLDR>();
-                                                        r_expr->_constr->append<ai::GSTR>(address + offset);
-                                                    break;
-
-                                                    case TCAT_STR:
-                                                        r_expr->_constr->append<ai::XLDS>();
-                                                        r_expr->_constr->append<ai::GSTS>(address + offset);
-                                                    break;
-
-                                                    default:
-                                                        // shouldn't happen
-                                                    break;
-                                                }
-                                            }
-                                        }
-
-                                        r_expr->_constr->append<ai::DTORP>();
+                                        do_record_actions<decltype(bool_action)>(
+                                            ctx,
+                                            r_expr->_constr,
+                                            stack,
+                                            bool_action,
+                                            int_action,
+                                            real_action,
+                                            str_action);
                                     } else {
                                         // TODO: error
                                     }
@@ -691,75 +637,35 @@ namespace mlc {
 
                                 case TCAT_RECORD:
                                     if (r_expr->_type->cat() == TCAT_RECORD) {
-                                        std::vector<std::tuple<type_pointer, type_pointer, stack_address>> stack{{type, r_expr->_type, 0}};
-
-                                        while (!stack.empty()) {
-                                            auto l_type = std::get<0>(stack.back());
-                                            auto r_type = std::get<1>(stack.back());
-                                            auto sub_address = std::get<2>(stack.back());
-
-                                            stack.pop_back();
-
-                                            for (
-                                                auto [i, j] = std::tuple{
-                                                    l_type->access_record()->begin(),
-                                                    r_type->access_record()->begin()
-                                                };
-
-                                                i != l_type->access_record()->end() &&
-                                                j != r_type->access_record()->end();
-
-                                                ++i,
-                                                ++j
-                                            ) {
-                                                if (
-                                                    i->type()->cat() != j->type()->cat() ||
-                                                    i->offset() != j->offset()
-                                                ) {
-                                                    break;
-                                                }
-
-                                                if (i->type()->cat() == TCAT_RECORD) {
-                                                    stack.emplace_back(i->type(), j->type(), i->offset() + sub_address);
-                                                    continue;
-                                                }
+                                        stack_type stack{{type, r_expr->_type, 0}};
 
 
+                                        std::function<void(icblock_pointer, stack_address)>
+                                        bool_action = [&](icblock_pointer code, stack_address offset) {
+                                            code->append<ai::XLDB>();
+                                            code->append<ai::LSTB>(address + offset);
+                                        },
+                                        int_action = [&](icblock_pointer code, stack_address offset) {
+                                            code->append<ai::XLDI>();
+                                            code->append<ai::LSTI>(address + offset);
+                                        },
+                                        real_action = [&](icblock_pointer code, stack_address offset) {
+                                            code->append<ai::XLDR>();
+                                            code->append<ai::LSTR>(address + offset);
+                                        },
+                                        str_action = [&](icblock_pointer code, stack_address offset) {
+                                            code->append<ai::XLDS>();
+                                            code->append<ai::LSTS>(address + offset);
+                                        };
 
-                                                auto offset = i->offset() + sub_address;
-                                                r_expr->_constr->append<ai::SLDP>(0);
-                                                r_expr->_constr->append<ai::LDLITI>(ctx->tab->ls_int().add(offset));
-                                                r_expr->_constr->append<ai::ADDP>();
-
-                                                switch (i->type()->cat()) {
-                                                    case TCAT_BOOL:
-                                                        r_expr->_constr->append<ai::XLDB>();
-                                                        r_expr->_constr->append<ai::LSTB>(address + offset);
-                                                    break;
-
-                                                    case TCAT_INT:
-                                                        r_expr->_constr->append<ai::XLDI>();
-                                                        r_expr->_constr->append<ai::LSTI>(address + offset);
-                                                    break;
-
-                                                    case TCAT_REAL:
-                                                        r_expr->_constr->append<ai::XLDR>();
-                                                        r_expr->_constr->append<ai::LSTR>(address + offset);
-                                                    break;
-
-                                                    case TCAT_STR:
-                                                        r_expr->_constr->append<ai::XLDS>();
-                                                        r_expr->_constr->append<ai::LSTS>(address + offset);
-                                                    break;
-
-                                                    default:
-                                                        // shouldn't happen
-                                                    break;
-                                                }
-                                            }
-                                        }
-
-                                        r_expr->_constr->append<ai::DTORP>();
+                                        do_record_actions<decltype(bool_action)>(
+                                            ctx,
+                                            r_expr->_constr,
+                                            stack,
+                                            bool_action,
+                                            int_action,
+                                            real_action,
+                                            str_action);
                                     } else {
                                         // TODO: error
                                     }
@@ -1691,29 +1597,45 @@ namespace mlc {
                                     switch (type->cat()) {
                                         case TCAT_BOOL:
                                             constr->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
-                                            constr->append<ai::LDLITI>(ctx->tab->ls_int().add(address));
-                                            constr->append<ai::ADDP>();
+
+                                            shift_pointer(
+                                                ctx,
+                                                constr,
+                                                address);
+
                                             constr->append<ai::XLDB>();
                                         break;
 
                                         case TCAT_INT:
                                             constr->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
-                                            constr->append<ai::LDLITI>(ctx->tab->ls_int().add(address));
-                                            constr->append<ai::ADDP>();
+
+                                            shift_pointer(
+                                                ctx,
+                                                constr,
+                                                address);
+
                                             constr->append<ai::XLDI>();
                                         break;
 
                                         case TCAT_REAL:
                                             constr->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
-                                            constr->append<ai::LDLITI>(ctx->tab->ls_int().add(address));
-                                            constr->append<ai::ADDP>();
+
+                                            shift_pointer(
+                                                ctx,
+                                                constr,
+                                                address);
+
                                             constr->append<ai::XLDR>();
                                         break;
 
                                         case TCAT_STR:
                                             constr->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
-                                            constr->append<ai::LDLITI>(ctx->tab->ls_int().add(address));
-                                            constr->append<ai::ADDP>();
+
+                                            shift_pointer(
+                                                ctx,
+                                                constr,
+                                                address);
+
                                             constr->append<ai::XLDS>();
                                         break;
 

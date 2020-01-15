@@ -953,6 +953,36 @@ namespace mlc {
                             break;
                         }
                     break;
+
+                    case SKIND_PARAMETER_BY_REFERENCE:
+                        type = symbol->access_parameter_by_reference()->type();
+
+                        switch (type->cat()) {
+                            case TCAT_BOOL:
+                                constr->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
+                                constr->append<ai::XLDB>();
+                            break;
+
+                            case TCAT_INT:
+                                constr->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
+                                constr->append<ai::XLDI>();
+                            break;
+
+                            case TCAT_REAL:
+                                constr->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
+                                constr->append<ai::XLDR>();
+                            break;
+
+                            case TCAT_STR:
+                                constr->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
+                                constr->append<ai::XLDS>();
+                            break;
+
+                            case TCAT_RECORD:
+                                // TODO
+                            break;
+                        }
+                    break;
                 }
 
                 return std::make_shared<r_expression>(type, constr);

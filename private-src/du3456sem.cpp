@@ -514,6 +514,171 @@ namespace mlc {
         return icblock;
     }
 
+    icblock_pointer make_if(
+        MlaskalCtx * ctx,
+        expression::pointer condition,
+        icblock_pointer then_stmt,
+        icblock_pointer else_stmt
+    ) {
+        auto r_expr = expression::rexpressionize(
+            ctx,
+            condition);
+
+        ic_label l1 = ctx->tab->new_label();
+        ic_label l2 = ctx->tab->new_label();
+        icblock_pointer icblock = r_expr->_constr;
+
+        icblock->append_with_target<ai::JF>(l1);
+
+        icblock = icblock_merge_and_kill(
+            icblock,
+            then_stmt);
+
+        if (else_stmt != nullptr) {
+            icblock->append_with_target<ai::JMP>(l2);
+        }
+
+        icblock->add_label(l1);
+
+        if (else_stmt != nullptr) {
+            icblock = icblock_merge_and_kill(
+                icblock,
+                else_stmt);
+
+            icblock->add_label(l2);
+        }
+
+        return icblock;
+    }
+
+    icblock_pointer make_repeat(
+        MlaskalCtx * ctx,
+        expression::pointer condition,
+        icblock_pointer stmt
+    ) {
+        auto r_expr = expression::rexpressionize(
+            ctx,
+            condition);
+
+        ic_label l1 = ctx->tab->new_label();
+        icblock_pointer icblock = icblock_create();
+
+        icblock->add_label(l1);
+
+        icblock = icblock_merge_and_kill(
+            icblock,
+            stmt);
+
+        icblock = icblock_merge_and_kill(
+            icblock,
+            r_expr->_constr);
+
+        icblock->append_with_target<ai::JF>(l1);
+
+        return icblock;
+    }
+
+    icblock_pointer make_while(
+        MlaskalCtx * ctx,
+        expression::pointer condition,
+        icblock_pointer stmt
+    ) {
+        auto r_expr = expression::rexpressionize(
+            ctx,
+            condition);
+
+        ic_label l1 = ctx->tab->new_label();
+        ic_label l2 = ctx->tab->new_label();
+        icblock_pointer icblock = icblock_create();
+
+        icblock->append_with_target<ai::JMP>(l2);
+        icblock->add_label(l1);
+
+        icblock = icblock_merge_and_kill(
+            icblock,
+            stmt);
+
+        icblock->add_label(l2);
+
+        icblock = icblock_merge_and_kill(
+            icblock,
+            r_expr->_constr);
+
+        icblock->append_with_target<ai::JT>(l1);
+
+        return icblock;
+    }
+
+    icblock_pointer make_for(
+        MlaskalCtx * ctx,
+        ls_id_index id,
+        expression::pointer left,
+        expression::pointer right,
+        DUTOKGE_FOR_DIRECTION direction,
+        icblock_pointer stmt
+    ) {
+        ic_label l1 = ctx->tab->new_label();
+        ic_label l2 = ctx->tab->new_label();
+        ic_label l3 = ctx->tab->new_label();
+
+        icblock_pointer icblock = do_assign(
+            ctx,
+            id,
+            left);
+
+        icblock->append_with_target<ai::JMP>(l2);
+        icblock->add_label(l1);
+
+        auto lit_one = icblock_create();
+
+        auto unit = ctx->tab->ls_int().add(1);
+
+        lit_one->append<ai::LDLITI>(unit);
+
+        icblock_pointer assignment = do_assign(
+            ctx,
+            id,
+            do_signadd(
+                ctx,
+                std::make_shared<l_expression>(
+                    ctx->tab->find_symbol(id)->access_typed()->type(),
+                    std::make_shared<id_list>(id)),
+                std::make_shared<r_expression>(
+                    ctx->tab->logical_integer(),
+                    lit_one),
+                (direction == DUTOKGE_FOR_DIRECTION::DUTOKGE_TO)
+                    ? DUTOKGE_OPER_SIGNADD::DUTOKGE_PLUS
+                    : DUTOKGE_OPER_SIGNADD::DUTOKGE_MINUS));
+
+
+        icblock = icblock_merge_and_kill(
+            icblock,
+            assignment);
+
+        icblock->add_label(l2);
+
+        icblock = icblock_merge_and_kill(
+            icblock,
+            stmt);
+
+        icblock->add_label(l3);
+
+        icblock = icblock_merge_and_kill(
+            icblock,
+            expression::rexpressionize(
+                ctx,
+                    do_compare(
+                    ctx,
+                    std::make_shared<l_expression>(
+                        ctx->tab->find_symbol(id)->access_typed()->type(),
+                        std::make_shared<id_list>(id)),
+                    right,
+                    DUTOKGE_OPER_REL::DUTOKGE_NE))->_constr);
+
+        icblock->append_with_target<ai::JT>(l1);
+
+        return icblock;
+    }
     bool count_field_recur(
         symbol_pointer symbol,
         const std::vector<ls_id_index>& ids,

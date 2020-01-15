@@ -158,7 +158,86 @@ namespace mlc {
                     break;
 
                     case TCAT_RECORD:
-                        // TODO
+                        if (r_expr->_type->cat() == TCAT_RECORD) {
+                            std::vector<std::tuple<type_pointer, type_pointer, stack_address>> stack{{type, r_expr->_type, 0}};
+
+                            while (!stack.empty()) {
+                                auto l_type = std::get<0>(stack.back());
+                                auto r_type = std::get<1>(stack.back());
+                                auto address = std::get<2>(stack.back());
+
+                                stack.pop_back();
+
+                                for (
+                                    auto [i, j] = std::tuple{
+                                        l_type->access_record()->begin(),
+                                        r_type->access_record()->begin()
+                                    };
+
+                                    i != l_type->access_record()->end() &&
+                                    j != r_type->access_record()->end();
+
+                                    ++i,
+                                    ++j
+                                ) {
+                                    if (
+                                        i->type()->cat() != j->type()->cat() ||
+                                        i->offset() != j->offset()
+                                    ) {
+                                        break;
+                                    }
+
+                                    if (i->type()->cat() == TCAT_RECORD) {
+                                        stack.emplace_back(
+                                            i->type(),
+                                            j->type(),
+                                            i->offset() + address);
+                                        continue;
+                                    }
+
+
+
+                                    auto offset = i->offset() + address;
+                                    r_expr->_constr->append<ai::SLDP>(0);
+                                    r_expr->_constr->append<ai::LDLITI>(ctx->tab->ls_int().add(offset));
+                                    r_expr->_constr->append<ai::ADDP>();
+
+                                    switch (i->type()->cat()) {
+                                        case TCAT_BOOL:
+                                            r_expr->_constr->append<ai::XLDB>();
+                                            r_expr->_constr->append<ai::GSTB>(
+                                                symbol->access_global_variable()->address() + offset);
+                                        break;
+
+                                        case TCAT_INT:
+                                            r_expr->_constr->append<ai::XLDI>();
+                                            r_expr->_constr->append<ai::GSTI>(
+                                                symbol->access_global_variable()->address() + offset);
+                                        break;
+
+                                        case TCAT_REAL:
+                                            r_expr->_constr->append<ai::XLDR>();
+                                            r_expr->_constr->append<ai::GSTR>(
+                                                symbol->access_global_variable()->address() + offset);
+                                        break;
+
+                                        case TCAT_STR:
+                                            r_expr->_constr->append<ai::XLDS>();
+                                            r_expr->_constr->append<ai::GSTS>(
+                                                symbol->access_global_variable()->address() + offset);
+                                        break;
+
+                                        default:
+                                            // shouldn't happen
+                                        break;
+                                    }
+                                }
+                            }
+
+                            r_expr->_constr->append<ai::DTORP>();
+                        } else {
+                            // TODO: error
+                        }
                     break;
                 }
             break;
@@ -167,11 +246,13 @@ namespace mlc {
                 type = symbol->access_local_variable()->type();
                 switch (type->cat()) {
                     case TCAT_BOOL:
-                        r_expr->_constr->append<ai::LSTB>(symbol->access_local_variable()->address());
+                        r_expr->_constr->append<ai::LSTB>(
+                            symbol->access_local_variable()->address());
                     break;
 
                     case TCAT_INT:
-                        r_expr->_constr->append<ai::LSTI>(symbol->access_local_variable()->address());
+                        r_expr->_constr->append<ai::LSTI>(
+                            symbol->access_local_variable()->address());
                     break;
 
                     case TCAT_REAL:
@@ -181,15 +262,97 @@ namespace mlc {
                             // TODO: cannot be converted to real
                         }
 
-                        r_expr->_constr->append<ai::LSTR>(symbol->access_local_variable()->address());
+                        r_expr->_constr->append<ai::LSTR>(
+                            symbol->access_local_variable()->address());
                     break;
 
                     case TCAT_STR:
-                        r_expr->_constr->append<ai::LSTS>(symbol->access_local_variable()->address());
+                        r_expr->_constr->append<ai::LSTS>(
+                            symbol->access_local_variable()->address());
                     break;
 
                     case TCAT_RECORD:
-                        // TODO
+                        if (r_expr->_type->cat() == TCAT_RECORD) {
+                            std::vector<std::tuple<type_pointer, type_pointer, stack_address>> stack{{type, r_expr->_type, 0}};
+
+                            while (!stack.empty()) {
+                                auto l_type = std::get<0>(stack.back());
+                                auto r_type = std::get<1>(stack.back());
+                                auto address = std::get<2>(stack.back());
+
+                                stack.pop_back();
+
+                                for (
+                                    auto [i, j] = std::tuple{
+                                        l_type->access_record()->begin(),
+                                        r_type->access_record()->begin()
+                                    };
+
+                                    i != l_type->access_record()->end() &&
+                                    j != r_type->access_record()->end();
+
+                                    ++i,
+                                    ++j
+                                ) {
+                                    if (
+                                        i->type()->cat() != j->type()->cat() ||
+                                        i->offset() != j->offset()
+                                    ) {
+                                        break;
+                                    }
+
+                                    if (i->type()->cat() == TCAT_RECORD) {
+                                        stack.emplace_back(
+                                            i->type(),
+                                            j->type(),
+                                            i->offset() + address);
+                                        continue;
+                                    }
+
+
+
+                                    auto offset = i->offset() + address;
+                                    r_expr->_constr->append<ai::SLDP>(0);
+                                    r_expr->_constr->append<ai::LDLITI>(
+                                        ctx->tab->ls_int().add(offset));
+                                    r_expr->_constr->append<ai::ADDP>();
+
+                                    switch (i->type()->cat()) {
+                                        case TCAT_BOOL:
+                                            r_expr->_constr->append<ai::XLDB>();
+                                            r_expr->_constr->append<ai::LSTB>(
+                                                symbol->access_local_variable()->address() + offset);
+                                        break;
+
+                                        case TCAT_INT:
+                                            r_expr->_constr->append<ai::XLDI>();
+                                            r_expr->_constr->append<ai::LSTI>(
+                                                symbol->access_local_variable()->address() + offset);
+                                        break;
+
+                                        case TCAT_REAL:
+                                            r_expr->_constr->append<ai::XLDR>();
+                                            r_expr->_constr->append<ai::LSTR>(
+                                                symbol->access_local_variable()->address() + offset);
+                                        break;
+
+                                        case TCAT_STR:
+                                            r_expr->_constr->append<ai::XLDS>();
+                                            r_expr->_constr->append<ai::LSTS>(
+                                                symbol->access_local_variable()->address() + offset);
+                                        break;
+
+                                        default:
+                                            // shouldn't happen
+                                        break;
+                                    }
+                                }
+                            }
+
+                            r_expr->_constr->append<ai::DTORP>();
+                        } else {
+                            // TODO: error
+                        }
                     break;
                 }
             break;
@@ -200,11 +363,13 @@ namespace mlc {
 
                     switch (type->cat()) {
                         case TCAT_BOOL:
-                            r_expr->_constr->append<ai::LSTB>(ctx->tab->my_return_address());
+                            r_expr->_constr->append<ai::LSTB>(
+                                ctx->tab->my_return_address());
                         break;
 
                         case TCAT_INT:
-                            r_expr->_constr->append<ai::LSTI>(ctx->tab->my_return_address());
+                            r_expr->_constr->append<ai::LSTI>(
+                                ctx->tab->my_return_address());
                         break;
 
                         case TCAT_REAL:
@@ -214,11 +379,13 @@ namespace mlc {
                                 // TODO: cannot be converted to real
                             }
 
-                            r_expr->_constr->append<ai::LSTR>(ctx->tab->my_return_address());
+                            r_expr->_constr->append<ai::LSTR>(
+                                ctx->tab->my_return_address());
                         break;
 
                         case TCAT_STR:
-                            r_expr->_constr->append<ai::LSTS>(ctx->tab->my_return_address());
+                            r_expr->_constr->append<ai::LSTS>(
+                                ctx->tab->my_return_address());
                         break;
 
                         case TCAT_RECORD:
@@ -235,29 +402,385 @@ namespace mlc {
 
                 switch (type->cat()) {
                     case TCAT_BOOL:
-                        r_expr->_constr->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
+                        r_expr->_constr->append<ai::LLDP>(
+                            symbol->access_parameter_by_reference()->address());
                         r_expr->_constr->append<ai::XSTB>();
                     break;
 
                     case TCAT_INT:
-                        r_expr->_constr->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
+                        r_expr->_constr->append<ai::LLDP>(
+                            symbol->access_parameter_by_reference()->address());
                         r_expr->_constr->append<ai::XSTI>();
                     break;
 
                     case TCAT_REAL:
-                        r_expr->_constr->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
+                        r_expr->_constr->append<ai::LLDP>(
+                            symbol->access_parameter_by_reference()->address());
                         r_expr->_constr->append<ai::XSTR>();
                     break;
 
                     case TCAT_STR:
-                        r_expr->_constr->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
+                        r_expr->_constr->append<ai::LLDP>(
+                            symbol->access_parameter_by_reference()->address());
                         r_expr->_constr->append<ai::XSTS>();
                     break;
 
                     case TCAT_RECORD:
-                        // TODO
+                        if (r_expr->_type->cat() == TCAT_RECORD) {
+                            std::vector<std::tuple<
+                                type_pointer,
+                                type_pointer,
+                                stack_address>> stack{{
+                                    type,
+                                    r_expr->_type,
+                                    0}};
+
+                            while (!stack.empty()) {
+                                auto l_type = std::get<0>(stack.back());
+                                auto r_type = std::get<1>(stack.back());
+                                auto address = std::get<2>(stack.back());
+
+                                stack.pop_back();
+
+                                for (
+                                    auto [i, j] = std::tuple{
+                                        l_type->access_record()->begin(),
+                                        r_type->access_record()->begin()
+                                    };
+
+                                    i != l_type->access_record()->end() &&
+                                    j != r_type->access_record()->end();
+
+                                    ++i,
+                                    ++j
+                                ) {
+                                    if (
+                                        i->type()->cat() != j->type()->cat() ||
+                                        i->offset() != j->offset()
+                                    ) {
+                                        break;
+                                    }
+
+                                    if (i->type()->cat() == TCAT_RECORD) {
+                                        stack.emplace_back(i->type(), j->type(), i->offset() + address);
+                                        continue;
+                                    }
+
+
+
+                                    auto offset = i->offset() + address;
+                                    r_expr->_constr->append<ai::SLDP>(0);
+                                    r_expr->_constr->append<ai::LDLITI>(ctx->tab->ls_int().add(offset));
+                                    r_expr->_constr->append<ai::ADDP>();
+
+                                    switch (i->type()->cat()) {
+                                        case TCAT_BOOL:
+                                            r_expr->_constr->append<ai::XLDB>();
+                                            r_expr->_constr->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
+                                            r_expr->_constr->append<ai::LDLITI>(ctx->tab->ls_int().add(offset));
+                                            r_expr->_constr->append<ai::ADDP>();
+                                            r_expr->_constr->append<ai::XSTB>();
+                                        break;
+
+                                        case TCAT_INT:
+                                            r_expr->_constr->append<ai::XLDI>();
+                                            r_expr->_constr->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
+                                            r_expr->_constr->append<ai::LDLITI>(ctx->tab->ls_int().add(offset));
+                                            r_expr->_constr->append<ai::ADDP>();
+                                            r_expr->_constr->append<ai::XSTI>();
+                                        break;
+
+                                        case TCAT_REAL:
+                                            r_expr->_constr->append<ai::XLDR>();
+                                            r_expr->_constr->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
+                                            r_expr->_constr->append<ai::LDLITI>(ctx->tab->ls_int().add(offset));
+                                            r_expr->_constr->append<ai::ADDP>();
+                                            r_expr->_constr->append<ai::XSTR>();
+                                        break;
+
+                                        case TCAT_STR:
+                                            r_expr->_constr->append<ai::XLDS>();
+                                            r_expr->_constr->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
+                                            r_expr->_constr->append<ai::LDLITI>(ctx->tab->ls_int().add(offset));
+                                            r_expr->_constr->append<ai::ADDP>();
+                                            r_expr->_constr->append<ai::XSTS>();
+                                        break;
+
+                                        default:
+                                            // shouldn't happen
+                                        break;
+                                    }
+                                }
+                            }
+
+                            r_expr->_constr->append<ai::DTORP>();
+                        } else {
+                            // TODO: error
+                        }
                     break;
                 }
+            break;
+        }
+
+        return r_expr->_constr;
+    }
+
+    icblock_pointer do_assign_long(
+        MlaskalCtx* ctx,
+        id_list::pointer ids,
+        expression::pointer expr
+    ) {
+        auto r_expr = expression::rexpressionize(ctx, expr);
+        auto symbol = ctx->tab->find_symbol(ids->_ids[0]);
+        auto kind = symbol->kind();
+        type_pointer type;
+
+        switch (kind) {
+            case SKIND_GLOBAL_VARIABLE:
+                type = symbol->access_global_variable()->type();
+                switch (type->cat()) {
+                    case TCAT_RECORD:{
+                        auto address = symbol->access_global_variable()->address();
+                        type = symbol->access_global_variable()->type();
+
+                        if (count_field_recur(symbol, ids->_ids, type, address)) {
+                            switch (type->cat()) {
+                                case TCAT_BOOL:
+                                    r_expr->_constr->append<ai::GSTB>(address);
+                                break;
+
+                                case TCAT_INT:
+                                    r_expr->_constr->append<ai::GSTI>(address);
+                                break;
+
+                                case TCAT_REAL:
+                                    if (r_expr->_type->cat() == TCAT_INT) {
+                                        r_expr->_constr->append<ai::CVRTIR>();
+                                    } else if (r_expr->_type->cat() != TCAT_REAL) {
+                                        // TODO: cannot be converted to real
+                                    }
+
+                                    r_expr->_constr->append<ai::GSTR>(address);
+                                break;
+
+                                case TCAT_STR:
+                                    r_expr->_constr->append<ai::GSTS>(address);
+                                break;
+
+                                case TCAT_RECORD:
+                                    if (r_expr->_type->cat() == TCAT_RECORD) {
+                                        std::vector<std::tuple<type_pointer, type_pointer, stack_address>> stack{{type, r_expr->_type, 0}};
+
+                                        while (!stack.empty()) {
+                                            auto l_type = std::get<0>(stack.back());
+                                            auto r_type = std::get<1>(stack.back());
+                                            auto sub_address = std::get<2>(stack.back());
+
+                                            stack.pop_back();
+
+                                            for (
+                                                auto [i, j] = std::tuple{
+                                                    l_type->access_record()->begin(),
+                                                    r_type->access_record()->begin()
+                                                };
+
+                                                i != l_type->access_record()->end() &&
+                                                j != r_type->access_record()->end();
+
+                                                ++i,
+                                                ++j
+                                            ) {
+                                                if (
+                                                    i->type()->cat() != j->type()->cat() ||
+                                                    i->offset() != j->offset()
+                                                ) {
+                                                    break;
+                                                }
+
+                                                if (i->type()->cat() == TCAT_RECORD) {
+                                                    stack.emplace_back(i->type(), j->type(), i->offset() + sub_address);
+                                                    continue;
+                                                }
+
+
+
+                                                auto offset = i->offset() + sub_address;
+                                                r_expr->_constr->append<ai::SLDP>(0);
+                                                r_expr->_constr->append<ai::LDLITI>(ctx->tab->ls_int().add(offset));
+                                                r_expr->_constr->append<ai::ADDP>();
+
+                                                switch (i->type()->cat()) {
+                                                    case TCAT_BOOL:
+                                                        r_expr->_constr->append<ai::XLDB>();
+                                                        r_expr->_constr->append<ai::GSTB>(address + offset);
+                                                    break;
+
+                                                    case TCAT_INT:
+                                                        r_expr->_constr->append<ai::XLDI>();
+                                                        r_expr->_constr->append<ai::GSTI>(address + offset);
+                                                    break;
+
+                                                    case TCAT_REAL:
+                                                        r_expr->_constr->append<ai::XLDR>();
+                                                        r_expr->_constr->append<ai::GSTR>(address + offset);
+                                                    break;
+
+                                                    case TCAT_STR:
+                                                        r_expr->_constr->append<ai::XLDS>();
+                                                        r_expr->_constr->append<ai::GSTS>(address + offset);
+                                                    break;
+
+                                                    default:
+                                                        // shouldn't happen
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                        r_expr->_constr->append<ai::DTORP>();
+                                    } else {
+                                        // TODO: error
+                                    }
+                                break;
+
+                                default:
+                                    // TODO: ERROR
+                                break;
+                            }
+                        } else {
+                            // TODO: ERROR
+                        }
+                    } break;
+
+                    default:
+                        // TODO: ERROR
+                    break;
+                }
+            break;
+
+            case SKIND_LOCAL_VARIABLE:
+                type = symbol->access_local_variable()->type();
+                switch (type->cat()) {
+                    case TCAT_RECORD: {
+                        auto address = symbol->access_local_variable()->address();
+                        type = symbol->access_local_variable()->type();
+
+                        if (count_field_recur(symbol, ids->_ids, type, address)) {
+                            switch (type->cat()) {
+                                case TCAT_BOOL:
+                                    r_expr->_constr->append<ai::LSTB>(address);
+                                break;
+
+                                case TCAT_INT:
+                                    r_expr->_constr->append<ai::LSTI>(address);
+                                break;
+
+                                case TCAT_REAL:
+                                    if (r_expr->_type->cat() == TCAT_INT) {
+                                        r_expr->_constr->append<ai::CVRTIR>();
+                                    } else if (r_expr->_type->cat() != TCAT_REAL) {
+                                        // TODO: cannot be converted to real
+                                    }
+
+                                    r_expr->_constr->append<ai::LSTR>(address);
+                                break;
+
+                                case TCAT_STR:
+                                    r_expr->_constr->append<ai::LSTS>(address);
+                                break;
+
+                                case TCAT_RECORD:
+                                    if (r_expr->_type->cat() == TCAT_RECORD) {
+                                        std::vector<std::tuple<type_pointer, type_pointer, stack_address>> stack{{type, r_expr->_type, 0}};
+
+                                        while (!stack.empty()) {
+                                            auto l_type = std::get<0>(stack.back());
+                                            auto r_type = std::get<1>(stack.back());
+                                            auto sub_address = std::get<2>(stack.back());
+
+                                            stack.pop_back();
+
+                                            for (
+                                                auto [i, j] = std::tuple{
+                                                    l_type->access_record()->begin(),
+                                                    r_type->access_record()->begin()
+                                                };
+
+                                                i != l_type->access_record()->end() &&
+                                                j != r_type->access_record()->end();
+
+                                                ++i,
+                                                ++j
+                                            ) {
+                                                if (
+                                                    i->type()->cat() != j->type()->cat() ||
+                                                    i->offset() != j->offset()
+                                                ) {
+                                                    break;
+                                                }
+
+                                                if (i->type()->cat() == TCAT_RECORD) {
+                                                    stack.emplace_back(i->type(), j->type(), i->offset() + sub_address);
+                                                    continue;
+                                                }
+
+
+
+                                                auto offset = i->offset() + sub_address;
+                                                r_expr->_constr->append<ai::SLDP>(0);
+                                                r_expr->_constr->append<ai::LDLITI>(ctx->tab->ls_int().add(offset));
+                                                r_expr->_constr->append<ai::ADDP>();
+
+                                                switch (i->type()->cat()) {
+                                                    case TCAT_BOOL:
+                                                        r_expr->_constr->append<ai::XLDB>();
+                                                        r_expr->_constr->append<ai::LSTB>(address + offset);
+                                                    break;
+
+                                                    case TCAT_INT:
+                                                        r_expr->_constr->append<ai::XLDI>();
+                                                        r_expr->_constr->append<ai::LSTI>(address + offset);
+                                                    break;
+
+                                                    case TCAT_REAL:
+                                                        r_expr->_constr->append<ai::XLDR>();
+                                                        r_expr->_constr->append<ai::LSTR>(address + offset);
+                                                    break;
+
+                                                    case TCAT_STR:
+                                                        r_expr->_constr->append<ai::XLDS>();
+                                                        r_expr->_constr->append<ai::LSTS>(address + offset);
+                                                    break;
+
+                                                    default:
+                                                        // shouldn't happen
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                        r_expr->_constr->append<ai::DTORP>();
+                                    } else {
+                                        // TODO: error
+                                    }
+                                break;
+
+                                default:
+                                    // TODO: ERROR
+                                break;
+                            }
+                        } else {
+                            // TODO: ERROR
+                        }
+                    } break;
+
+                    default:
+                        // TODO: ERROR
+                    break;
+                }
+
+            default:
+                // TODO: ERROR
             break;
         }
 
@@ -728,8 +1251,166 @@ namespace mlc {
                     }
                 }
 
-                constr = icblock_merge_and_kill(constr, expr->_constr);
-                destr = icblock_merge_and_kill(create_destr(par->ltype->cat()), destr);
+                if (tcat1 == TCAT_RECORD) {
+                    if (tcat2 == TCAT_RECORD) {
+                        std::vector<std::tuple<
+                            type_pointer,
+                            type_pointer,
+                            stack_address,
+                            size_t>> stack{{
+                                par->ltype,
+                                expr->_type,
+                                0,
+                                0}};
+
+                        constr = icblock_merge_and_kill(constr, expr->_constr);
+
+                        stack_address offset = 0;
+
+                        while (!stack.empty()) {
+                            auto l_type = std::get<0>(stack.back());
+                            auto r_type = std::get<1>(stack.back());
+                            auto address = std::get<2>(stack.back());
+                            auto skip = std::get<3>(stack.back());
+
+                            stack.pop_back();
+
+                            for (
+                                auto [i, j] = std::tuple{
+                                    l_type->access_record()->begin() + skip,
+                                    r_type->access_record()->begin() + skip
+                                };
+
+                                i != l_type->access_record()->end() &&
+                                j != r_type->access_record()->end();
+
+                                ++i,
+                                ++j
+                            ) {
+                                ++skip;
+
+                                if (
+                                    i->type()->cat() != j->type()->cat() ||
+                                    i->offset() != j->offset()
+                                ) {
+                                    break;
+                                }
+
+                                if (i->type()->cat() == TCAT_RECORD) {
+                                    stack.emplace_back(
+                                        i->type(),
+                                        j->type(),
+                                        i->offset() + address,
+                                        0);
+
+                                    stack.emplace_back(
+                                        l_type,
+                                        r_type,
+                                        address,
+                                        skip);
+
+                                    break;
+                                }
+
+                                offset = i->offset() + address;
+
+                                if (offset > 0) {
+                                    constr->append<ai::SLDP>(-offset + 1);
+                                    constr->append<ai::LDLITI>(ctx->tab->ls_int().add(offset));
+                                    constr->append<ai::ADDP>();
+                                }
+
+                                destr = icblock_merge_and_kill(
+                                    create_destr(i->type()->cat()),
+                                    destr);
+                            }
+                        }
+
+                        stack = {{
+                            par->ltype,
+                            expr->_type,
+                            0,
+                            0}};
+
+                        constr->append<ai::SADD>(-offset - 1);
+
+                        while (!stack.empty()) {
+                            auto l_type = std::get<0>(stack.back());
+                            auto r_type = std::get<1>(stack.back());
+                            auto address = std::get<2>(stack.back());
+                            auto skip = std::get<3>(stack.back());
+
+                            stack.pop_back();
+
+                            for (
+                                auto [i, j] = std::tuple{
+                                    l_type->access_record()->begin() + skip,
+                                    r_type->access_record()->begin() + skip
+                                };
+
+                                i != l_type->access_record()->end() &&
+                                j != r_type->access_record()->end();
+
+                                ++i,
+                                ++j
+                            ) {
+                                ++skip;
+                                constr->append<ai::SADD>(1);
+
+                                if (
+                                    i->type()->cat() != j->type()->cat() ||
+                                    i->offset() != j->offset()
+                                ) {
+                                    break;
+                                }
+
+                                if (i->type()->cat() == TCAT_RECORD) {
+                                    stack.emplace_back(
+                                        i->type(),
+                                        j->type(),
+                                        i->offset() + address,
+                                        0);
+
+                                    stack.emplace_back(
+                                        l_type,
+                                        r_type,
+                                        address,
+                                        skip);
+
+                                    break;
+                                }
+
+                                switch (i->type()->cat()) {
+                                    case TCAT_BOOL:
+                                        constr->append<ai::XLDB>();
+                                    break;
+
+                                    case TCAT_INT:
+                                        constr->append<ai::XLDI>();
+                                    break;
+
+                                    case TCAT_REAL:
+                                        constr->append<ai::XLDR>();
+                                    break;
+
+                                    case TCAT_STR:
+                                        constr->append<ai::XLDS>();
+                                    break;
+
+                                    default:
+                                        // shouldn't happen
+                                    break;
+                                }
+
+                            }
+                        }
+                    } else {
+                        // TODO: error
+                    }
+                } else {
+                    constr = icblock_merge_and_kill(constr, expr->_constr);
+                    destr = icblock_merge_and_kill(create_destr(par->ltype->cat()), destr);
+                }
             } else {
                 auto pass_par = address_load(ctx, *real_par);
 
@@ -837,14 +1518,22 @@ namespace mlc {
                                             constr->append<ai::GLDS>(address);
                                         break;
 
+                                        case TCAT_RECORD:
+                                            constr->append<ai::GREF>(address);
+                                        break;
+
                                         default:
-                                            // TODO: ERROR
+                                            // TODO:
                                         break;
                                     }
                                 } else {
                                     // TODO: ERROR
                                 }
                             } break;
+
+                            default:
+                                // TODO
+                            break;
                         }
                     break;
 
@@ -889,6 +1578,10 @@ namespace mlc {
                                             constr->append<ai::LLDS>(address);
                                         break;
 
+                                        case TCAT_RECORD:
+                                            constr->append<ai::LREF>(address);
+                                        break;
+
                                         default:
                                             // TODO: ERROR
                                         break;
@@ -897,6 +1590,10 @@ namespace mlc {
                                     // TODO: ERROR
                                 }
                             } break;
+
+                            default:
+                                // TODO
+                            break;
                         }
                     break;
 
@@ -921,6 +1618,10 @@ namespace mlc {
                             break;
 
                             case TCAT_RECORD:
+                                // TODO
+                            break;
+
+                            default:
                                 // TODO
                             break;
                         }
@@ -949,6 +1650,10 @@ namespace mlc {
                             break;
 
                             case TCAT_RECORD:
+                                // this shouldn't happen
+                            break;
+
+                            default:
                                 // TODO
                             break;
                         }
@@ -978,10 +1683,61 @@ namespace mlc {
                                 constr->append<ai::XLDS>();
                             break;
 
-                            case TCAT_RECORD:
+                            case TCAT_RECORD: {
+                                stack_address address = 0;
+                                type = symbol->access_parameter_by_reference()->type();
+
+                                if (count_field_recur(symbol, l_expr->_ids->_ids, type, address)) {
+                                    switch (type->cat()) {
+                                        case TCAT_BOOL:
+                                            constr->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
+                                            constr->append<ai::LDLITI>(ctx->tab->ls_int().add(address));
+                                            constr->append<ai::ADDP>();
+                                            constr->append<ai::XLDB>();
+                                        break;
+
+                                        case TCAT_INT:
+                                            constr->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
+                                            constr->append<ai::LDLITI>(ctx->tab->ls_int().add(address));
+                                            constr->append<ai::ADDP>();
+                                            constr->append<ai::XLDI>();
+                                        break;
+
+                                        case TCAT_REAL:
+                                            constr->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
+                                            constr->append<ai::LDLITI>(ctx->tab->ls_int().add(address));
+                                            constr->append<ai::ADDP>();
+                                            constr->append<ai::XLDR>();
+                                        break;
+
+                                        case TCAT_STR:
+                                            constr->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
+                                            constr->append<ai::LDLITI>(ctx->tab->ls_int().add(address));
+                                            constr->append<ai::ADDP>();
+                                            constr->append<ai::XLDS>();
+                                        break;
+
+                                        case TCAT_RECORD:
+                                            constr->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
+                                        break;
+
+                                        default:
+                                            // TODO: ERROR
+                                        break;
+                                    }
+                                } else {
+                                    // TODO: ERROR
+                                }
+                            } break;
+
+                            default:
                                 // TODO
                             break;
                         }
+                    break;
+
+                    default:
+                        // TODO
                     break;
                 }
 

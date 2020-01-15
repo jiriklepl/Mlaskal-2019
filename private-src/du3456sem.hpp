@@ -327,6 +327,11 @@ namespace mlc {
         ls_id_index id,
         expression::pointer expr);
 
+    icblock_pointer do_assign_long(
+        MlaskalCtx* ctx,
+        id_list::pointer ids,
+        expression::pointer expr);
+
     expression::pointer do_compare(
         MlaskalCtx* ctx,
         expression::pointer left,

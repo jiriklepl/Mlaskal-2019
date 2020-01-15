@@ -25,20 +25,10 @@
 #include "gen_ainstr.hpp"
 
 namespace mlc {
-    std::string& upper_case(std::string&);
-    std::string& un_apostrophe(std::string&);
-
     enum class SPECIAL_CASE {
         SC_NORMAL,
         SC_UINT_DOTDOT
     };
-
-    ls_real_type::value_type convert_real(const std::string&);
-    ls_int_type::value_type convert_int(
-        const char* from,
-        decltype(MlaskalCtx::curline) line);
-
-    icblock_pointer create_destr(type_category);
 
     bool count_field_recur(
         symbol_pointer symbol,
@@ -319,6 +309,69 @@ namespace mlc {
 
         std::vector<expression::pointer> _pars;
     };
+
+
+    std::string& upper_case(std::string&);
+    std::string& un_apostrophe(std::string&);
+
+    ls_real_type::value_type convert_real(const std::string&);
+
+    ls_int_type::value_type convert_int(
+        const char* from,
+        decltype(MlaskalCtx::curline) line);
+
+    icblock_pointer create_destr(type_category);
+
+    icblock_pointer do_assign(
+        MlaskalCtx* ctx,
+        ls_id_index id,
+        expression::pointer expr);
+
+    expression::pointer do_compare(
+        MlaskalCtx* ctx,
+        expression::pointer left,
+        expression::pointer right,
+        DUTOKGE_OPER_REL oper);
+
+    expression::pointer do_signadd(
+        MlaskalCtx* ctx,
+        expression::pointer left,
+        expression::pointer right,
+        DUTOKGE_OPER_SIGNADD oper);
+
+    icblock_pointer address_load(
+        MlaskalCtx* ctx,
+        expression::pointer par);
+
+    icblock_pointer make_if(
+        MlaskalCtx * ctx,
+        expression::pointer condition,
+        icblock_pointer then_stmt,
+        icblock_pointer else_stmt);
+
+    icblock_pointer make_repeat(
+        MlaskalCtx * ctx,
+        expression::pointer condition,
+        icblock_pointer stmt);
+
+    icblock_pointer make_while(
+        MlaskalCtx * ctx,
+        expression::pointer condition,
+        icblock_pointer stmt);
+
+    icblock_pointer make_for(
+        MlaskalCtx * ctx,
+        ls_id_index id,
+        expression::pointer left,
+        expression::pointer right,
+        DUTOKGE_FOR_DIRECTION direction,
+        icblock_pointer stmt);
+
+    icblock_pointer make_call(
+        MlaskalCtx * ctx,
+        parameter_list_const_ptr pars,
+        real_par_list::pointer real_pars,
+        ic_function_pointer code);
 
 }
 

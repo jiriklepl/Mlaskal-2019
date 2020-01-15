@@ -787,7 +787,6 @@ namespace mlc {
             l_expression* l_expr = (l_expression*)&*expr;
             type_pointer type;
             icblock_pointer constr;
-            icblock_pointer destr;
 
             constr = icblock_create();
 

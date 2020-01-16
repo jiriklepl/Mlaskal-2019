@@ -277,19 +277,19 @@ namespace mlc {
                                 0}};
 
                             std::function<void(icblock_pointer, stack_address)>
-                            bool_action = [address, &symbol](icblock_pointer code, stack_address offset) {
+                            bool_action = [address](icblock_pointer code, stack_address offset) {
                                 code->append<ai::XLDB>();
                                 code->append<ai::GSTB>(address + offset);
                             },
-                            int_action = [address, &symbol](icblock_pointer code, stack_address offset) {
+                            int_action = [address](icblock_pointer code, stack_address offset) {
                                 code->append<ai::XLDI>();
                                 code->append<ai::GSTI>(address + offset);
                             },
-                            real_action = [address, &symbol](icblock_pointer code, stack_address offset) {
+                            real_action = [address](icblock_pointer code, stack_address offset) {
                                 code->append<ai::XLDR>();
                                 code->append<ai::GSTR>(address + offset);
                             },
-                            str_action = [address, &symbol](icblock_pointer code, stack_address offset) {
+                            str_action = [address](icblock_pointer code, stack_address offset) {
                                 code->append<ai::XLDS>();
                                 code->append<ai::GSTS>(address + offset);
                             };
@@ -341,19 +341,19 @@ namespace mlc {
 
 
                             std::function<void(icblock_pointer, stack_address)>
-                            bool_action = [address, &symbol](icblock_pointer code, stack_address offset) {
+                            bool_action = [address](icblock_pointer code, stack_address offset) {
                                 code->append<ai::XLDB>();
                                 code->append<ai::LSTB>(address + offset);
                             },
-                            int_action = [address, &symbol](icblock_pointer code, stack_address offset) {
+                            int_action = [address](icblock_pointer code, stack_address offset) {
                                 code->append<ai::XLDI>();
                                 code->append<ai::LSTI>(address + offset);
                             },
-                            real_action = [address, &symbol](icblock_pointer code, stack_address offset) {
+                            real_action = [address](icblock_pointer code, stack_address offset) {
                                 code->append<ai::XLDR>();
                                 code->append<ai::LSTR>(address + offset);
                             },
-                            str_action = [address, &symbol](icblock_pointer code, stack_address offset) {
+                            str_action = [address](icblock_pointer code, stack_address offset) {
                                 code->append<ai::XLDS>();
                                 code->append<ai::LSTS>(address + offset);
                             };
@@ -444,7 +444,7 @@ namespace mlc {
 
 
                             std::function<void(icblock_pointer, stack_address)>
-                            bool_action = [ctx, address, &symbol](icblock_pointer code, stack_address offset) {
+                            bool_action = [ctx, address](icblock_pointer code, stack_address offset) {
                                 code->append<ai::XLDB>();
                                 code->append<ai::LLDP>(address);
 
@@ -455,7 +455,7 @@ namespace mlc {
 
                                 code->append<ai::XSTB>();
                             },
-                            int_action = [ctx, address, &symbol](icblock_pointer code, stack_address offset) {
+                            int_action = [ctx, address](icblock_pointer code, stack_address offset) {
                                 code->append<ai::XLDI>();
                                 code->append<ai::LLDP>(address);
 
@@ -466,7 +466,7 @@ namespace mlc {
 
                                 code->append<ai::XSTI>();
                             },
-                            real_action = [ctx, address, &symbol](icblock_pointer code, stack_address offset) {
+                            real_action = [ctx, address](icblock_pointer code, stack_address offset) {
                                 code->append<ai::XLDR>();
                                 code->append<ai::LLDP>(address);
 
@@ -477,7 +477,7 @@ namespace mlc {
 
                                 code->append<ai::XSTR>();
                             },
-                            str_action = [ctx, address, &symbol](icblock_pointer code, stack_address offset) {
+                            str_action = [ctx, address](icblock_pointer code, stack_address offset) {
                                 code->append<ai::XLDS>();
                                 code->append<ai::LLDP>(address);
 

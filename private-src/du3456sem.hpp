@@ -31,7 +31,6 @@ namespace mlc {
     };
 
     bool count_field_recur(
-        symbol_pointer symbol,
         const std::vector<ls_id_index>& ids,
         type_pointer& type,
         stack_address& address);

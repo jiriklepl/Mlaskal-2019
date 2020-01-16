@@ -312,6 +312,7 @@ namespace mlc {
             case SKIND_LOCAL_VARIABLE:
                 type = symbol->access_local_variable()->type();
                 address = symbol->access_local_variable()->address();
+
                 switch (type->cat()) {
                     case TCAT_BOOL:
                         r_expr->_constr->append<ai::LSTB>(address);

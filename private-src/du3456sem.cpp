@@ -239,17 +239,20 @@ namespace mlc {
         auto r_expr = expression::rexpressionize(ctx, expr);
         auto kind = symbol->kind();
         type_pointer type;
+        stack_address address;
 
         switch (kind) {
             case SKIND_GLOBAL_VARIABLE:
                 type = symbol->access_global_variable()->type();
+                address = symbol->access_global_variable()->address();
+
                 switch (type->cat()) {
                     case TCAT_BOOL:
-                        r_expr->_constr->append<ai::GSTB>(symbol->access_global_variable()->address());
+                        r_expr->_constr->append<ai::GSTB>(address);
                     break;
 
                     case TCAT_INT:
-                        r_expr->_constr->append<ai::GSTI>(symbol->access_global_variable()->address());
+                        r_expr->_constr->append<ai::GSTI>(address);
                     break;
 
                     case TCAT_REAL:
@@ -259,11 +262,11 @@ namespace mlc {
                             message(DUERR_TYPEMISMATCH, ctx->curline);
                         }
 
-                        r_expr->_constr->append<ai::GSTR>(symbol->access_global_variable()->address());
+                        r_expr->_constr->append<ai::GSTR>(address);
                     break;
 
                     case TCAT_STR:
-                        r_expr->_constr->append<ai::GSTS>(symbol->access_global_variable()->address());
+                        r_expr->_constr->append<ai::GSTS>(address);
                     break;
 
                     case TCAT_RECORD:
@@ -274,21 +277,21 @@ namespace mlc {
                                 0}};
 
                             std::function<void(icblock_pointer, stack_address)>
-                            bool_action = [&symbol](icblock_pointer code, stack_address offset) {
+                            bool_action = [address, &symbol](icblock_pointer code, stack_address offset) {
                                 code->append<ai::XLDB>();
-                                code->append<ai::GSTB>(symbol->access_global_variable()->address() + offset);
+                                code->append<ai::GSTB>(address + offset);
                             },
-                            int_action = [&symbol](icblock_pointer code, stack_address offset) {
+                            int_action = [address, &symbol](icblock_pointer code, stack_address offset) {
                                 code->append<ai::XLDI>();
-                                code->append<ai::GSTI>(symbol->access_global_variable()->address() + offset);
+                                code->append<ai::GSTI>(address + offset);
                             },
-                            real_action = [&symbol](icblock_pointer code, stack_address offset) {
+                            real_action = [address, &symbol](icblock_pointer code, stack_address offset) {
                                 code->append<ai::XLDR>();
-                                code->append<ai::GSTR>(symbol->access_global_variable()->address() + offset);
+                                code->append<ai::GSTR>(address + offset);
                             },
-                            str_action = [&symbol](icblock_pointer code, stack_address offset) {
+                            str_action = [address, &symbol](icblock_pointer code, stack_address offset) {
                                 code->append<ai::XLDS>();
-                                code->append<ai::GSTS>(symbol->access_global_variable()->address() + offset);
+                                code->append<ai::GSTS>(address + offset);
                             };
 
                             do_record_actions<decltype(bool_action)>(
@@ -308,15 +311,14 @@ namespace mlc {
 
             case SKIND_LOCAL_VARIABLE:
                 type = symbol->access_local_variable()->type();
+                address = symbol->access_local_variable()->address();
                 switch (type->cat()) {
                     case TCAT_BOOL:
-                        r_expr->_constr->append<ai::LSTB>(
-                            symbol->access_local_variable()->address());
+                        r_expr->_constr->append<ai::LSTB>(address);
                     break;
 
                     case TCAT_INT:
-                        r_expr->_constr->append<ai::LSTI>(
-                            symbol->access_local_variable()->address());
+                        r_expr->_constr->append<ai::LSTI>(address);
                     break;
 
                     case TCAT_REAL:
@@ -326,13 +328,11 @@ namespace mlc {
                             message(DUERR_TYPEMISMATCH, ctx->curline);
                         }
 
-                        r_expr->_constr->append<ai::LSTR>(
-                            symbol->access_local_variable()->address());
+                        r_expr->_constr->append<ai::LSTR>(address);
                     break;
 
                     case TCAT_STR:
-                        r_expr->_constr->append<ai::LSTS>(
-                            symbol->access_local_variable()->address());
+                        r_expr->_constr->append<ai::LSTS>(address);
                     break;
 
                     case TCAT_RECORD:
@@ -341,21 +341,21 @@ namespace mlc {
 
 
                             std::function<void(icblock_pointer, stack_address)>
-                            bool_action = [&symbol](icblock_pointer code, stack_address offset) {
+                            bool_action = [address, &symbol](icblock_pointer code, stack_address offset) {
                                 code->append<ai::XLDB>();
-                                code->append<ai::LSTB>(symbol->access_local_variable()->address() + offset);
+                                code->append<ai::LSTB>(address + offset);
                             },
-                            int_action = [&symbol](icblock_pointer code, stack_address offset) {
+                            int_action = [address, &symbol](icblock_pointer code, stack_address offset) {
                                 code->append<ai::XLDI>();
-                                code->append<ai::LSTI>(symbol->access_local_variable()->address() + offset);
+                                code->append<ai::LSTI>(address + offset);
                             },
-                            real_action = [&symbol](icblock_pointer code, stack_address offset) {
+                            real_action = [address, &symbol](icblock_pointer code, stack_address offset) {
                                 code->append<ai::XLDR>();
-                                code->append<ai::LSTR>(symbol->access_local_variable()->address() + offset);
+                                code->append<ai::LSTR>(address + offset);
                             },
-                            str_action = [&symbol](icblock_pointer code, stack_address offset) {
+                            str_action = [address, &symbol](icblock_pointer code, stack_address offset) {
                                 code->append<ai::XLDS>();
-                                code->append<ai::LSTS>(symbol->access_local_variable()->address() + offset);
+                                code->append<ai::LSTS>(address + offset);
                             };
 
                             do_record_actions<decltype(bool_action)>(
@@ -415,29 +415,26 @@ namespace mlc {
 
             case SKIND_PARAMETER_BY_REFERENCE:
                 type = symbol->access_parameter_by_reference()->type();
+                address = symbol->access_parameter_by_reference()->address();
 
                 switch (type->cat()) {
                     case TCAT_BOOL:
-                        r_expr->_constr->append<ai::LLDP>(
-                            symbol->access_parameter_by_reference()->address());
+                        r_expr->_constr->append<ai::LLDP>(address);
                         r_expr->_constr->append<ai::XSTB>();
                     break;
 
                     case TCAT_INT:
-                        r_expr->_constr->append<ai::LLDP>(
-                            symbol->access_parameter_by_reference()->address());
+                        r_expr->_constr->append<ai::LLDP>(address);
                         r_expr->_constr->append<ai::XSTI>();
                     break;
 
                     case TCAT_REAL:
-                        r_expr->_constr->append<ai::LLDP>(
-                            symbol->access_parameter_by_reference()->address());
+                        r_expr->_constr->append<ai::LLDP>(address);
                         r_expr->_constr->append<ai::XSTR>();
                     break;
 
                     case TCAT_STR:
-                        r_expr->_constr->append<ai::LLDP>(
-                            symbol->access_parameter_by_reference()->address());
+                        r_expr->_constr->append<ai::LLDP>(address);
                         r_expr->_constr->append<ai::XSTS>();
                     break;
 
@@ -447,9 +444,9 @@ namespace mlc {
 
 
                             std::function<void(icblock_pointer, stack_address)>
-                            bool_action = [ctx, &symbol](icblock_pointer code, stack_address offset) {
+                            bool_action = [ctx, address, &symbol](icblock_pointer code, stack_address offset) {
                                 code->append<ai::XLDB>();
-                                code->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
+                                code->append<ai::LLDP>(address);
 
                                 shift_pointer(
                                     ctx,
@@ -458,9 +455,9 @@ namespace mlc {
 
                                 code->append<ai::XSTB>();
                             },
-                            int_action = [ctx, &symbol](icblock_pointer code, stack_address offset) {
+                            int_action = [ctx, address, &symbol](icblock_pointer code, stack_address offset) {
                                 code->append<ai::XLDI>();
-                                code->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
+                                code->append<ai::LLDP>(address);
 
                                 shift_pointer(
                                     ctx,
@@ -469,9 +466,9 @@ namespace mlc {
 
                                 code->append<ai::XSTI>();
                             },
-                            real_action = [ctx, &symbol](icblock_pointer code, stack_address offset) {
+                            real_action = [ctx, address, &symbol](icblock_pointer code, stack_address offset) {
                                 code->append<ai::XLDR>();
-                                code->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
+                                code->append<ai::LLDP>(address);
 
                                 shift_pointer(
                                     ctx,
@@ -480,9 +477,9 @@ namespace mlc {
 
                                 code->append<ai::XSTR>();
                             },
-                            str_action = [ctx, &symbol](icblock_pointer code, stack_address offset) {
+                            str_action = [ctx, address, &symbol](icblock_pointer code, stack_address offset) {
                                 code->append<ai::XLDS>();
-                                code->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
+                                code->append<ai::LLDP>(address);
 
                                 shift_pointer(
                                     ctx,
@@ -528,15 +525,15 @@ namespace mlc {
         auto symbol = ctx->tab->find_symbol(ids->_ids[0]);
         auto kind = symbol->kind();
         type_pointer type;
+        stack_address address;
 
         switch (kind) {
             case SKIND_GLOBAL_VARIABLE:
                 type = symbol->access_global_variable()->type();
+                address = symbol->access_global_variable()->address();
+
                 switch (type->cat()) {
                     case TCAT_RECORD:{
-                        auto address = symbol->access_global_variable()->address();
-                        type = symbol->access_global_variable()->type();
-
                         if (count_field_recur(ids->_ids, type, address)) {
                             switch (type->cat()) {
                                 case TCAT_BOOL:
@@ -614,11 +611,10 @@ namespace mlc {
 
             case SKIND_LOCAL_VARIABLE:
                 type = symbol->access_local_variable()->type();
+                address = symbol->access_local_variable()->address();
+
                 switch (type->cat()) {
                     case TCAT_RECORD: {
-                        auto address = symbol->access_local_variable()->address();
-                        type = symbol->access_local_variable()->type();
-
                         if (count_field_recur(ids->_ids, type, address)) {
                             switch (type->cat()) {
                                 case TCAT_BOOL:
@@ -1394,6 +1390,7 @@ namespace mlc {
                 switch (kind) {
                     case SKIND_GLOBAL_VARIABLE:
                         type = symbol->access_global_variable()->type();
+
                         switch (type->cat()) {
                             case TCAT_BOOL:
                                 constr->append<ai::GLDB>(symbol->access_global_variable()->address());
@@ -1454,6 +1451,7 @@ namespace mlc {
 
                     case SKIND_LOCAL_VARIABLE:
                         type = symbol->access_local_variable()->type();
+
                         switch (type->cat()) {
                             case TCAT_BOOL:
                                 constr->append<ai::LLDB>(symbol->access_local_variable()->address());

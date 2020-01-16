@@ -710,7 +710,7 @@ simple_statement:
 
             $$ = std::move(constr);
         } else {
-            // TODO: calling a non-procedure
+            message(DUERR_NOTPROC, @IDENTIFIER, *$IDENTIFIER);
         }
     }
     | IDENTIFIER LPAR real_par_list RPAR {
@@ -726,7 +726,7 @@ simple_statement:
                 $real_par_list,
                 symbol->access_procedure()->code());
         } else {
-            // TODO: calling a non-procedure
+            message(DUERR_NOTPROC, @IDENTIFIER, *$IDENTIFIER);
         }
     }
     | GOTO UINT {
@@ -744,7 +744,7 @@ simple_statement:
 
 variable:
     IDENTIFIER {
-        // TODO: IDENTIFIER: variable
+        // IDENTIFIER: variable
         $$ = std::make_shared<id_list>($IDENTIFIER);
     }
     | variable_noidentifier { $$ = std::move($variable_noidentifier); }
@@ -789,7 +789,7 @@ expression:
                 r_expr2->_constr->append<ai::CVRTIR>();
                 r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
             } else {
-                // TODO
+                message(DUERR_TYPEMISMATCH, @EQ);
             }
 
             r_expr1->_constr->append<ai::EQR>();
@@ -802,7 +802,7 @@ expression:
                 r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
                 r_expr1->_constr->append<ai::EQI>();
             } else {
-                // TODO
+                message(DUERR_TYPEMISMATCH, @EQ);
             }
         } else if (tcat1 == TCAT_BOOL && tcat2 == TCAT_BOOL) {
             r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
@@ -811,7 +811,7 @@ expression:
             r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
             r_expr1->_constr->append<ai::EQS>();
         } else {
-            // TODO
+            message(DUERR_TYPEMISMATCH, @EQ);
         }
 
         r_expr1->_type = ctx->tab->logical_bool();
@@ -835,7 +835,7 @@ simple_expression:
                 break;
 
                 default:
-                    // TODO: +- something else than int and real
+                    message(DUERR_TYPEMISMATCH, @add_expression);
                 break;
             }
         }
@@ -865,10 +865,10 @@ add_expression:
                 r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
                 r_expr1->_constr->append<ai::OR>();
             } else {
-                // TODO
+                message(DUERR_TYPEMISMATCH, @OR);
             }
         } else {
-            // TODO
+            message(DUERR_TYPEMISMATCH, @OR);
         }
 
         $$ = std::move(r_expr1);
@@ -891,10 +891,10 @@ mul_expression:
                         r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
                         r_expr1->_constr->append<ai::AND>();
                     } else {
-                        // TODO
+                        message(DUERR_TYPEMISMATCH, @OPER_MUL);
                     }
                 } else {
-                    // TODO
+                    message(DUERR_TYPEMISMATCH, @OPER_MUL);
                 }
             break;
 
@@ -906,7 +906,7 @@ mul_expression:
                         r_expr2->_constr->append<ai::CVRTIR>();
                         r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
                     } else {
-                        // TODO
+                        message(DUERR_TYPEMISMATCH, @OPER_MUL);
                     }
 
                     r_expr1->_constr->append<ai::MULR>();
@@ -920,10 +920,10 @@ mul_expression:
                         r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
                         r_expr1->_constr->append<ai::MULI>();
                     } else {
-                        // TODO
+                        message(DUERR_TYPEMISMATCH, @OPER_MUL);
                     }
                 } else {
-                    // TODO
+                    message(DUERR_TYPEMISMATCH, @OPER_MUL);
                 }
             break;
 
@@ -935,7 +935,7 @@ mul_expression:
                         r_expr2->_constr->append<ai::CVRTIR>();
                         r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
                     } else {
-                        // TODO
+                        message(DUERR_TYPEMISMATCH, @OPER_MUL);
                     }
 
                 } else if (tcat1 == TCAT_INT) {
@@ -947,10 +947,10 @@ mul_expression:
                         r_expr2->_constr->append<ai::CVRTIR>();
                         r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
                     } else {
-                        // TODO
+                        message(DUERR_TYPEMISMATCH, @OPER_MUL);
                     }
                 } else {
-                    // TODO
+                    message(DUERR_TYPEMISMATCH, @OPER_MUL);
                 }
 
                 r_expr1->_type = ctx->tab->logical_real();
@@ -966,7 +966,7 @@ mul_expression:
                     } else if (tcat2 == TCAT_INT) {
                         r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
                     } else {
-                        // TODO
+                        message(DUERR_TYPEMISMATCH, @OPER_MUL);
                     }
                 } else if (tcat1 == TCAT_INT) {
                     if (tcat2 == TCAT_REAL) {
@@ -975,10 +975,10 @@ mul_expression:
                     } else if (tcat2 == TCAT_INT) {
                         r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
                     } else {
-                        // TODO
+                        message(DUERR_TYPEMISMATCH, @OPER_MUL);
                     }
                 } else {
-                    // TODO
+                    message(DUERR_TYPEMISMATCH, @OPER_MUL);
                 }
 
                 r_expr1->_type = ctx->tab->logical_integer();
@@ -994,7 +994,7 @@ mul_expression:
                     } else if (tcat2 == TCAT_INT) {
                         r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
                     } else {
-                        // TODO
+                        message(DUERR_TYPEMISMATCH, @OPER_MUL);
                     }
                 } else if (tcat1 == TCAT_INT) {
                     if (tcat2 == TCAT_REAL) {
@@ -1003,10 +1003,10 @@ mul_expression:
                     } else if (tcat2 == TCAT_INT) {
                         r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
                     } else {
-                        // TODO
+                        message(DUERR_TYPEMISMATCH, @OPER_MUL);
                     }
                 } else {
-                    // TODO
+                    message(DUERR_TYPEMISMATCH, @OPER_MUL);
                 }
 
                 r_expr1->_type = ctx->tab->logical_integer();
@@ -1040,7 +1040,7 @@ factor:
             break;
 
             default:
-            /* shouldn't be able to get here */
+                /* shouldn't be able to get here */
             break;
         }
 
@@ -1090,7 +1090,7 @@ factor:
                 break;
 
                 case TCAT_RECORD:
-                    // TODO: function returning a record
+                    // TODO (maybe): function returning a record
                 break;
             }
 
@@ -1104,7 +1104,7 @@ factor:
                         $real_par_list,
                         symbol->access_function()->code())));
         } else {
-            // TODO: calling a non-function
+            message(DUERR_NOTFNC, @IDENTIFIER, *$IDENTIFIER);
         }
     }
     | LPAR expression RPAR { $$ = std::move($expression); }
@@ -1117,7 +1117,7 @@ factor:
             break;
 
             default:
-                // TODO: some error here!
+                message(DUERR_TYPEMISMATCH, @inner_factor);
             break;
         }
 

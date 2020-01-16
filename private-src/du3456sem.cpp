@@ -256,7 +256,7 @@ namespace mlc {
                         if (r_expr->_type->cat() == TCAT_INT) {
                             r_expr->_constr->append<ai::CVRTIR>();
                         } else if (r_expr->_type->cat() != TCAT_REAL) {
-                            // TODO: cannot be converted to real
+                            message(DUERR_TYPEMISMATCH, ctx->curline);
                         }
 
                         r_expr->_constr->append<ai::GSTR>(symbol->access_global_variable()->address());
@@ -300,7 +300,7 @@ namespace mlc {
                                 real_action,
                                 str_action);
                         } else {
-                            // TODO: error
+                            message(DUERR_TYPEMISMATCH, ctx->curline);
                         }
                     break;
                 }
@@ -323,7 +323,7 @@ namespace mlc {
                         if (r_expr->_type->cat() == TCAT_INT) {
                             r_expr->_constr->append<ai::CVRTIR>();
                         } else if (r_expr->_type->cat() != TCAT_REAL) {
-                            // TODO: cannot be converted to real
+                            message(DUERR_TYPEMISMATCH, ctx->curline);
                         }
 
                         r_expr->_constr->append<ai::LSTR>(
@@ -367,7 +367,7 @@ namespace mlc {
                                 real_action,
                                 str_action);
                         } else {
-                            // TODO: error
+                            message(DUERR_TYPEMISMATCH, ctx->curline);
                         }
                     break;
                 }
@@ -392,7 +392,7 @@ namespace mlc {
                             if (r_expr->_type->cat() == TCAT_INT) {
                                 r_expr->_constr->append<ai::CVRTIR>();
                             } else if (r_expr->_type->cat() != TCAT_REAL) {
-                                // TODO: cannot be converted to real
+                                message(DUERR_TYPEMISMATCH, ctx->curline);
                             }
 
                             r_expr->_constr->append<ai::LSTR>(
@@ -405,11 +405,11 @@ namespace mlc {
                         break;
 
                         case TCAT_RECORD:
-                            // TODO
+                            // TODO (maybe)
                         break;
                     }
                 } else {
-                    // TODO: wrong return
+                    message(DUERR_NOTMINE, ctx->curline, *id);
                 }
             break;
 
@@ -501,10 +501,18 @@ namespace mlc {
                                 real_action,
                                 str_action);
                         } else {
-                            // TODO: error
+                            message(DUERR_TYPEMISMATCH, ctx->curline);
                         }
                     break;
+
+                    default:
+                        // TODO: ERROR
+                    break;
                 }
+            break;
+
+            default:
+                // TODO: ERROR
             break;
         }
 
@@ -529,7 +537,7 @@ namespace mlc {
                         auto address = symbol->access_global_variable()->address();
                         type = symbol->access_global_variable()->type();
 
-                        if (count_field_recur(symbol, ids->_ids, type, address)) {
+                        if (count_field_recur(ids->_ids, type, address)) {
                             switch (type->cat()) {
                                 case TCAT_BOOL:
                                     r_expr->_constr->append<ai::GSTB>(address);
@@ -543,7 +551,7 @@ namespace mlc {
                                     if (r_expr->_type->cat() == TCAT_INT) {
                                         r_expr->_constr->append<ai::CVRTIR>();
                                     } else if (r_expr->_type->cat() != TCAT_REAL) {
-                                        // TODO: cannot be converted to real
+                                        message(DUERR_TYPEMISMATCH, ctx->curline);
                                     }
 
                                     r_expr->_constr->append<ai::GSTR>(address);
@@ -585,7 +593,7 @@ namespace mlc {
                                             real_action,
                                             str_action);
                                     } else {
-                                        // TODO: error
+                                        message(DUERR_TYPEMISMATCH, ctx->curline);
                                     }
                                 break;
 
@@ -594,7 +602,7 @@ namespace mlc {
                                 break;
                             }
                         } else {
-                            // TODO: ERROR
+                            message(DUERR_NOTFIELD, ctx->curline, *ids->_ids.back());
                         }
                     } break;
 
@@ -611,7 +619,7 @@ namespace mlc {
                         auto address = symbol->access_local_variable()->address();
                         type = symbol->access_local_variable()->type();
 
-                        if (count_field_recur(symbol, ids->_ids, type, address)) {
+                        if (count_field_recur(ids->_ids, type, address)) {
                             switch (type->cat()) {
                                 case TCAT_BOOL:
                                     r_expr->_constr->append<ai::LSTB>(address);
@@ -625,7 +633,7 @@ namespace mlc {
                                     if (r_expr->_type->cat() == TCAT_INT) {
                                         r_expr->_constr->append<ai::CVRTIR>();
                                     } else if (r_expr->_type->cat() != TCAT_REAL) {
-                                        // TODO: cannot be converted to real
+                                        message(DUERR_TYPEMISMATCH, ctx->curline);
                                     }
 
                                     r_expr->_constr->append<ai::LSTR>(address);
@@ -667,7 +675,7 @@ namespace mlc {
                                             real_action,
                                             str_action);
                                     } else {
-                                        // TODO: error
+                                        message(DUERR_TYPEMISMATCH, ctx->curline);
                                     }
                                 break;
 
@@ -676,7 +684,7 @@ namespace mlc {
                                 break;
                             }
                         } else {
-                            // TODO: ERROR
+                            message(DUERR_NOTFIELD, ctx->curline, *ids->_ids.back());
                         }
                     } break;
 
@@ -711,7 +719,7 @@ namespace mlc {
                 r_expr2->_constr->append<ai::CVRTIR>();
                 r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
             } else {
-                // TODO
+                message(DUERR_TYPEMISMATCH, ctx->curline);
             }
 
             switch (oper) {
@@ -786,7 +794,7 @@ namespace mlc {
                     break;
                 }
             } else {
-                // TODO
+                message(DUERR_TYPEMISMATCH, ctx->curline);
             }
         } else if (tcat1 == TCAT_BOOL && tcat2 == TCAT_BOOL) {
             r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
@@ -837,7 +845,7 @@ namespace mlc {
                 break;
             }
         } else {
-            // TODO
+            message(DUERR_TYPEMISMATCH, ctx->curline);
         }
 
         r_expr1->_type = ctx->tab->logical_bool();
@@ -863,7 +871,7 @@ namespace mlc {
                 r_expr2->_constr->append<ai::CVRTIR>();
                 r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
             } else {
-                // TODO
+                message(DUERR_TYPEMISMATCH, ctx->curline);
             }
 
             if (oper == DUTOKGE_OPER_SIGNADD::DUTOKGE_PLUS) {
@@ -891,7 +899,7 @@ namespace mlc {
                     r_expr1->_constr->append<ai::SUBI>();
                 }
             } else {
-                // TODO
+                message(DUERR_TYPEMISMATCH, ctx->curline);
             }
         } else if (tcat1 == TCAT_STR && tcat2 == TCAT_STR) {
                 r_expr1->_constr = icblock_merge_and_kill(r_expr1->_constr, r_expr2->_constr);
@@ -899,10 +907,10 @@ namespace mlc {
                 if (oper == DUTOKGE_OPER_SIGNADD::DUTOKGE_PLUS) {
                     r_expr1->_constr->append<ai::ADDS>();
                 } else {
-                    // TODO
+                    message(DUERR_TYPEMISMATCH, ctx->curline);
                 }
         } else {
-            // TODO
+            message(DUERR_TYPEMISMATCH, ctx->curline);
         }
 
         return r_expr1;
@@ -1115,7 +1123,9 @@ namespace mlc {
         real_par_list::pointer real_pars,
         ic_function_pointer code
     ) {
-        // TODO: test for lengths of parameter lists
+        if (pars->size() != real_pars->_pars.size()) {
+            message(DUERR_PARNUM, ctx->curline, *code->get_name());
+        }
 
         icblock_pointer constr = icblock_create();
         icblock_pointer destr = icblock_create();
@@ -1143,17 +1153,17 @@ namespace mlc {
                         if (tcat2 == TCAT_INT) {
                             expr->_constr->append<ai::CVRTIR>();
                         } else {
-                            // TODO
+                            message(DUERR_TYPEMISMATCH, ctx->curline);
                         }
                     } else if (tcat1 == TCAT_INT) {
                         if (tcat2 == TCAT_REAL) {
-                            // TODO: warning
+                            message(DUERR_CONVERSION, ctx->curline);
                             expr->_constr->append<ai::CVRTRI>();
                         } else {
-                            // TODO
+                            message(DUERR_TYPEMISMATCH, ctx->curline);
                         }
                     } else {
-                        // TODO
+                        message(DUERR_TYPEMISMATCH, ctx->curline);
                     }
                 }
 
@@ -1311,7 +1321,7 @@ namespace mlc {
                             }
                         }
                     } else {
-                        // TODO: error
+                        message(DUERR_TYPEMISMATCH, ctx->curline);
                     }
                 } else {
                     constr = icblock_merge_and_kill(constr, expr->_constr);
@@ -1345,7 +1355,6 @@ namespace mlc {
     }
 
     bool count_field_recur(
-        symbol_pointer symbol,
         const std::vector<ls_id_index>& ids,
         type_pointer& type,
         stack_address& address
@@ -1406,7 +1415,7 @@ namespace mlc {
                                 auto address = symbol->access_global_variable()->address();
                                 type = symbol->access_global_variable()->type();
 
-                                if (count_field_recur(symbol, l_expr->_ids->_ids, type, address)) {
+                                if (count_field_recur(l_expr->_ids->_ids, type, address)) {
                                     switch (type->cat()) {
                                         case TCAT_BOOL:
                                             constr->append<ai::GLDB>(address);
@@ -1429,16 +1438,16 @@ namespace mlc {
                                         break;
 
                                         default:
-                                            // TODO:
+                                            // TODO (maybe)
                                         break;
                                     }
                                 } else {
-                                    // TODO: ERROR
+                                    message(DUERR_NOTFIELD, ctx->curline, *l_expr->_ids->_ids.back());
                                 }
                             } break;
 
                             default:
-                                // TODO
+                                // TODO: ERROR
                             break;
                         }
                     break;
@@ -1466,7 +1475,7 @@ namespace mlc {
                                 auto address = symbol->access_local_variable()->address();
                                 type = symbol->access_local_variable()->type();
 
-                                if (count_field_recur(symbol, l_expr->_ids->_ids, type, address)) {
+                                if (count_field_recur(l_expr->_ids->_ids, type, address)) {
                                     switch (type->cat()) {
                                         case TCAT_BOOL:
                                             constr->append<ai::LLDB>(address);
@@ -1493,12 +1502,12 @@ namespace mlc {
                                         break;
                                     }
                                 } else {
-                                    // TODO: ERROR
+                                    message(DUERR_NOTFIELD, ctx->curline, *l_expr->_ids->_ids.back());
                                 }
                             } break;
 
                             default:
-                                // TODO
+                                // TODO: ERROR
                             break;
                         }
                     break;
@@ -1524,11 +1533,11 @@ namespace mlc {
                             break;
 
                             case TCAT_RECORD:
-                                // TODO
+                                // TODO (RECORD)
                             break;
 
                             default:
-                                // TODO
+                                // TODO: ERROR
                             break;
                         }
 
@@ -1560,7 +1569,7 @@ namespace mlc {
                             break;
 
                             default:
-                                // TODO
+                                // TODO: ERROR
                             break;
                         }
                     break;
@@ -1593,7 +1602,7 @@ namespace mlc {
                                 stack_address address = 0;
                                 type = symbol->access_parameter_by_reference()->type();
 
-                                if (count_field_recur(symbol, l_expr->_ids->_ids, type, address)) {
+                                if (count_field_recur(l_expr->_ids->_ids, type, address)) {
                                     switch (type->cat()) {
                                         case TCAT_BOOL:
                                             constr->append<ai::LLDP>(symbol->access_parameter_by_reference()->address());
@@ -1648,18 +1657,18 @@ namespace mlc {
                                         break;
                                     }
                                 } else {
-                                    // TODO: ERROR
+                                    message(DUERR_NOTFIELD, ctx->curline, *l_expr->_ids->_ids.back());
                                 }
                             } break;
 
                             default:
-                                // TODO
+                                // TODO: ERROR
                             break;
                         }
                     break;
 
                     default:
-                        // TODO
+                        // TODO: ERROR
                     break;
                 }
 
